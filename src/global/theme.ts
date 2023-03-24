@@ -23,6 +23,9 @@ export const Theme = {
         },
         blue: {
             300: '#00A3FF'
+        },
+        white: {
+            700: '#FFFFFF'
         }
     },
     fonts: {

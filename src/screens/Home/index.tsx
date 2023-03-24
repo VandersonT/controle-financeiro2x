@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, Button } from 'react-native';
+import styles from "./style";
 
 const Home = ({ navigation }: any) => {
 
@@ -15,13 +16,5 @@ const Home = ({ navigation }: any) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-});
 
 export default Home;
