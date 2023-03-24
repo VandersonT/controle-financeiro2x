@@ -1,6 +1,7 @@
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import styles from './style';
 import {LinearGradient} from 'expo-linear-gradient';
+import { AntDesign } from '@expo/vector-icons'; 
 
 type Props = {
     msg: String,
@@ -12,7 +13,9 @@ const ErrorFlash = ({ msg, closeFnc }: Props) => {
         <LinearGradient colors={['#DD1E1E', '#A82626']} style={styles.errorBox}>
             <Text></Text>
             <Text style={styles.errorMsg}>{msg}</Text>
-            <Text style={styles.closeButton}>X</Text>
+            <TouchableOpacity onPress={() => closeFnc()}>
+                <AntDesign style={styles.closeButton} name="closecircleo" size={24} color="black" />
+            </TouchableOpacity>
         </LinearGradient>
     );
 }

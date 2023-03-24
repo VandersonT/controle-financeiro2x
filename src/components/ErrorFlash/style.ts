@@ -5,11 +5,13 @@ const styles = StyleSheet.create({
     errorBox: {
         width: '90%',
         position: 'absolute',
+        zIndex: 2,
         top: 62,
         borderRadius: 3,
         flex: 1,
         flexDirection: "row",
         justifyContent: 'space-between',
+        alignItems: 'center',
         paddingHorizontal: 20,
         paddingVertical: 14
     },
@@ -18,7 +20,8 @@ const styles = StyleSheet.create({
         fontSize: Theme.fontSizes.md
     },
     closeButton: {
-        color: Theme.colors.white[700]
+        color: Theme.colors.white[700],
+        fontSize: Theme.fontSizes.md
     }
 });
 
