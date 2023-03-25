@@ -12,7 +12,7 @@ const Home = ({ navigation }: any) => {
     return (
         <View style={styles.container}>
             
-            <Header />
+            <Header nav={navigation} />
             
             <View style={styles.main}>
                 <Text>Conteudo</Text>        

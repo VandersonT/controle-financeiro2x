@@ -87,16 +87,16 @@ const styles = StyleSheet.create({
         height: screenHeight,
         position: 'absolute',
         top: 0,
-        zIndex: 6,
+        zIndex: 4,
         backgroundColor: 'rgba(0, 0, 0, 0.7)'
     },
     menuBox: {
         width: 310,
-        height: '100%',
+        height: screenHeight,
         position: 'absolute',
         top: 0,
         right: 0,
-        zIndex: 699,
+        zIndex: 4,
         backgroundColor: Theme.colors.white[700]
     },
     menuInfoBox: {
