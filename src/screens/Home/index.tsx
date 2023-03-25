@@ -13,7 +13,11 @@ const Home = ({ navigation }: any) => {
         <View style={styles.container}>
             
             <Header />
-            <Text>Conteudo</Text>
+            
+            <View style={styles.main}>
+                <Text>Conteudo</Text>        
+            </View>
+        
         </View>
     );
 }

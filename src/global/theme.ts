@@ -28,6 +28,7 @@ export const Theme = {
             700: '#FFFFFF'
         },
         black: {
+            700: '#000000',
             300: '#3b3b3b'
         }
     },

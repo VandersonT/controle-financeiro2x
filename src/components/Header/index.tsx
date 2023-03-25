@@ -1,4 +1,4 @@
-import { View, Text, StatusBar, Image } from 'react-native';
+import { View, Text, StatusBar, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../global/theme';
@@ -10,11 +10,12 @@ const Header = () => {
             {/*Define cor da barra de status*/}
             <StatusBar backgroundColor={Theme.colors.secondary[700]} barStyle="light-content" />
             
+            {/*Part One*/}
             <View style={styles.headerBox}>
                 <View style={styles.headerInfo}>
                     <Image
                         resizeMode='contain'
-                        source={require('../../../assets/images/noPhoto.png')}
+                        source={require('../../../assets/images/photo1.jpg')}
                         style={{width: 57, height: 55, marginRight: 13, borderColor: '#5144DB', borderWidth: 2, borderRadius: 50}}
                     />
                     <Text style={styles.userName}>Matheus Silva</Text>
@@ -24,6 +25,8 @@ const Header = () => {
                 </Text>
             </View>
 
+
+            {/*Part Two*/}
             <View style={styles.infoBox}>
                 <View style={styles.infoSingle}>
                     <Text style={styles.infoTitle}>Disponivel</Text>
@@ -39,6 +42,39 @@ const Header = () => {
                     <Text style={[styles.money, styles.money_white]}>R$ 709.012,00</Text>
                 </LinearGradient>
             </View>
+            
+            <View style={styles.bgDark}>
+                <View style={styles.menuBox}>
+                    <ImageBackground
+                        style={{width: '100%', height: 255}}
+                        source={require('../../../assets/images/Landscape.png')}
+                    >
+                        <View style={styles.menuInfoBox}>
+                            <Image 
+                                source={require('../../../assets/images/photo1.jpg')}
+                                style={{width: 100, height: 100, borderRadius: 50}}
+                            />
+                            <Text style={styles.menuTitle}>Matheus Silva</Text>
+                        </View>
+                    </ImageBackground>
+
+                    <View>
+                        <TouchableOpacity style={styles.optionSingle}>
+                            <Text>Perfil</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.optionSingle}>
+                            <Text>Créditos</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.optionSingle}>
+                            <Text>Sair</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
+            </View>
+
         </View>
     );
 }
