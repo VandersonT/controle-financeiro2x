@@ -26,6 +26,9 @@ export const Theme = {
         },
         white: {
             700: '#FFFFFF'
+        },
+        black: {
+            300: '#3b3b3b'
         }
     },
     fonts: {

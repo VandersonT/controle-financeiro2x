@@ -13,8 +13,9 @@ export default () => (
   
   <MainStack.Navigator>
     
-    <MainStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
     <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+    <MainStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
+    
 
   </MainStack.Navigator>
 );

@@ -40,14 +40,14 @@ const SignIn = ({ navigation }: any) => {
             return;
         }
 
-        //navigation.push('Home');
+        navigation.push('Home');
     }
     const registerAction = () => {
         if(!userRegister || !emailRegister || !passRegister || !confirmPassRegister){
             setErrorMsg('Preencha todos os campos.')
             return;
         }
-        //navigation.push('Home');
+        navigation.push('Home');
     }
     /*-------------------------------------*/
 
