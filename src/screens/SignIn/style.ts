@@ -7,6 +7,7 @@ import { Theme } from '../../global/theme';
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -15,13 +16,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 40
     },
     logoText: {
         fontWeight: '400',
         fontSize: Theme.fontSizes.xxl,
         marginLeft: 15
     },
-    loginBox: {
+    mainBox: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',

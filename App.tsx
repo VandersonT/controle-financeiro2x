@@ -4,9 +4,9 @@ import MainStack from "./src/navigators/MainStack";
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <MainStack/>
-    </NavigationContainer>
+      <NavigationContainer>
+        <MainStack/>
+      </NavigationContainer>
   );
 }
 
