@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     },
     logoBox: {
         display: 'flex',
-        flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 40,
         marginTop: 100
@@ -22,7 +21,12 @@ const styles = StyleSheet.create({
     logoText: {
         fontWeight: '400',
         fontSize: Theme.fontSizes.xxl,
-        marginLeft: 15
+        marginLeft: 15,
+        color: Theme.colors.black[500],
+        marginTop: 10,
+        paddingBottom: 10,
+        borderBottomWidth: 3,
+        borderColor: Theme.colors.primary[700]
     },
     mainBox: {
         width: '100%',
@@ -40,7 +44,8 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: Theme.fontSizes.md,
-        marginBottom: 10
+        marginBottom: 10,
+        color: Theme.colors.black[500]
     },
     input: {
         width: '100%',

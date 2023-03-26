@@ -66,8 +66,8 @@ const SignIn = ({ navigation }: any) => {
                     {!register &&
                         <View style={styles.mainBox}>
                             <Image
-                                style={{width: 131, height: 131, marginBottom: 40}}
-                                source={require('../../../assets/images/logo.png')}
+                                style={{width: 131, height: 131, marginBottom: 40, borderRadius: 100}}
+                                source={require('../../../assets/images/logo.jpg')}
                             />
                             
                             <View style={styles.fieldSingle}>
@@ -96,10 +96,10 @@ const SignIn = ({ navigation }: any) => {
                             <View style={[styles.mainBox, styles.margimBottom]}>
                                 <View style={styles.logoBox}>
                                     <Image
-                                        style={{width: 85, height: 85}}
-                                        source={require('../../../assets/images/logo.png')}
+                                        style={{width: 85, height: 85, borderRadius: 100}}
+                                        source={require('../../../assets/images/logo.jpg')}
                                     />
-                                    <Text style={styles.logoText}>Cadastre-se</Text>
+                                    <Text style={styles.logoText}>Bem Vindo</Text>
                                 </View>
 
                                 <View style={styles.fieldSingle}>

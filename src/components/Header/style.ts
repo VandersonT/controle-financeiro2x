@@ -6,11 +6,13 @@ const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     /*Header Style*/
+    margimBottom: {
+        marginBottom: 100
+    },
     container: {
         width: '100%',
         height: 171,
-        backgroundColor: Theme.colors.secondary[700],
-        marginBottom: 100
+        backgroundColor: Theme.colors.secondary[700]
     },
     userName: {
         color: Theme.colors.white[700],
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     infoTitleBox: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     infoTitle: {
         fontSize: Theme.fontSizes.md
