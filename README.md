@@ -1,0 +1,59 @@
+<h1 align="center" id="title">Controle Financeiro 2x</h1>
+
+<p id="description">This app is an efficient and practical solution to help people manage their finances without involving real money. With it, you can simulate your financial transactions and have a complete view of your money movements in real time. Additionally, the app allows you to create virtual money boxes for specific purposes such as a trip, emergency funds, or buying a new car. With this functionality, you can plan and achieve your financial goals in an organized and planned way.</p>
+
+<br/><br/>
+<h2>🚀 Demo</h2>
+
+[Indisponivel\_no\_momento](Indisponivel_no_momento)
+
+
+<br/><br/>
+<h2>🔨 Prototype</h2>
+<a href="https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1" target="_blank">https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1</a>
+
+
+<br/><br/>
+<h2>💻 Project Screenshots:</h2>
+<br/>
+
+<div style="display: flex; justify-content: space-around;flex-wrap: wrap;">
+<img style="margin-bottom: 50px"  src="https://images2.imgbox.com/3f/b3/ih4GI8kQ_o.png" alt="project-screenshot" width="200" height="400/">
+
+<img style="margin-bottom: 50px" src="https://images2.imgbox.com/05/9a/2l6qeoUA_o.png" alt="project-screenshot" width="200" height="400/">
+
+<img style="margin-bottom: 50px"  src="https://images2.imgbox.com/35/50/4NsTsF34_o.png" alt="project-screenshot" width="200" height="400/">
+
+<img style="margin-bottom: 50px"  src="https://images2.imgbox.com/d5/e1/CEKRZKKX_o.png" alt="project-screenshot" width="200" height="400/">
+</div>
+
+<br/><br/>
+<h2>🛠️ Installation Steps:</h2>
+<br/>
+<p>1. Clone o Repositorio</p>
+
+```
+Git clone https://github.com/VandersonT/controle-financeiro2x
+```
+<br/>
+<p>2. Baixe as dependências</p>
+
+```
+npm install
+```
+
+  
+  <br/><br/>
+<h2>💻 Built with</h2>
+
+Technologies used in the project:
+
+*   React Native
+*   TypeScript
+*   SqlLite
+
+<br/><br/>
+<h2>💖Like my work?</h2>
+<p>If you enjoyed using Controle Financeiro 2x please share it with your friends. </p>
+
+<p>Additionally if you encountered any issues or have any suggestions for improvement feel free to open an issue or submit a pull request. Your contribution is essential to making Controle Financeiro 2x even better.</p>
