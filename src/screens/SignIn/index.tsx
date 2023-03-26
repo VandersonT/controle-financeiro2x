@@ -54,7 +54,7 @@ const SignIn = ({ navigation }: any) => {
     
 
     return (
-        <KeyboardAvoidingView keyboardVerticalOffset={50} style={styles.container} behavior={(Platform.OS == "ios") ? "padding" : "height" }>
+        <KeyboardAvoidingView keyboardVerticalOffset={0} style={styles.container} behavior={(Platform.OS == "ios") ? "padding" : "height" }>
             
                 <LinearGradient colors={['rgba(234,234,234,1)', 'rgba(243,243,243,1)']} style={styles.container}>
 
@@ -71,13 +71,13 @@ const SignIn = ({ navigation }: any) => {
                             />
                             
                             <View style={styles.fieldSingle}>
-                                <Text style={styles.label}>Usuário:</Text>
-                                <TextInput value={user} style={styles.input} onChangeText={(changeUser)=>setUser(changeUser)} />
+                                <Text style={styles.label}>Email:</Text>
+                                <TextInput placeholder="Digite seu email" value={user} style={styles.input} onChangeText={(changeUser)=>setUser(changeUser)} />
                             </View>
 
                             <View style={styles.fieldSingle}>
                                 <Text style={styles.label}>Senha:</Text>
-                                <TextInput secureTextEntry value={pass} style={styles.input} onChangeText={(changePass)=>setPass(changePass)} />
+                                <TextInput placeholder="Digite sua senha" secureTextEntry value={pass} style={styles.input} onChangeText={(changePass)=>setPass(changePass)} />
                             </View>
 
                             <Button1 title="Entrar" fnc={loginAction} />
@@ -92,8 +92,8 @@ const SignIn = ({ navigation }: any) => {
 
                     {register &&
 
-                        <ScrollView style={{width: '100%', paddingTop: 100}}>
-                            <View  style={styles.mainBox}>
+                        <ScrollView style={{width: '100%', flexGrow: 1}}>
+                            <View style={[styles.mainBox, styles.margimBottom]}>
                                 <View style={styles.logoBox}>
                                     <Image
                                         style={{width: 85, height: 85}}

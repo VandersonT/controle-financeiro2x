@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 40
+        marginBottom: 40,
+        marginTop: 100
     },
     logoText: {
         fontWeight: '400',
@@ -27,6 +28,9 @@ const styles = StyleSheet.create({
         width: '100%',
         display: 'flex',
         alignItems: 'center',
+    },
+    margimBottom: {
+        marginBottom: 50
     },
     fieldSingle: {
         width: '80%',
