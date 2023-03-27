@@ -2,15 +2,30 @@
 
 <p id="description">This app is an efficient and practical solution to help people manage their finances without involving real money. With it, you can simulate your financial transactions and have a complete view of your money movements in real time. Additionally, the app allows you to create virtual money boxes for specific purposes such as a trip, emergency funds, or buying a new car. With this functionality, you can plan and achieve your financial goals in an organized and planned way.</p>
 
+___
+
+<br/>
+<h2>Devs:</h2>
+
+- Bruno Caldeira | [GitHub](https://github.com/VandersonT)
+
+- Eduardo Xxxx | [GitHub](https://github.com/VandersonT)
+
+- Enzo Dupim | [GitHub](https://github.com/VandersonT)
+
+
+- Vanderson Paulo | [GitHub](https://github.com/VandersonT)
+
 <br/><br/>
 <h2>🚀 Demo</h2>
 
 [Indisponivel\_no\_momento](Indisponivel_no_momento)
 
 
-<br/><br/>
+<br/>
 <h2>🔨 Prototype</h2>
-<a href="https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1" target="_blank">https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1</a>
+
+[https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1](https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1)
 
 
 <br/><br/>
@@ -30,16 +45,27 @@
 <br/><br/>
 <h2>🛠️ Installation Steps:</h2>
 <br/>
-<p>1. Clone o Repositorio</p>
+<p>1. Clone the repository:</p>
 
 ```
 Git clone https://github.com/VandersonT/controle-financeiro2x
 ```
 <br/>
-<p>2. Baixe as dependências</p>
+<p>2. Download the project dependencies:</p>
 
 ```
 npm install
+```
+
+<br/>
+<p>2. Start Project:</p>
+
+```
+npm start
+```
+or
+```
+npx expo start
 ```
 
   
