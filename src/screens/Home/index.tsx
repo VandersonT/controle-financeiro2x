@@ -25,6 +25,8 @@ const Home = ({ navigation }: any) => {
         const [ seeMore, setSeeMore ] = useState<boolean[]>([false]);
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(0);
 
+
+        
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
@@ -33,16 +35,18 @@ const Home = ({ navigation }: any) => {
             const aux = [];
 
             /*Close all transactions*/
+            setTransactionOpened(-1);
             for(let i = 0; i < transactions.length; i++)
                 aux[i] = false;
             
             /*Open transaction if not already opened, otherwise close it.*/
-            if(transactionOpened != index)
+            if(transactionOpened != index){
                 aux[index] = true;
+                setTransactionOpened(index);
+            }
 
             /*Set States*/
             setSeeMore(aux);
-            setTransactionOpened(index);
         }
 
     return (
