@@ -2,21 +2,32 @@
 /*              IMPORTS                   */
 /*----------------------------------------*/
 import React, { useState } from "react";
-import { View, Text, Button, TouchableOpacity, ScrollView } from 'react-native';
-import styles from "./style";
+import { View, Text, Button, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import Header from '../../components/Header';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { Theme } from "../../global/theme";
+
+//Functions Helpers
 import BrazilianRealFormat from "../../helpers/BrazilianRealFormat";
+
+//Css's
+import { Theme } from "../../global/theme";
+import styles from "./style";
+
+//Types
 import { Transaction } from "../../Types/Transaction";
+
+
+
+
+
 
 const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
     let transactions:Transaction[] = [
-        {title: 'Padaria do se Mané', value: 900.00, description: 'eu ganhei porque vendi latinha pro mané', date: '27/03/2023', 'where': 'disponível'},
-        {title: 'bet943', value: 100.00, description: 'Ganhei fazendo aposta na concorrente da bet', date: '28/03/2023', 'where': 'disponível'},
-        {title: 'Academia', value: -500.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'}
+        {id: '0', title: 'Padaria do se Mané', value: 900.00, description: 'eu ganhei porque vendi latinha pro mané', date: '27/03/2023', 'where': 'disponível'},
+        {id: '1', title: 'bet943', value: 100.00, description: 'Ganhei fazendo aposta na concorrente da bet', date: '28/03/2023', 'where': 'disponível'},
+        {id: '2', title: 'Academia', value: -500.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'}
     ];
 
     /*----------------------------------------*/
@@ -26,7 +37,7 @@ const Home = ({ navigation }: any) => {
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(0);
 
 
-        
+
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
@@ -50,7 +61,6 @@ const Home = ({ navigation }: any) => {
         }
 
     return (
-        <ScrollView style={{flexGrow: 1}}>
         <View style={styles.container}>
             
             <Header nav={navigation} showMoney={true} />
@@ -63,7 +73,53 @@ const Home = ({ navigation }: any) => {
 
                 <View style={styles.transactionsBox}>
 
-                    {transactions.map((transaction, index)=>(
+                    <FlatList
+                        data={transactions}
+                        keyExtractor={item=>item.id}
+                        renderItem={({item, index})=>
+                        <View key={index}>
+                            <TouchableOpacity style={styles.transactionSingle} onPress={() => openTransaction(index)}>
+                                <Text style={styles.transactionTitle}>{item['title']}</Text>
+                                <View style={styles.leftSide}>
+                                    <Text style={[styles.transactionValue, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
+                                    {transactionOpened == index
+                                        ? <SimpleLineIcons name="arrow-down" size={15} color={Theme.colors.black[300]} />
+                                        : <SimpleLineIcons name="arrow-left" size={13} color={Theme.colors.black[300]} />
+                                    }
+                                    
+                                </View>
+                            </TouchableOpacity>
+
+                            {seeMore[index] &&
+                                <View style={styles.transactionSingle_detail}>
+                                    
+                                    <View style={styles.fieldSingle}>
+                                        <Text style={styles.fieldTitle}>Descrição:</Text>
+                                        <Text style={styles.description}>{item['description']}</Text>
+                                    </View>
+
+                                    <View style={styles.fieldSingle}>
+                                        <Text style={styles.fieldTitle}>Data:</Text>
+                                        <Text style={styles.description}>{item['date']}</Text>
+                                    </View>
+
+                                    <View style={styles.fieldSingle}>
+                                        <Text style={styles.fieldTitle}>Onde:</Text>
+                                        <Text style={styles.description}>{item['where']}</Text>
+                                    </View>
+
+                                    <View style={styles.fieldSingle}>
+                                        <Text style={styles.fieldTitle}>Valor:</Text>
+                                        <Text style={[styles.description, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
+                                    </View>
+
+                                </View>
+                            }
+                        </View>
+                        }
+                    />
+
+                    {/*{transactions.map((transaction, index)=>(
                         <View key={index}>
                             <TouchableOpacity style={styles.transactionSingle} onPress={() => openTransaction(index)}>
                                 <Text style={styles.transactionTitle}>{transaction['title']}</Text>
@@ -103,14 +159,13 @@ const Home = ({ navigation }: any) => {
                                 </View>
                             }
                         </View>
-                    ))}
+                    ))}*/}
 
                 </View>
 
             </View>
         
         </View>
-        </ScrollView>
     );
 }
 

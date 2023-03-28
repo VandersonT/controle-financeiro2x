@@ -5,10 +5,12 @@ import React, { useState } from "react";
 import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./style";
+import { CheckBox } from 'react-native-elements';
 
 //Components:
 import ErrorFlash from "../../components/ErrorFlash";
 import Button1 from "../../components/Button1";
+import { Theme } from "../../global/theme";
 /*----------------------------------------*/
 
 
@@ -26,6 +28,7 @@ const SignIn = ({ navigation }: any) => {
     const [ emailRegister, setEmailRegister ] = useState<string>('');
     const [ passRegister, setPassRegister ] = useState<string>('');
     const [ confirmPassRegister, setConfirmPassRegister ] = useState<string>('');
+    const [checked, setChecked] = useState(false);
     /*-------------------------------------*/
 
 
@@ -49,6 +52,9 @@ const SignIn = ({ navigation }: any) => {
         }
         navigation.push('Home');
     }
+    const handleCheck = () => {
+        setChecked(!checked);
+    };
     /*-------------------------------------*/
 
     
@@ -56,7 +62,7 @@ const SignIn = ({ navigation }: any) => {
     return (
         <KeyboardAvoidingView keyboardVerticalOffset={0} style={styles.container} behavior={(Platform.OS == "ios") ? "padding" : "height" }>
             
-                <LinearGradient colors={['rgba(234,234,234,1)', 'rgba(243,243,243,1)']} style={styles.container}>
+                <View style={styles.container}>
 
                 
                     {errorMsg &&
@@ -65,74 +71,85 @@ const SignIn = ({ navigation }: any) => {
                     
                     {!register &&
                         <View style={styles.mainBox}>
-                            <Image
-                                style={{width: 131, height: 131, marginBottom: 40, borderRadius: 100}}
-                                source={require('../../../assets/images/logo.jpg')}
-                            />
-                            
-                            <View style={styles.fieldSingle}>
-                                <Text style={styles.label}>Email:</Text>
-                                <TextInput placeholder="Digite seu email" value={user} style={styles.input} onChangeText={(changeUser)=>setUser(changeUser)} />
-                            </View>
+                            <ScrollView style={{width: '100%', flexGrow: 1}}>
+                                <Image
+                                    style={{width: '100%'}}
+                                    source={require('../../../assets/images/topDetail2.png')}
+                                />
 
-                            <View style={styles.fieldSingle}>
-                                <Text style={styles.label}>Senha:</Text>
-                                <TextInput placeholder="Digite sua senha" secureTextEntry value={pass} style={styles.input} onChangeText={(changePass)=>setPass(changePass)} />
-                            </View>
+                                <View style={styles.formBox}>
+                                    <Image
+                                        style={{width: 104, height: 104, borderRadius: 60}}
+                                        source={require('../../../assets/images/logo.jpg')}
+                                    />
+                                    <View style={styles.titleBox}>
+                                        <Text style={styles.title1}>Controle</Text>
+                                        <Text  style={styles.title2}>Financeiro</Text>
+                                    </View>
 
-                            <Button1 title="Entrar" fnc={loginAction} />
+                                    <TextInput style={styles.input} placeholder="Digete seu email" />
+                                    <TextInput style={[styles.input, {marginBottom: 0}]} placeholder="Digete sua senha" />
 
-                            <TouchableOpacity style={styles.link} onPress={() => setRegister(true)}>
-                                <Text style={styles.linkText}>Não possui uma conta ainda?</Text>
-                                <Text style={styles.linkText}>cadastra-se agora</Text>
-                            </TouchableOpacity>
+                                    <CheckBox
+                                        title='Lembre de mim'
+                                        checked={checked}
+                                        onPress={handleCheck}
+                                        containerStyle={styles.checkboxContainer}
+                                        textStyle={styles.checkboxText}
+                                        checkedColor="#000"
+                                    />
 
+                                    <Button1 title="Entrar" fnc={loginAction} />
+                                    <TouchableOpacity onPress={() => setRegister(true)}>
+                                        <Text style={styles.link}>Não possuo uma conta</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </ScrollView>
                         </View>
                     }
 
                     {register &&
+                        <View style={styles.mainBox}>
+                            <ScrollView style={{width: '100%', flexGrow: 1}}>
+                                <Image
+                                    style={{width: '100%'}}
+                                    source={require('../../../assets/images/topDetail2.png')}
+                                />
 
-                        <ScrollView style={{width: '100%', flexGrow: 1}}>
-                            <View style={[styles.mainBox, styles.margimBottom]}>
-                                <View style={styles.logoBox}>
+                                <View style={styles.formBox}>
                                     <Image
-                                        style={{width: 85, height: 85, borderRadius: 100}}
+                                        style={{width: 104, height: 104, borderRadius: 60}}
                                         source={require('../../../assets/images/logo.jpg')}
                                     />
-                                    <Text style={styles.logoText}>Bem Vindo</Text>
-                                </View>
+                                    <View style={styles.titleBox}>
+                                        <Text style={styles.title1}>Controle</Text>
+                                        <Text  style={styles.title2}>Financeiro</Text>
+                                    </View>
 
-                                <View style={styles.fieldSingle}>
-                                    <Text style={styles.label}>Usuário:</Text>
-                                    <TextInput value={userRegister} style={styles.input} onChangeText={(e)=>setUserRegister(e)} />
-                                </View>
-                                
-                                <View style={styles.fieldSingle}>
-                                    <Text style={styles.label}>Email:</Text>
-                                    <TextInput value={emailRegister} style={styles.input} onChangeText={(e)=>setEmailRegister(e)} />
-                                </View>
+                                    <TextInput style={styles.input} placeholder="Digete seu email" />
+                                    <TextInput style={styles.input} placeholder="Digete seu email" />
+                                    <TextInput style={styles.input} placeholder="Digete sua senha" />
+                                    <TextInput style={[styles.input, {marginBottom: 0}]} placeholder="Confirme sua senha" />
 
-                                <View style={styles.fieldSingle}>
-                                    <Text style={styles.label}>Senha:</Text>
-                                    <TextInput secureTextEntry value={passRegister} style={styles.input} onChangeText={(e)=>setPassRegister(e)} />
+                                    <CheckBox
+                                        title='Exibir senhas'
+                                        checked={checked}
+                                        onPress={handleCheck}
+                                        containerStyle={styles.checkboxContainer}
+                                        textStyle={styles.checkboxText}
+                                        checkedColor="#000"
+                                    />
+
+                                    <Button1 title="Entrar" fnc={loginAction} />
+                                    <TouchableOpacity onPress={() => setRegister(false)}>
+                                        <Text style={styles.link}>Já possuo uma conta</Text>
+                                    </TouchableOpacity>
                                 </View>
-
-                                <View style={styles.fieldSingle}>
-                                    <Text style={styles.label}>Confirmar Senha:</Text>
-                                    <TextInput secureTextEntry value={confirmPassRegister} style={styles.input} onChangeText={(e)=>setConfirmPassRegister(e)} />
-                                </View>
-
-                                <Button1 title="Cadastrar" fnc={registerAction} />
-
-                                <TouchableOpacity style={styles.link} onPress={() => setRegister(false)}>
-                                    <Text style={styles.linkText}>Já possui uma conta?</Text>
-                                    <Text style={styles.linkText}>Entre agora</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </ScrollView>
+                            </ScrollView>
+                        </View>
                     }
                 
-                </LinearGradient>
+                </View>
         </KeyboardAvoidingView>
     );
 }

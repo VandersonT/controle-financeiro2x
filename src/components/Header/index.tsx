@@ -49,7 +49,7 @@ const Header = ({ nav, showMoney }: Props) => {
                     <View style={styles.headerInfo}>
                         <Image
                             resizeMode='contain'
-                            source={require('../../../assets/images/photo1.jpg')}
+                            source={require('../../../assets/images/noPhoto.png')}
                             style={{width: 57, height: 55, marginRight: 13, borderColor: '#5144DB', borderWidth: 2, borderRadius: 50}}
                         />
                         <Text style={styles.userName}>Matheus Silva</Text>
@@ -96,7 +96,7 @@ const Header = ({ nav, showMoney }: Props) => {
                             >
                                 <View style={styles.menuInfoBox}>
                                     <Image 
-                                        source={require('../../../assets/images/photo1.jpg')}
+                                        source={require('../../../assets/images/noPhoto.png')}
                                         style={{width: 100, height: 100, borderRadius: 50}}
                                     />
                                     <Text style={styles.menuTitle}>Matheus Silva</Text>

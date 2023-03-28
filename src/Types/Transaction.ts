@@ -1,9 +1,10 @@
 import { Double } from "react-native/Libraries/Types/CodegenTypes";
 
 export type Transaction = {
-    title: String,
+    id: string,
+    title: string,
     value: Double,
-    description: String,
-    date: String, //Facilitar pra não ter que ficar salvando em formato mm/dd/yy e depois trocando.
-    where: String
+    description: string,
+    date: string, //Facilitar pra não ter que ficar salvando em formato mm/dd/yy e depois trocando.
+    where: string
 }

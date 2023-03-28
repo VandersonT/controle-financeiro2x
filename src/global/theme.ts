@@ -3,11 +3,12 @@ export const Theme = {
         primary: {
             700: '#271C97',
             500: '#3C2CE2',
-            300: '#5144DB'
+            300: '#5144DB',
+            200: '#7377FF',
         },
         secondary: {
             700: '#0E0E0E',
-            500: '#1C1C1C',
+            300: '#1C1C1C',
             200: '#4D4D4D'
         },
         green: {
@@ -16,6 +17,7 @@ export const Theme = {
         red: {
             700: '#A82626',
             500: '#E30000',
+            300: '#E62E17',
             200: '#DD1E1E'
         },
         gray: {
@@ -30,7 +32,8 @@ export const Theme = {
         black: {
             700: '#000000',
             500: '#333333',
-            300: '#3b3b3b'
+            300: '#3b3b3b',
+            200: '#B1B1B1'
         }
     },
     fonts: {

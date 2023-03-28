@@ -1,68 +1,66 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { Theme } from '../../global/theme';
 
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    logoBox: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: 40,
-        marginTop: 100
-    },
-    logoText: {
-        fontWeight: '400',
-        fontSize: Theme.fontSizes.xxl,
-        marginLeft: 15,
-        color: Theme.colors.black[500],
-        marginTop: 10,
-        paddingBottom: 10,
-        borderBottomWidth: 3,
-        borderColor: Theme.colors.primary[700]
+        backgroundColor: Theme.colors.white[700],
     },
     mainBox: {
-        width: '100%',
+        minHeight: screenHeight,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    formBox: {
+        marginTop: 20,
         display: 'flex',
         alignItems: 'center',
-    },
-    margimBottom: {
         marginBottom: 50
     },
-    fieldSingle: {
-        width: '80%',
+    titleBox: {
         display: 'flex',
-        alignItems: 'center',
-        marginBottom: 30
+        flexDirection: 'row',
+        marginTop: 17,
+        marginBottom: 40
     },
-    label: {
-        fontSize: Theme.fontSizes.md,
-        marginBottom: 10,
-        color: Theme.colors.black[500]
+    title1: {
+        color: Theme.colors.black[700],
+        fontSize: Theme.fontSizes.xxl
+    },
+    title2: {
+        fontSize: Theme.fontSizes.xxl,
+        marginLeft: 10,
+        color: Theme.colors.primary[300]
     },
     input: {
-        width: '100%',
-        backgroundColor: Theme.colors.white[700],
-        height: 40,
-        borderColor: '#CCC',
+        width: 250,
         borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        textAlign: 'center'
+        borderColor: Theme.colors.black[200],
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        borderRadius: 40,
+        fontSize: Theme.fontSizes.md,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    checkboxContainer: {
+        backgroundColor: '#fff',
+        borderWidth: 0,
+        marginBottom: 20
+    },
+    checkboxText: {
+      fontWeight: 'normal',
+      color: Theme.colors.blue[300]
     },
     link: {
-        marginTop: 20
-    },
-    linkText: {
         color: Theme.colors.blue[300],
-        textAlign: 'center'
+        marginTop: 20
     }
 });
 
