@@ -60,7 +60,7 @@ const SignIn = ({ navigation }: any) => {
     
 
     return (
-        <KeyboardAvoidingView keyboardVerticalOffset={0} style={styles.container} behavior={(Platform.OS == "ios") ? "padding" : "height" }>
+        <KeyboardAvoidingView keyboardVerticalOffset={100} style={styles.container} behavior={(Platform.OS == "ios") ? "padding" : "height" }>
             
                 <View style={styles.container}>
 

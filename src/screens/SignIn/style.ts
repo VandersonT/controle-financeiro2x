@@ -9,11 +9,11 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        minHeight: '100%',
         flex: 1,
         backgroundColor: Theme.colors.white[700],
     },
     mainBox: {
-        minHeight: screenHeight,
         display: 'flex',
         alignItems: 'center'
     },
