@@ -87,8 +87,8 @@ const SignIn = ({ navigation }: any) => {
                                         <Text  style={styles.title2}>Financeiro</Text>
                                     </View>
 
-                                    <TextInput style={styles.input} placeholder="Digete seu email" />
-                                    <TextInput style={[styles.input, {marginBottom: 0}]} placeholder="Digete sua senha" />
+                                    <TextInput value={user} onChangeText={setUser} style={styles.input} placeholder="Digete seu email" />
+                                    <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 0}]} placeholder="Digete sua senha" />
 
                                     <CheckBox
                                         title='Lembre de mim'

@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
         width: '100%',
         minHeight: screenHeight,
         backgroundColor: Theme.colors.gray[200],
-        paddingBottom: 50
     },
     main: {
         position: 'relative',
         zIndex: -1,
-        marginHorizontal: 20
+        marginHorizontal: 20,
+        marginBottom: 100
     },
     newTransaction: {
         color: Theme.colors.primary[500],
