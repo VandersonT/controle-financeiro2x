@@ -32,7 +32,8 @@ const Home = ({ navigation }: any) => {
         {id: '4', title: 'tesoura', value: -300.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
         {id: '5', title: 'rato', value: -400.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
         {id: '6', title: 'teste', value: -500.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '7', title: 'tolino', value: -600.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'}
+        {id: '7', title: 'tolino', value: -600.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
+        {id: '8', title: 'test', value: -700.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
     ];
 
     /*----------------------------------------*/
@@ -65,6 +66,51 @@ const Home = ({ navigation }: any) => {
             setSeeMore(aux);
         }
 
+        const renderItem = ({item}: any) => {
+            
+            return (
+                <View key={item.id}>
+                    <TouchableOpacity style={styles.transactionSingle} onPress={() => openTransaction(item.id)}>
+                        <Text style={styles.transactionTitle}>{item['title']}</Text>
+                        <View style={styles.leftSide}>
+                            <Text style={[styles.transactionValue, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item?.value)}</Text>
+                            {transactionOpened == Number(item.id)
+                                ? <SimpleLineIcons name="arrow-down" size={15} color={Theme.colors.black[300]} />
+                                : <SimpleLineIcons name="arrow-left" size={13} color={Theme.colors.black[300]} />
+                            }
+                            
+                        </View>
+                    </TouchableOpacity>
+
+                    {seeMore[item.id] &&
+                        <View style={styles.transactionSingle_detail}>
+                            
+                            <View style={styles.fieldSingle}>
+                                <Text style={styles.fieldTitle}>Descrição:</Text>
+                                <Text style={styles.description}>{item['description']}</Text>
+                            </View>
+
+                            <View style={styles.fieldSingle}>
+                                <Text style={styles.fieldTitle}>Data:</Text>
+                                <Text style={styles.description}>{item['date']}</Text>
+                            </View>
+
+                            <View style={styles.fieldSingle}>
+                                <Text style={styles.fieldTitle}>Onde:</Text>
+                                <Text style={styles.description}>{item['where']}</Text>
+                            </View>
+
+                            <View style={styles.fieldSingle}>
+                                <Text style={styles.fieldTitle}>Valor:</Text>
+                                <Text style={[styles.description, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
+                            </View>
+
+                        </View>
+                    }
+                </View>
+            )
+        }
+
     return (
         <ScrollView style={styles.container}>
             
@@ -79,49 +125,10 @@ const Home = ({ navigation }: any) => {
                 <View style={styles.transactionsBox}>
 
                     <FlatList
+                        scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
                         data={transactions}
                         keyExtractor={item=>item.id}
-                        renderItem={({item, index})=>
-                        <View key={index}>
-                            <TouchableOpacity style={styles.transactionSingle} onPress={() => openTransaction(index)}>
-                                <Text style={styles.transactionTitle}>{item['title']}</Text>
-                                <View style={styles.leftSide}>
-                                    <Text style={[styles.transactionValue, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
-                                    {transactionOpened == index
-                                        ? <SimpleLineIcons name="arrow-down" size={15} color={Theme.colors.black[300]} />
-                                        : <SimpleLineIcons name="arrow-left" size={13} color={Theme.colors.black[300]} />
-                                    }
-                                    
-                                </View>
-                            </TouchableOpacity>
-
-                            {seeMore[index] &&
-                                <View style={styles.transactionSingle_detail}>
-                                    
-                                    <View style={styles.fieldSingle}>
-                                        <Text style={styles.fieldTitle}>Descrição:</Text>
-                                        <Text style={styles.description}>{item['description']}</Text>
-                                    </View>
-
-                                    <View style={styles.fieldSingle}>
-                                        <Text style={styles.fieldTitle}>Data:</Text>
-                                        <Text style={styles.description}>{item['date']}</Text>
-                                    </View>
-
-                                    <View style={styles.fieldSingle}>
-                                        <Text style={styles.fieldTitle}>Onde:</Text>
-                                        <Text style={styles.description}>{item['where']}</Text>
-                                    </View>
-
-                                    <View style={styles.fieldSingle}>
-                                        <Text style={styles.fieldTitle}>Valor:</Text>
-                                        <Text style={[styles.description, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
-                                    </View>
-
-                                </View>
-                            }
-                        </View>
-                        }
+                        renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
 
                 </View>
