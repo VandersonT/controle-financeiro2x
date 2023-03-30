@@ -1,7 +1,7 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, Button, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
@@ -18,7 +18,7 @@ import { Transaction } from "../../Types/Transaction";
 //Components
 import Header from '../../components/Header';
 import Footer from "../../components/Footer";
-
+import NewTransaction from "../../components/NewTransaction";
 
 
 
@@ -28,7 +28,19 @@ const Home = ({ navigation }: any) => {
     let transactions:Transaction[] = [
         {id: '0', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
         {id: '1', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '2', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'}
+        {id: '2', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
+        {id: '3', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '4', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
+        {id: '5', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
+        {id: '6', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '7', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
+        {id: '8', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
+        {id: '9', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '10', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
+        {id: '11', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
+        {id: '12', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '13', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
+        {id: '14', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
 
     ];
 
@@ -37,12 +49,27 @@ const Home = ({ navigation }: any) => {
     /*----------------------------------------*/
         const [ seeMore, setSeeMore ] = useState<boolean[]>([false]);
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(-1);
-
-
+        const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
+        const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
 
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
+
+        const scrollViewRef = useRef<ScrollView>(null);
+
+        const handleScrollToTop = () => {
+            setScrollEnabled(false);
+            setNewTransactionStatus(true);
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+        }
+
+        const closeNewTransaction = () => {
+            setScrollEnabled(true);
+            setNewTransactionStatus(false);
+            /*Limpa os campos também*/
+        }
+
         const openTransaction = (index: any) => {
 
             const aux = [];
@@ -108,15 +135,21 @@ const Home = ({ navigation }: any) => {
         }
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container} showsVerticalScrollIndicator={false}>
+            
+            {newTrasactionStatus &&
+                <NewTransaction closeFnc={closeNewTransaction} />
+            }
             
             <Header nav={navigation} showMoney={true} />
             
             <View style={styles.main}>
                 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleScrollToTop}>
                     <Text style={styles.newTransaction}>Nova Transação</Text>
                 </TouchableOpacity>
+
+                
 
                 <View style={styles.transactionsBox}>
 
