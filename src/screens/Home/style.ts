@@ -9,26 +9,31 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        minHeight: screenHeight,
-        backgroundColor: Theme.colors.gray[200],
+        backgroundColor: Theme.colors.white[700],
+        flex: 1
     },
     main: {
         position: 'relative',
+        minHeight: screenHeight-411,
         zIndex: -1,
         marginHorizontal: 20,
-        marginBottom: 100
+        marginBottom: 60
     },
     newTransaction: {
         color: Theme.colors.primary[500],
-        fontSize: Theme.fontSizes.md
+        fontSize: Theme.fontSizes.md,
+        marginTop: 30,
+        marginBottom: 15,
     },
     transactionsBox: {
-        marginTop: 20,
-        width: '100%',
+        marginTop: 6,
+        width: '100%'
     },
     transactionSingle: {
         width: '100%',
         height: 63,
+        borderWidth: 1,
+        borderColor: Theme.colors.white[500],
         borderRadius: 6,
         backgroundColor: Theme.colors.white[700],
         shadowColor: "#000",
@@ -69,8 +74,8 @@ const styles = StyleSheet.create({
         backgroundColor: Theme.colors.white[700],
         position: 'relative',
         bottom: 3,
-        borderColor: Theme.colors.gray[200],
-        borderTopWidth: 1,
+        borderColor: Theme.colors.white[500],
+        borderWidth: 1,
         padding: 15,
         paddingTop: 0,
         borderBottomLeftRadius: 5,

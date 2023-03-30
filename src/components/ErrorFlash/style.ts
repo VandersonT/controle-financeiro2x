@@ -2,11 +2,14 @@ import { StyleSheet } from "react-native"
 import { Theme } from "../../global/theme";
 
 const styles = StyleSheet.create({
-    errorBox: {
-        width: '90%',
+    container: {
         position: 'absolute',
         zIndex: 2,
         top: 62,
+        alignItems: 'center'
+    },
+    errorBox: {
+        width: '90%',
         borderRadius: 3,
         flex: 1,
         flexDirection: "row",

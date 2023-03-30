@@ -126,10 +126,10 @@ const SignIn = ({ navigation }: any) => {
                                         <Text  style={styles.title2}>Financeiro</Text>
                                     </View>
 
+                                    <TextInput style={styles.input} placeholder="Digete seu usuário" />
                                     <TextInput style={styles.input} placeholder="Digete seu email" />
-                                    <TextInput style={styles.input} placeholder="Digete seu email" />
-                                    <TextInput style={styles.input} placeholder="Digete sua senha" />
-                                    <TextInput style={[styles.input, {marginBottom: 0}]} placeholder="Confirme sua senha" />
+                                    <TextInput secureTextEntry={checked ? false : true} style={styles.input} placeholder="Digete sua senha" />
+                                    <TextInput secureTextEntry={checked ? false : true} style={[styles.input, {marginBottom: 0}]} placeholder="Confirme sua senha" />
 
                                     <CheckBox
                                         title='Exibir senhas'
@@ -140,7 +140,7 @@ const SignIn = ({ navigation }: any) => {
                                         checkedColor="#000"
                                     />
 
-                                    <Button1 title="Entrar" fnc={loginAction} />
+                                    <Button1 title="Entrar" fnc={registerAction} />
                                     <TouchableOpacity onPress={() => setRegister(false)}>
                                         <Text style={styles.link}>Já possuo uma conta</Text>
                                     </TouchableOpacity>

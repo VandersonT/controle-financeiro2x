@@ -9,7 +9,7 @@ export const Theme = {
         secondary: {
             700: '#0E0E0E',
             300: '#1C1C1C',
-            200: '#4D4D4D'
+            200: '#4D4D4D',
         },
         green: {
             500: '#37C713'
@@ -27,7 +27,8 @@ export const Theme = {
             300: '#00A3FF'
         },
         white: {
-            700: '#FFFFFF'
+            700: '#FFFFFF',
+            500: '#D8D8D8'
         },
         black: {
             700: '#000000',

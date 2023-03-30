@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: 171,
-        backgroundColor: Theme.colors.secondary[700]
+        backgroundColor: Theme.colors.primary[300]
     },
     userName: {
         color: Theme.colors.white[700],
@@ -66,21 +66,14 @@ const styles = StyleSheet.create({
     infoTitle: {
         fontSize: Theme.fontSizes.md
     },
-    infoTitle_white: {
-        color: Theme.colors.white[700],
-    },
     infoTitle_alert: {
         fontSize: Theme.fontSizes.sm,
         marginLeft: 5,
-        color: Theme.colors.white[700],
     },
     money: {
         fontSize: Theme.fontSizes.lg,
         color: Theme.colors.black[300],
         marginTop: 10
-    },
-    money_white: {
-        color: Theme.colors.white[700]
     },
 
     /*Menu Opened*/

@@ -42,7 +42,7 @@ const Header = ({ nav, showMoney }: Props) => {
             
             <View style={styles.container}>
                 {/*Define cor da barra de status*/}
-                <StatusBar backgroundColor={Theme.colors.secondary[700]} barStyle="light-content" />
+                <StatusBar backgroundColor={Theme.colors.primary[300]} barStyle="light-content" />
                 
                 {/*Part One*/}
                 <View style={styles.headerBox}>
@@ -69,15 +69,15 @@ const Header = ({ nav, showMoney }: Props) => {
                             <Text style={styles.infoTitle}>Disponivel</Text>
                             <Text style={styles.money}>R$ 979,03</Text>
                         </View>
-                        <LinearGradient colors={[Theme.colors.primary[300], Theme.colors.primary[700]]} style={styles.infoSingle}>
+                        <View style={styles.infoSingle}>
                             <TouchableOpacity style={styles.infoTitleBox} onPress={moneyJar}>
-                                <Text style={[styles.infoTitle, styles.infoTitle_white]}>
+                                <Text style={styles.infoTitle}>
                                     Caixinha
                                 </Text>
                                 <Text style={styles.infoTitle_alert}>[Clique]</Text>
                             </TouchableOpacity>
-                            <Text style={[styles.money, styles.money_white]}>R$ 709,00</Text>
-                        </LinearGradient>
+                            <Text style={styles.money}>R$ 709,00</Text>
+                        </View>
                     </View>
                 }
                 

@@ -3,7 +3,6 @@
 /*----------------------------------------*/
 import React, { useState } from "react";
 import { View, Text, Button, TouchableOpacity, ScrollView, FlatList } from 'react-native';
-import Header from '../../components/Header';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 //Functions Helpers
@@ -16,7 +15,9 @@ import styles from "./style";
 //Types
 import { Transaction } from "../../Types/Transaction";
 
-
+//Components
+import Header from '../../components/Header';
+import Footer from "../../components/Footer";
 
 
 
@@ -25,22 +26,17 @@ const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
     let transactions:Transaction[] = [
-        {id: '0', title: 'Padaria do se Mané', value: 900.00, description: 'eu ganhei porque vendi latinha pro mané', date: '27/03/2023', 'where': 'disponível'},
-        {id: '1', title: 'bet943', value: 100.00, description: 'Ganhei fazendo aposta na concorrente da bet', date: '28/03/2023', 'where': 'disponível'},
-        {id: '2', title: 'Academia', value: -100.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '3', title: 'Pedra', value: -200.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '4', title: 'tesoura', value: -300.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '5', title: 'rato', value: -400.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '6', title: 'teste', value: -500.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '7', title: 'tolino', value: -600.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
-        {id: '8', title: 'test', value: -700.00, description: 'Paguei a academia', date: '30/03/2023', 'where': 'disponível'},
+        {id: '0', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '1', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
+        {id: '2', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'}
+
     ];
 
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
         const [ seeMore, setSeeMore ] = useState<boolean[]>([false]);
-        const [ transactionOpened, setTransactionOpened ] = useState<Number>(0);
+        const [ transactionOpened, setTransactionOpened ] = useState<Number>(-1);
 
 
 
@@ -112,7 +108,7 @@ const Home = ({ navigation }: any) => {
         }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             
             <Header nav={navigation} showMoney={true} />
             
@@ -133,6 +129,8 @@ const Home = ({ navigation }: any) => {
 
                 </View>
             </View>
+
+            <Footer />
         
         </ScrollView>
     );
