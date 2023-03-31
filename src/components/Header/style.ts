@@ -64,15 +64,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     infoTitle: {
-        fontSize: Theme.fontSizes.md
+        fontSize: Theme.fontSizes.md,
+        color: Theme.colors.gray[600]
     },
     infoTitle_alert: {
         fontSize: Theme.fontSizes.sm,
         marginLeft: 5,
+        color: Theme.colors.blue[300]
     },
     money: {
         fontSize: Theme.fontSizes.lg,
-        color: Theme.colors.black[300],
+        color: Theme.colors.black[200],
         marginTop: 10
     },
 

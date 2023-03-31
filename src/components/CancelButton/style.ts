@@ -6,11 +6,12 @@ const styles = StyleSheet.create({
         minWidth: 130,
         height: 45,
         borderRadius: 3,
-        backgroundColor: Theme.colors.primary[300],
+        borderWidth: 1,
+        borderColor: Theme.colors.red[100],
         margin: 5
     },
     buttonText: {
-        color: Theme.colors.white[700],
+        color: Theme.colors.red[100],
         fontSize: Theme.fontSizes.md,
         textAlign: 'center',
         lineHeight: 45,

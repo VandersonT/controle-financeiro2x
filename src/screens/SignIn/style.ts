@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     input: {
         width: 250,
         borderWidth: 1,
-        borderColor: Theme.colors.black[200],
+        borderColor: Theme.colors.gray[400],
         paddingHorizontal: 20,
         paddingVertical: 8,
         borderRadius: 40,

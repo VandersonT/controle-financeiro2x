@@ -87,8 +87,8 @@ const SignIn = ({ navigation }: any) => {
                                         <Text  style={styles.title2}>Financeiro</Text>
                                     </View>
 
-                                    <TextInput value={user} onChangeText={setUser} style={styles.input} placeholder="Digete seu email" />
-                                    <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 0}]} placeholder="Digete sua senha" />
+                                    <TextInput value={user} onChangeText={setUser} style={styles.input} placeholder="Digite seu email" />
+                                    <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 0}]} placeholder="Digite sua senha" />
 
                                     <CheckBox
                                         title='Lembre de mim'
@@ -126,9 +126,9 @@ const SignIn = ({ navigation }: any) => {
                                         <Text  style={styles.title2}>Financeiro</Text>
                                     </View>
 
-                                    <TextInput style={styles.input} placeholder="Digete seu usuário" />
-                                    <TextInput style={styles.input} placeholder="Digete seu email" />
-                                    <TextInput secureTextEntry={checked ? false : true} style={styles.input} placeholder="Digete sua senha" />
+                                    <TextInput style={styles.input} placeholder="Digite seu usuário" />
+                                    <TextInput style={styles.input} placeholder="Digite seu email" />
+                                    <TextInput secureTextEntry={checked ? false : true} style={styles.input} placeholder="Digite sua senha" />
                                     <TextInput secureTextEntry={checked ? false : true} style={[styles.input, {marginBottom: 0}]} placeholder="Confirme sua senha" />
 
                                     <CheckBox
@@ -140,7 +140,7 @@ const SignIn = ({ navigation }: any) => {
                                         checkedColor="#000"
                                     />
 
-                                    <Button1 title="Entrar" fnc={registerAction} />
+                                    <Button1 title="Cadastrar" fnc={registerAction} />
                                     <TouchableOpacity onPress={() => setRegister(false)}>
                                         <Text style={styles.link}>Já possuo uma conta</Text>
                                     </TouchableOpacity>

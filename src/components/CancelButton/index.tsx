@@ -6,7 +6,7 @@ type Props = {
     fnc: () => void
 }
 
-const Button1 = ({ title, fnc }: Props) => {
+const CancelButton = ({ title, fnc }: Props) => {
     return (
         <TouchableOpacity style={styles.button} onPress={() => fnc()}>
             <Text style={styles.buttonText}>{title}</Text>
@@ -14,4 +14,4 @@ const Button1 = ({ title, fnc }: Props) => {
     );
 }
 
-export default Button1;
+export default CancelButton;
