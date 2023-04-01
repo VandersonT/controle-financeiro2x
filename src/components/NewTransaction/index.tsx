@@ -53,10 +53,10 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
     };
 
     const createTransaction = () => {
-        /*if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate){
+        if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
-        }*/
+        }
 
         //Manda para o banco de dados a nova transação
         

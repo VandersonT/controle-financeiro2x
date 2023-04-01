@@ -12,13 +12,13 @@ import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 
 type Props = {
     nav: any,
-    showMoney: boolean,
+    showMoney?: boolean,
     totalMoneyAvailable?: number,
     stash?: number
 }
 
 
-const Header = ({ nav, showMoney, totalMoneyAvailable = 0, stash = 0 }: Props) => {
+const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: Props) => {
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
@@ -38,7 +38,7 @@ const Header = ({ nav, showMoney, totalMoneyAvailable = 0, stash = 0 }: Props) =
 
         //Se quiser fazer uma verificação futura pedindo senha, coloque aqui
 
-        //nav.push('MoneyJar');
+        nav.push('MoneyJar');
     }
     return (
         <View style={showMoney && styles.margimBottom}>
