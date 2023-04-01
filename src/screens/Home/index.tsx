@@ -1,7 +1,7 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, Button, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
@@ -26,7 +26,7 @@ const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
     let transactionsBancoSimulation:Transaction[] = [
-        {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'Disponível'},
         {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
         {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
     ];
@@ -39,13 +39,31 @@ const Home = ({ navigation }: any) => {
         const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
         const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
         const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
-
+        const [ totalMoneyAvailable, setTotalMoneyAvailable] = useState<number>(0);
+        const [ stash, setStash ] = useState<number>(0);
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
 
-        const scrollViewRef = useRef<ScrollView>(null);
+        useEffect(() => {
 
+            let moneyAvailable = 0;
+            let stashed = 0;
+            console.log('transactions'+transactions);
+            for(let i = 0; i < transactions.length; i++) {
+                if(transactions[i].where === 'Disponível' || transactions[i].where === 'disponível') {
+                    moneyAvailable += transactions[i].value;
+                }else{
+                    stashed += transactions[i].value;
+                }
+            }
+
+            setStash(stashed);
+            setTotalMoneyAvailable(moneyAvailable);
+
+        }, [transactions]);
+
+        const scrollViewRef = useRef<ScrollView>(null);
         const handleScrollToTop = () => {
             setScrollEnabled(false);
             setNewTransactionStatus(true);
@@ -64,7 +82,7 @@ const Home = ({ navigation }: any) => {
             //aux.push(transaction);
             aux.splice(0, 0,transaction);
 
-            setTransactions(aux);
+            setTransactions([...aux]);
 
             /*Close transaction creation modal*/
             closeNewTransaction();
@@ -170,7 +188,7 @@ const Home = ({ navigation }: any) => {
                 <NewTransaction successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
             }
             
-            <Header nav={navigation} showMoney={true} />
+            <Header nav={navigation} showMoney={true} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
             
             <View style={styles.main}>
                 

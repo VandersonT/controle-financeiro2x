@@ -7,15 +7,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../global/theme';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
+import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 
 
 type Props = {
     nav: any,
-    showMoney: boolean
+    showMoney: boolean,
+    totalMoneyAvailable?: number,
+    stash?: number
 }
 
 
-const Header = ({ nav, showMoney }: Props) => {
+const Header = ({ nav, showMoney, totalMoneyAvailable = 0, stash = 0 }: Props) => {
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
@@ -67,7 +70,7 @@ const Header = ({ nav, showMoney }: Props) => {
                     <View style={styles.infoBox}>
                         <View style={styles.infoSingle}>
                             <Text style={styles.infoTitle}>Disponivel</Text>
-                            <Text style={styles.money}>R$ 979,03</Text>
+                            <Text style={styles.money}>{BrazilianRealFormat(totalMoneyAvailable)}</Text>
                         </View>
                         <View style={styles.infoSingle}>
                             <TouchableOpacity style={styles.infoTitleBox} onPress={moneyJar}>
@@ -76,7 +79,7 @@ const Header = ({ nav, showMoney }: Props) => {
                                 </Text>
                                 <Text style={styles.infoTitle_alert}>[Clique]</Text>
                             </TouchableOpacity>
-                            <Text style={styles.money}>R$ 709,00</Text>
+                            <Text style={styles.money}>{BrazilianRealFormat(stash)}</Text>
                         </View>
                     </View>
                 }
