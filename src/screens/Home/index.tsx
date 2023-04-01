@@ -25,23 +25,10 @@ import NewTransaction from "../../components/NewTransaction";
 const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
-    let transactions:Transaction[] = [
+    let transactionsBancoSimulation:Transaction[] = [
         {id: '0', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
         {id: '1', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
         {id: '2', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
-        {id: '3', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
-        {id: '4', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '5', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
-        {id: '6', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
-        {id: '7', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '8', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
-        {id: '9', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
-        {id: '10', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '11', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
-        {id: '12', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
-        {id: '13', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '14', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
-
     ];
 
     /*----------------------------------------*/
@@ -51,6 +38,7 @@ const Home = ({ navigation }: any) => {
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(-1);
         const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
         const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
+        const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
 
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
@@ -67,7 +55,19 @@ const Home = ({ navigation }: any) => {
         const closeNewTransaction = () => {
             setScrollEnabled(true);
             setNewTransactionStatus(false);
-            /*Limpa os campos também*/
+        }
+
+        const transactionSuccess = (transaction: any) => {
+
+            let aux = transactions;
+
+            //aux.push(transaction);
+            aux.splice(0, 0,transaction);
+
+            setTransactions(aux);
+
+            /*Close transaction creation modal*/
+            closeNewTransaction();
         }
 
         const openTransaction = (index: any) => {
@@ -89,15 +89,15 @@ const Home = ({ navigation }: any) => {
             setSeeMore(aux);
         }
 
-        const renderItem = ({item}: any) => {
+        const renderItem = ({item, index}: any) => {
             
             return (
-                <View key={item.id}>
-                    <TouchableOpacity style={styles.transactionSingle} onPress={() => openTransaction(item.id)}>
+                <View key={index}>
+                    <TouchableOpacity style={styles.transactionSingle} onPress={() => openTransaction(index)}>
                         <Text style={styles.transactionTitle}>{item['title']}</Text>
                         <View style={styles.leftSide}>
                             <Text style={[styles.transactionValue, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item?.value)}</Text>
-                            {transactionOpened == Number(item.id)
+                            {transactionOpened == Number(index)
                                 ? <SimpleLineIcons name="arrow-down" size={15} color={Theme.colors.black[300]} />
                                 : <SimpleLineIcons name="arrow-left" size={13} color={Theme.colors.black[300]} />
                             }
@@ -105,7 +105,7 @@ const Home = ({ navigation }: any) => {
                         </View>
                     </TouchableOpacity>
 
-                    {seeMore[item.id] &&
+                    {seeMore[index] &&
                         <View style={styles.transactionSingle_detail}>
                             
                             <View style={styles.fieldSingle}>
@@ -138,7 +138,7 @@ const Home = ({ navigation }: any) => {
         <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container} showsVerticalScrollIndicator={false}>
             
             {newTrasactionStatus &&
-                <NewTransaction closeFnc={closeNewTransaction} />
+                <NewTransaction successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
             }
             
             <Header nav={navigation} showMoney={true} />

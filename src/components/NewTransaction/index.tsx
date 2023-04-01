@@ -1,13 +1,14 @@
-import { ScrollView, Text, TextInput, TouchableOpacity, View, Platform, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View, Platform, KeyboardAvoidingView, Alert } from 'react-native';
 import Button1 from '../Button1';
 import CancelButton from '../CancelButton';
 import styles from './style';
 import { useState, useRef, useEffect } from 'react';
 import BrazillianDateFormat from '../../helpers/BrazillianDateFormat';
-
+import uuid from 'react-native-uuid';
 
 type Props = {
-    closeFnc: () => void
+    closeFnc: () => void,
+    successFnc: any
 }
 
 
@@ -19,19 +20,21 @@ const options = [
     { id: '5', label: 'Investimentos', value: 'Investimentos'},
   ];
 
-const NewTransaction = ({ closeFnc }: Props) => {
+const NewTransaction = ({ closeFnc, successFnc }: Props) => {
 
     const [inputDate, setInputDate] = useState('');
+    const [inputValue, setInputValue] = useState('');
+    const [inputTransactionTitle, setInputTransactionTitle] = useState('');
     const buttonRef = useRef<TouchableOpacity>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(options[0]);
 
     const handlePress = (event: any) => {
         if (event.target === buttonRef.current) {
-          console.log('Button clicked!');
-          // Execute a ação desejada quando o botão é clicado diretamente
+            console.log('Button clicked!');
+            // Execute a ação desejada quando o botão é clicado diretamente
         }
-      };
+    };
 
     const handleInputDate = (date: string) => {
         
@@ -50,14 +53,29 @@ const NewTransaction = ({ closeFnc }: Props) => {
     };
 
     const createTransaction = () => {
+        /*if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate){
+            Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
+            return;
+        }*/
 
+        //Manda para o banco de dados a nova transação
+        
+        let id = uuid.v4();
+        successFnc({
+            id,
+            title: inputTransactionTitle,
+            value: parseInt(inputValue),
+            description: 'esqueci do input disso',
+            date: inputDate,
+            where: selectedOption.value
+        });
     }
 
     const renderItem = ({ item }:any) => (
         <TouchableOpacity style={styles.optionSingle}>
-          <Text>{item.label}</Text>
+            <Text>{item.label}</Text>
         </TouchableOpacity>
-      );
+    );
 
     return (
         <KeyboardAvoidingView style={styles.bgDark} keyboardVerticalOffset={0} behavior={(Platform.OS == "ios") ? "padding" : "height" }>
@@ -65,13 +83,13 @@ const NewTransaction = ({ closeFnc }: Props) => {
                 
                 <TouchableOpacity activeOpacity={1} style={styles.newTransactionBox}>
 
-                    <ScrollView>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                     <Text style={styles.title}>Nova Transação</Text>
 
                     <View style={styles.form}>
                         
-                        <TextInput style={styles.input} placeholder="Titulo da Transação" />
-                        <TextInput style={styles.input} placeholder="Digite o Valor" />
+                        <TextInput style={styles.input} onChangeText={setInputTransactionTitle} value={inputTransactionTitle} placeholder="Titulo da Transação" />
+                        <TextInput style={styles.input} onChangeText={setInputValue} value={inputValue} keyboardType="numeric" placeholder="Digite o Valor" />
                         
                         <View>
                             <TouchableOpacity style={styles.input} onPress={() => setIsOpen(!isOpen)}>
@@ -95,7 +113,7 @@ const NewTransaction = ({ closeFnc }: Props) => {
                         </View>
 
                         <TextInput value={inputDate} onChangeText={handleInputDate} style={styles.input} placeholder="dd/mm/yyyy" />
-                        
+
                     </View>
 
                     <View style={styles.buttonBox}>
