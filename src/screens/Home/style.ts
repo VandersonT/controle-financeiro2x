@@ -29,6 +29,12 @@ const styles = StyleSheet.create({
         marginTop: 6,
         width: '100%'
     },
+    empty: {
+        color: Theme.colors.gray[400],
+        textAlign: 'center',
+        fontSize: Theme.fontSizes.lg,
+        marginTop: 50
+    },
     transactionSingle: {
         width: '100%',
         height: 63,
@@ -88,6 +94,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
         elevation: 2,
+    },
+    deleteTransactionBox: {
+        borderTopWidth: 1,
+        borderTopColor: Theme.colors.gray[400],
+        marginTop: 20,
+        paddingTop: 10
+    },
+    deleteTransaction: {
+        color: Theme.colors.red[100],
+        textAlign: 'center',
     },
     fieldSingle: {
         display: 'flex',

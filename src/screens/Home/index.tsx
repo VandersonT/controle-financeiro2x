@@ -2,7 +2,7 @@
 /*              IMPORTS                   */
 /*----------------------------------------*/
 import React, { useState, useRef } from "react";
-import { View, Text, Button, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Text, Button, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 //Functions Helpers
@@ -26,9 +26,9 @@ const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
     let transactionsBancoSimulation:Transaction[] = [
-        {id: '0', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
-        {id: '1', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '2', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
+        {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'disponível'},
+        {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
+        {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
     ];
 
     /*----------------------------------------*/
@@ -89,6 +89,32 @@ const Home = ({ navigation }: any) => {
             setSeeMore(aux);
         }
 
+        const deleteTransaction = (transactionId: string, index: number) => {
+            
+            Alert.alert(
+                'Confirmação',
+                'Tem certeza que deseja excluir essa transação?',
+                [
+                  {
+                    text: 'Cancelar',
+                    onPress: () => {},
+                    style: 'cancel',
+                  },
+                  { text: 'Excluir', onPress: () => {
+                    let aux = transactions;
+                    aux.splice(index, 1);
+                    setTransactions([...aux]);
+
+                    /*Close all transactions*/
+                    setTransactionOpened(-1);
+
+                    setSeeMore([false]);
+                  }},
+                ],
+                { cancelable: false }
+              );
+        }
+
         const renderItem = ({item, index}: any) => {
             
             return (
@@ -127,7 +153,10 @@ const Home = ({ navigation }: any) => {
                                 <Text style={styles.fieldTitle}>Valor:</Text>
                                 <Text style={[styles.description, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
                             </View>
-
+                            
+                            <TouchableOpacity onPress={() => deleteTransaction(item['id'], index)} style={styles.deleteTransactionBox}>
+                                <Text style={styles.deleteTransaction}>Excluir</Text>
+                            </TouchableOpacity>
                         </View>
                     }
                 </View>
@@ -159,6 +188,10 @@ const Home = ({ navigation }: any) => {
                         keyExtractor={item=>item.id}
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
+
+                    {transactions.length < 1 &&
+                        <Text style={styles.empty}>Nenhuma transação até o momento</Text>
+                    }
 
                 </View>
             </View>

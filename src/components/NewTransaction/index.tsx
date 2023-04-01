@@ -14,7 +14,7 @@ type Props = {
 
 const options = [
     { id: '1', label: 'Emergência', value: 'Emergência'},
-    { id: '2', label: 'Disponível', value: 'Emergência'},
+    { id: '2', label: 'Disponível', value: 'Disponível'},
     { id: '3', label: 'Viagens', value: 'Viagens'},
     { id: '4', label: 'Obra', value: 'Obra'},
     { id: '5', label: 'Investimentos', value: 'Investimentos'},
