@@ -1,7 +1,7 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import { View, Text, StatusBar, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, StatusBar, Image, ImageBackground, TouchableOpacity, Modal } from 'react-native';
 import styles from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../global/theme';
@@ -85,7 +85,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                 }
                 
                 {menuOpened &&
-                    <>
+                    <Modal transparent={true}>
                         {/*Deixa o fundo preto transparente*/}
                         <TouchableOpacity 
                             style={styles.bgDark}
@@ -121,7 +121,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                             </View>
 
                         </View>
-                    </>
+                    </Modal>
                 }
             </View>
 

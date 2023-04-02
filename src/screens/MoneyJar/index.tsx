@@ -79,7 +79,7 @@ const MoneyJar = ({ navigation }: any) => {
                 <TouchableOpacity onPress={() => navigation.push('Home')}>
                     <MaterialIcons name="arrow-back-ios" size={24} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Caixinhas [{MoneyJars.length}]</Text>
+                <Text style={styles.title}>Caixinhas ({MoneyJars.length})</Text>
                 <Text></Text>
             </View>
 
