@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: Theme.fontSizes.xl,
-        color: "#333"
+        fontWeight: "700",
+        color: Theme.colors.secondary[200]
     },
     link: {
         color: Theme.colors.primary[500],
@@ -48,7 +49,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ddd",
         padding: 10,
-        marginBottom: 15
+        marginBottom: 15,
+        borderRadius: 5
     },
     infoBox: {
         width: 170,
@@ -58,12 +60,12 @@ const styles = StyleSheet.create({
     },
     infoTitle: {
         fontSize: Theme.fontSizes.lg,
-        fontWeight: "500",
-        color: Theme.colors.black[300]
+        fontWeight: "700",
+        color: Theme.colors.secondary[200]
     },
     infoValue: {
         fontSize: Theme.fontSizes.lg,
-        color: Theme.colors.black[300]
+        color: Theme.colors.secondary[200]
     }
 });
 
