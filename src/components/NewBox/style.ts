@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         height: screenHeight,
         position: 'absolute',
         top: 0,
-        zIndex: -4,
+        zIndex: 4,
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         display: 'flex',
         justifyContent: 'center',
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
         padding: 6,
     },
     optionsBox: {
-        //height: 130,
         position: 'relative',
         bottom: 0,
         left: 0,

@@ -7,7 +7,7 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Theme.colors.white[700],
-        minHeight: screenHeight
+        minHeight: screenHeight,
     },
     content: {
         width: '100%',
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     moneyJarsBox: {
+        minHeight: screenHeight-440,
         marginTop: 15,
         marginBottom: 100
     },
