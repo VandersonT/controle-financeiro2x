@@ -46,11 +46,6 @@ const MoneyJar = ({ navigation }: any) => {
 
     const renderItem = ({item, index}: any) => {
 
-        const images = {
-            travel: require('../../../assets/images/moneyJarCovers/travel.jpg'),
-            disponivel: require('../../../assets/images/moneyJarCovers/freeMoney.jpeg'),
-        };
-
         return (
             <TouchableOpacity style={styles.moneyJarsSingle}>
                 <Image

@@ -8,7 +8,7 @@ import { Theme } from '../../global/theme';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
-
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
     nav: any,
@@ -27,6 +27,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
+    
     const logOut = () => {
 
         //Desloga o cara aqui
@@ -40,12 +41,14 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
 
         nav.push('MoneyJar');
     }
+    
     return (
         <View style={showMoney && styles.margimBottom}>
             
             <View style={styles.container}>
+                
                 {/*Define cor da barra de status*/}
-                <StatusBar backgroundColor={Theme.colors.primary[300]} barStyle="light-content" />
+                <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
                 
                 {/*Part One*/}
                 <View style={styles.headerBox}>
@@ -57,7 +60,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                         />
                         <Text style={styles.userName}>Matheus Silva</Text>
                     </View>
-                    <TouchableOpacity onPress={()=>{setMenuOpened(true)}}>
+                    <TouchableOpacity onPress={() => setMenuOpened(true)}>
                         <Text style={styles.menuButton}>
                             <Feather name="menu" size={24} color={Theme.colors.white[700]} />
                         </Text>
@@ -85,19 +88,18 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                 }
                 
                 {menuOpened &&
-                    <Modal transparent={true}>
-                        {/*Deixa o fundo preto transparente*/}
-                        <TouchableOpacity 
-                            style={styles.bgDark}
-                            onPress={()=>setMenuOpened(false)}
-                        />
-
+                    <Modal>
                         <View style={styles.menuBox}>
                             <ImageBackground
                                 style={{width: '100%', height: 255}}
                                 source={require('../../../assets/images/Landscape.png')}
                             >
                                 <View style={styles.menuInfoBox}>
+
+                                    <TouchableOpacity style={styles.closeMenu} onPress={() => setMenuOpened(false)}>
+                                        <AntDesign name="close" size={30} color={Theme.colors.white[700]} />
+                                    </TouchableOpacity>
+
                                     <Image 
                                         source={require('../../../assets/images/noPhoto.png')}
                                         style={{width: 100, height: 100, borderRadius: 50}}
@@ -108,18 +110,17 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
 
                             <View>
                                 <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Home')}>
-                                    <Text>Perfil</Text>
+                                    <Text style={styles.optionTitle}>Perfil</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Home')}>
-                                    <Text>Créditos</Text>
+                                    <Text style={styles.optionTitle}>Créditos</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.optionSingle} onPress={logOut}>
-                                    <Text>Sair</Text>
+                                    <Text style={styles.optionTitle}>Sair</Text>
                                 </TouchableOpacity>
                             </View>
-
                         </View>
                     </Modal>
                 }

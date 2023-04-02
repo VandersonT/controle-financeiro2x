@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     },
     main: {
         position: 'relative',
-        minHeight: screenHeight-411,
+        minHeight: screenHeight-350,
         zIndex: -1,
         marginHorizontal: 20,
         marginBottom: 60

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "#ddd",
         backgroundColor: "#fff",
-        marginBottom: 40
+        marginBottom: 40,
     },
     title: {
         fontSize: Theme.fontSizes.xl,

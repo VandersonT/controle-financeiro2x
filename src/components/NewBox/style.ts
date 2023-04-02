@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         height: screenHeight,
         position: 'absolute',
         top: 0,
-        zIndex: 4,
+        zIndex: -4,
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         display: 'flex',
         justifyContent: 'center',

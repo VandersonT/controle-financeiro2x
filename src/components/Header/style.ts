@@ -79,21 +79,17 @@ const styles = StyleSheet.create({
     },
 
     /*Menu Opened*/
-    bgDark: {
+    closeMenu: {
+        position: 'relative',
+        bottom: 25,
+        left: 150
+    },
+    menuBox: {
         width: '100%',
         height: screenHeight,
         position: 'absolute',
         top: 0,
-        zIndex: 4,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)'
-    },
-    menuBox: {
-        width: 310,
-        height: screenHeight,
-        position: 'absolute',
-        top: 0,
         right: 0,
-        zIndex: 4,
         backgroundColor: Theme.colors.white[700]
     },
     menuInfoBox: {
@@ -114,7 +110,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    optionTitle: {
+        color: Theme.colors.gray[600],
+        fontSize: Theme.fontSizes.md,
     }
 });
 
