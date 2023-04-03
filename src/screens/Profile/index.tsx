@@ -14,7 +14,7 @@ const Profile = ({ navigation }: any) => {
     }
 
     const editProfile = () => {
-
+        navigation.push('EditProfile');
     }
 
     return (

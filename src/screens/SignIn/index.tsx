@@ -64,7 +64,6 @@ const SignIn = ({ navigation }: any) => {
             
                 <View style={styles.container}>
 
-                
                     {errorMsg &&
                         <ErrorFlash msg={errorMsg} closeFnc={closeFlash}/>
                     }
