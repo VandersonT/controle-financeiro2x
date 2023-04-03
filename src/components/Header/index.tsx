@@ -109,7 +109,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                             </ImageBackground>
 
                             <View>
-                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Home')}>
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Profile')}>
                                     <Text style={styles.optionTitle}>Perfil</Text>
                                 </TouchableOpacity>
 
