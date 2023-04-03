@@ -7,6 +7,7 @@ import Home from '../screens/Home';
 import SignIn from '../screens/SignIn';
 import MoneyJar from '../screens/MoneyJar';
 import MoneyJarOpened from '../screens/MoneyJarOpened';
+import Credits from '../screens/Credits';
 /****/
 
 const MainStack = createNativeStackNavigator();
@@ -14,6 +15,7 @@ const MainStack = createNativeStackNavigator();
 export default () => (
   
   <MainStack.Navigator>
+    <MainStack.Screen name="Credits" component={Credits} options={{ headerShown: false }}/>
     <MainStack.Screen name="MoneyJarOpened" component={MoneyJarOpened} options={{ headerShown: false }}/>
     <MainStack.Screen name="MoneyJar" component={MoneyJar} options={{ headerShown: false }}/>
     <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />

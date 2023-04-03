@@ -113,7 +113,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                                     <Text style={styles.optionTitle}>Perfil</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Home')}>
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Credits')}>
                                     <Text style={styles.optionTitle}>Créditos</Text>
                                 </TouchableOpacity>
 
