@@ -28,6 +28,9 @@ export const Theme = {
             300: '#E6E6E6',
             200: '#EAEAEA',
         },
+        yellow: {
+            200: '#96be25'
+        },
         blue: {
             300: '#00A3FF'
         },

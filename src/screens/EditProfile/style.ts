@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     form: {
         display: 'flex',
         alignItems: 'center',
-        marginTop: 80
+        marginTop: 80,
+        marginBottom: 90
     },
     inputSingle: {
         width: '70%',
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
         width: '70%',
         marginTop: 5,
         fontSize: Theme.fontSizes.sm,
-        color: Theme.colors.gray[600],
+        color: Theme.colors.yellow[200],
     },
     checkboxContainer: {
         backgroundColor: '#fff',

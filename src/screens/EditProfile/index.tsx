@@ -1,9 +1,10 @@
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, ScrollView } from 'react-native';
 import styles from './style';
 import Header2 from '../../components/Header2';
 import Button1 from '../../components/Button1';
 import { useState } from 'react';
 import { CheckBox } from 'react-native-elements';
+import Footer from '../../components/Footer';
 
 const EditProfile = ({ navigation }: any) => {
 
@@ -31,7 +32,7 @@ const EditProfile = ({ navigation }: any) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
             <Header2 title='Editar Perfil' fnc={backToProfile} />
 
@@ -39,7 +40,7 @@ const EditProfile = ({ navigation }: any) => {
                 <TextInput style={styles.inputSingle} value={userName} onChangeText={setUserName} placeholder="Digite seu nome" />
                 <TextInput style={styles.inputSingle} value={email} onChangeText={setEmail} placeholder="Digite seu nome" />
                 <TextInput style={styles.inputSingle} value={password} onChangeText={setPassword} placeholder="Digite sua senha atual" />
-                <Text style={styles.note}>Só digite a senha se for colocar uma nova abaixo</Text>
+                <Text style={styles.note}>Só digite a senha se for colocar uma nova abaixo.</Text>
                 <TextInput secureTextEntry={showNewPass ? false : true} style={styles.inputSingle} value={newPassword} onChangeText={setNewPassword} placeholder="Digite sua nova senha (Opcional)" />
                 
                 <CheckBox
@@ -54,7 +55,9 @@ const EditProfile = ({ navigation }: any) => {
                 <Button1 title="Salvar" fnc={saveInfo} />
             </View>
 
-        </View>
+            <Footer />
+
+        </ScrollView>
     );
 }
 
