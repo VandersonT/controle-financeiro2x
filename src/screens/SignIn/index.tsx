@@ -8,7 +8,7 @@ import styles from "./style";
 import { CheckBox } from 'react-native-elements';
 
 //Firebase Imports
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore"; 
 import db from "../../config/firebase";
 
@@ -30,7 +30,7 @@ const SignIn = ({ navigation }: any) => {
     /*-------------States------------------*/
     const [ errorMsg, setErrorMsg ] = useState<String>("");
     const [ register, setRegister ] = useState<boolean>(false);
-    const [ user, setUser ] = useState<string>('');
+    const [ email, setEmail ] = useState<string>('');
     const [ pass, setPass ] = useState<string>('');
     const [ userRegister, setUserRegister ] = useState<string>('');
     const [ emailRegister, setEmailRegister ] = useState<string>('');
@@ -46,12 +46,27 @@ const SignIn = ({ navigation }: any) => {
     }
     const loginAction = () => {
 
-        if(!user || !pass){
+        if(!email || !pass){
             setErrorMsg('Preencha todos os campos.')
             return;
         }
 
-        navigation.push('Home');
+        const auth = getAuth();
+
+        signInWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+
+            //Send user to Home
+            navigation.push('Home');
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMsg(errorTranslate(errorCode) as string);
+        });
+
     }
 
     const registerAction = async () => {
@@ -70,7 +85,6 @@ const SignIn = ({ navigation }: any) => {
         .then(async (userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            console.log("Logado: ", user);
             
             /*Saving necessary user data to Firestore*/
             const userRef = collection(db, "user");
@@ -88,9 +102,7 @@ const SignIn = ({ navigation }: any) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            //console.log("Error: ", errorMessage);
             setErrorMsg(errorTranslate(errorCode) as string);
-            //console.log("codigo: "+errorCode);
         });
        
     }
@@ -128,7 +140,7 @@ const SignIn = ({ navigation }: any) => {
                                         <Text  style={styles.title2}>Financeiro</Text>
                                     </View>
 
-                                    <TextInput value={user} onChangeText={setUser} style={styles.input} placeholder="Digite seu email" />
+                                    <TextInput value={email} onChangeText={setEmail} style={styles.input} placeholder="Digite seu email" />
                                     <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 0}]} placeholder="Digite sua senha" />
 
                                     <CheckBox
