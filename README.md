@@ -7,12 +7,11 @@ ___
 <br/>
 <h2>Devs:</h2>
 
-- Bruno Caldeira | [GitHub](https://github.com/VandersonT)
+- Bruno Caldeira | [GitHub](https://github.com/caldeira-bruno)
 
-- Eduardo Xxxx | [GitHub](https://github.com/VandersonT)
+- Eduardo Oliveira | [GitHub](https://github.com/Duduax)
 
-- Enzo Dupim | [GitHub](https://github.com/VandersonT)
-
+- Enzo Dupin | [GitHub](https://github.com/EnzoAD)
 
 - Vanderson Paulo | [GitHub](https://github.com/VandersonT)
 
@@ -76,7 +75,7 @@ Technologies used in the project:
 
 *   React Native
 *   TypeScript
-*   SqlLite
+*   Firebase
 
 <br/><br/>
 <h2>💖Like my work?</h2>
