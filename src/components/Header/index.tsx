@@ -10,6 +10,11 @@ import { useState } from 'react';
 import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 import { AntDesign } from '@expo/vector-icons';
 
+
+//Firebase imports
+import { getAuth, signOut } from "firebase/auth";
+
+
 type Props = {
     nav: any,
     showMoney?: boolean,
@@ -30,9 +35,15 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
     
     const logOut = () => {
 
-        //Desloga o cara aqui
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            //Logged out successfully
+            nav.push('SignIn');
+        }).catch((error) => {
+            //Could not log out
+            //console.log("Error: ", error);
+        });
 
-        nav.push('SignIn');
     }
 
     const moneyJar = () => {

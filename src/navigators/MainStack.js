@@ -1,7 +1,10 @@
-import React from  'react';
+import React, { useEffect, useState } from  'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+//Firebase Importas
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import db from '../config/firebase'; //Even if not using this, do not remove! Removing this will cause an options error.
 
 /*PAGES*/
 import Home from '../screens/Home';
@@ -19,15 +22,29 @@ const MainStack = createNativeStackNavigator();
 
 export default () => {
 
+  const [ userLogged, setUserLogged ] = useState(false);
 
-  let user = false; //Temporário! pegar da variavel User do auth do firebase
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // usuário está logado
+                setUserLogged(true);
+            } else {
+                // usuário não está logado
+                setUserLogged(false);
+            }
+        });
 
+        // quando a tela for desmontada, remove o ouvinte
+        return unsubscribe;
+    });
 
   return(
   
     <MainStack.Navigator>
       
-      {user 
+      {userLogged 
       ?
         <>
           <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />

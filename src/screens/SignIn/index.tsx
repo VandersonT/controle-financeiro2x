@@ -7,10 +7,18 @@ import { LinearGradient } from "expo-linear-gradient";
 import styles from "./style";
 import { CheckBox } from 'react-native-elements';
 
+//Firebase Imports
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, doc, setDoc } from "firebase/firestore"; 
+import db from "../../config/firebase";
+
 //Components:
 import ErrorFlash from "../../components/ErrorFlash";
 import Button1 from "../../components/Button1";
 import { Theme } from "../../global/theme";
+
+//Helpers
+import errorTranslate from "../../helpers/firebaseErrorTranslate";
 /*----------------------------------------*/
 
 
@@ -45,12 +53,46 @@ const SignIn = ({ navigation }: any) => {
 
         navigation.push('Home');
     }
-    const registerAction = () => {
+
+    const registerAction = async () => {
         if(!userRegister || !emailRegister || !passRegister || !confirmPassRegister){
-            setErrorMsg('Preencha todos os campos.')
+            setErrorMsg('Preencha todos os campos.');
             return;
         }
-        navigation.push('Home');
+
+        if(passRegister != confirmPassRegister){
+            setErrorMsg('As senhas não coincidem.');
+            return;
+        }
+
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, emailRegister, passRegister)
+        .then(async (userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            console.log("Logado: ", user);
+            
+            /*Saving necessary user data to Firestore*/
+            const userRef = collection(db, "user");
+
+            await setDoc(doc(userRef, user.uid), {
+                username: userRegister,
+                email: emailRegister,
+                avatar: "noPhoto.png"
+            });
+            /******/
+            
+            //Send user to Home
+            navigation.push('Home');
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            //console.log("Error: ", errorMessage);
+            setErrorMsg(errorTranslate(errorCode) as string);
+            //console.log("codigo: "+errorCode);
+        });
+       
     }
     const handleCheck = () => {
         setChecked(!checked);
@@ -125,10 +167,10 @@ const SignIn = ({ navigation }: any) => {
                                         <Text  style={styles.title2}>Financeiro</Text>
                                     </View>
 
-                                    <TextInput style={styles.input} placeholder="Digite seu usuário" />
-                                    <TextInput style={styles.input} placeholder="Digite seu email" />
-                                    <TextInput secureTextEntry={checked ? false : true} style={styles.input} placeholder="Digite sua senha" />
-                                    <TextInput secureTextEntry={checked ? false : true} style={[styles.input, {marginBottom: 0}]} placeholder="Confirme sua senha" />
+                                    <TextInput style={styles.input} placeholder="Digite seu usuário" value={userRegister} onChangeText={setUserRegister} />
+                                    <TextInput style={styles.input} placeholder="Digite seu email" value={emailRegister} onChangeText={setEmailRegister} />
+                                    <TextInput secureTextEntry={checked ? false : true} style={styles.input} value={passRegister} onChangeText={setPassRegister} placeholder="Digite sua senha" />
+                                    <TextInput secureTextEntry={checked ? false : true} style={[styles.input, {marginBottom: 0}]} value={confirmPassRegister} onChangeText={setConfirmPassRegister} placeholder="Confirme sua senha" />
 
                                     <CheckBox
                                         title='Exibir senhas'
