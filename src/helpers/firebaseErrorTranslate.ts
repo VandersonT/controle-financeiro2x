@@ -1,4 +1,4 @@
-const errorTranslate = (errorCode: string) => {
+const firebaseErrorTranslate = (errorCode: string) => {
 
     if(errorCode == "auth/weak-password")
         return "A senha é muito fraca.";
@@ -20,4 +20,4 @@ const errorTranslate = (errorCode: string) => {
         return "Desculpe, mas ocorreu um erro.";
 }
 
-export default errorTranslate;
+export default firebaseErrorTranslate;

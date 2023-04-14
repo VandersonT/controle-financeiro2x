@@ -2,13 +2,13 @@
 /*              IMPORTS                   */
 /*----------------------------------------*/
 import React, { useState } from "react";
-import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./style";
 import { CheckBox } from 'react-native-elements';
 
 //Firebase Imports
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore"; 
 import db from "../../config/firebase";
 
@@ -18,7 +18,8 @@ import Button1 from "../../components/Button1";
 import { Theme } from "../../global/theme";
 
 //Helpers
-import errorTranslate from "../../helpers/firebaseErrorTranslate";
+import firebaseErrorTranslate from "../../helpers/firebaseErrorTranslate";
+import SuccessFlash from "../../components/SuccessFlash";
 /*----------------------------------------*/
 
 
@@ -28,8 +29,10 @@ import errorTranslate from "../../helpers/firebaseErrorTranslate";
 const SignIn = ({ navigation }: any) => {
 
     /*-------------States------------------*/
-    const [ errorMsg, setErrorMsg ] = useState<String>("");
-    const [ register, setRegister ] = useState<boolean>(false);
+    const [ errorMsg, setErrorMsg ] = useState<string>("");
+    const [ successMsg, setSuccessMsg ] = useState<string>("");
+    const [ currentScreen, setCurrentScreen ] = useState<number>(1);/*1: Login | 2: Register | 3: Reset Password*/
+    const [ emailReset, setEmailReset ] = useState<string>('');
     const [ email, setEmail ] = useState<string>('');
     const [ pass, setPass ] = useState<string>('');
     const [ userRegister, setUserRegister ] = useState<string>('');
@@ -43,6 +46,7 @@ const SignIn = ({ navigation }: any) => {
     /*------------Functions----------------*/
     const closeFlash = () => {
         setErrorMsg("");
+        setSuccessMsg("");
     }
     const loginAction = () => {
 
@@ -64,7 +68,7 @@ const SignIn = ({ navigation }: any) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setErrorMsg(errorTranslate(errorCode) as string);
+            setErrorMsg(firebaseErrorTranslate(errorCode) as string);
         });
 
     }
@@ -102,15 +106,30 @@ const SignIn = ({ navigation }: any) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setErrorMsg(errorTranslate(errorCode) as string);
+            setErrorMsg(firebaseErrorTranslate(errorCode) as string);
         });
        
     }
     const handleCheck = () => {
         setChecked(!checked);
     };
-    /*-------------------------------------*/
 
+    const resetPassword = async () => {
+        
+        try {
+            const auth = getAuth();
+            // Enviar um e-mail de redefinição de senha para o endereço de e-mail fornecido
+            await sendPasswordResetEmail(auth, emailReset);
+        
+            // Exibir uma mensagem de sucesso ao usuário
+            setSuccessMsg("Email de redefinição enviado.");
+        } catch (error: any) {
+            // Exibir uma mensagem de erro ao usuário
+            setErrorMsg(firebaseErrorTranslate(error.code));
+        }
+
+    }
+    /*-------------------------------------*/
     
 
     return (
@@ -121,8 +140,12 @@ const SignIn = ({ navigation }: any) => {
                     {errorMsg &&
                         <ErrorFlash msg={errorMsg} closeFnc={closeFlash}/>
                     }
-                    
-                    {!register &&
+
+                    {successMsg &&
+                        <SuccessFlash msg={successMsg} closeFnc={closeFlash} />
+                    }
+
+                    {currentScreen === 1 &&
                         <View style={styles.mainBox}>
                             <ScrollView style={{width: '100%', flexGrow: 1}}>
                                 <Image
@@ -153,15 +176,20 @@ const SignIn = ({ navigation }: any) => {
                                     />
 
                                     <Button1 title="Entrar" fnc={loginAction} />
-                                    <TouchableOpacity onPress={() => setRegister(true)}>
-                                        <Text style={styles.link}>Não possuo uma conta</Text>
+                                    
+                                    <TouchableOpacity onPress={() => setCurrentScreen(3)}>
+                                        <Text style={[styles.link, {marginTop: 20}]}>Esqueci minha senha</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => setCurrentScreen(2)}>
+                                        <Text style={[styles.link, {marginTop: 10}]}>Não possuo uma conta</Text>
                                     </TouchableOpacity>
                                 </View>
                             </ScrollView>
                         </View>
                     }
 
-                    {register &&
+                    {currentScreen === 2 &&
                         <View style={styles.mainBox}>
                             <ScrollView style={{width: '100%', flexGrow: 1}}>
                                 <Image
@@ -194,8 +222,43 @@ const SignIn = ({ navigation }: any) => {
                                     />
 
                                     <Button1 title="Cadastrar" fnc={registerAction} />
-                                    <TouchableOpacity onPress={() => setRegister(false)}>
-                                        <Text style={styles.link}>Já possuo uma conta</Text>
+                                    <TouchableOpacity onPress={() => setCurrentScreen(1)}>
+                                        <Text style={[styles.link, {marginTop: 20}]}>Já possuo uma conta</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </ScrollView>
+                        </View>
+                    }
+
+                    {currentScreen === 3 &&
+                        <View style={styles.mainBox}>
+                            <ScrollView style={{width: '100%', flexGrow: 1}}>
+                                <Image
+                                    style={{width: '100%'}}
+                                    source={require('../../../assets/images/topDetail2.png')}
+                                />
+
+                                <View style={styles.formBox}>
+                                    <Image
+                                        style={{width: 104, height: 104, borderRadius: 60}}
+                                        source={require('../../../assets/images/logo.jpg')}
+                                    />
+                                    <View style={styles.titleBox}>
+                                        <Text style={styles.title1}>Resetar</Text>
+                                        <Text  style={styles.title2}>Senha</Text>
+                                    </View>
+
+                                    <TextInput value={emailReset} onChangeText={setEmailReset} style={styles.input} placeholder="Digite o email da conta" />
+
+
+                                    <Button1 title="Recuperar" fnc={resetPassword} />
+                                    
+                                    <TouchableOpacity onPress={() => setCurrentScreen(1)}>
+                                        <Text style={[styles.link, {marginTop: 20}]}>Lembro a senha</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => setCurrentScreen(2)}>
+                                        <Text style={[styles.link, {marginTop: 10}]}>Não possuo uma conta</Text>
                                     </TouchableOpacity>
                                 </View>
                             </ScrollView>

@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     },
     link: {
         color: Theme.colors.blue[300],
-        marginTop: 20
     }
 });
 
