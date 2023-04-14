@@ -1,14 +1,14 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./style";
 import { CheckBox } from 'react-native-elements';
 
 //Firebase Imports
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { browserSessionPersistence, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore"; 
 import db from "../../config/firebase";
 
@@ -21,7 +21,6 @@ import { Theme } from "../../global/theme";
 import firebaseErrorTranslate from "../../helpers/firebaseErrorTranslate";
 import SuccessFlash from "../../components/SuccessFlash";
 /*----------------------------------------*/
-
 
 
 
@@ -48,6 +47,7 @@ const SignIn = ({ navigation }: any) => {
         setErrorMsg("");
         setSuccessMsg("");
     }
+
     const loginAction = () => {
 
         if(!email || !pass){
@@ -56,6 +56,9 @@ const SignIn = ({ navigation }: any) => {
         }
 
         const auth = getAuth();
+
+
+        /*Check if the user want to stay logged in*/
 
         signInWithEmailAndPassword(auth, email, pass)
         .then((userCredential) => {
@@ -164,16 +167,16 @@ const SignIn = ({ navigation }: any) => {
                                     </View>
 
                                     <TextInput value={email} onChangeText={setEmail} style={styles.input} placeholder="Digite seu email" />
-                                    <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 0}]} placeholder="Digite sua senha" />
+                                    <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 20}]} placeholder="Digite sua senha" />
 
-                                    <CheckBox
+                                    {/*<CheckBox
                                         title='Lembre de mim'
                                         checked={checked}
                                         onPress={handleCheck}
                                         containerStyle={styles.checkboxContainer}
                                         textStyle={styles.checkboxText}
                                         checkedColor="#000"
-                                    />
+                                    />*/}
 
                                     <Button1 title="Entrar" fnc={loginAction} />
                                     

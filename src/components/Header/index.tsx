@@ -69,7 +69,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                             source={require('../../../assets/images/noPhoto.png')}
                             style={{width: 57, height: 55, marginRight: 13, borderColor: '#5144DB', borderWidth: 2, borderRadius: 50}}
                         />
-                        <Text style={styles.userName}>Matheus Silva</Text>
+                        <Text style={styles.userName}>Colocar Depois</Text>
                     </View>
                     <TouchableOpacity onPress={() => setMenuOpened(true)}>
                         <Text style={styles.menuButton}>

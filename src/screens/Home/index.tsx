@@ -1,7 +1,7 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, Text, Button, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
@@ -20,6 +20,10 @@ import Header from '../../components/Header';
 import Footer from "../../components/Footer";
 import NewTransaction from "../../components/NewTransaction";
 
+//Context
+import { Context } from "../../context/Context";
+
+
 
 
 const Home = ({ navigation }: any) => {
@@ -30,6 +34,11 @@ const Home = ({ navigation }: any) => {
         {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
         {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
     ];
+
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
+
+    //console.log(state.user.name)
 
     /*----------------------------------------*/
     /*               STATES                   */
@@ -49,7 +58,6 @@ const Home = ({ navigation }: any) => {
 
             let moneyAvailable = 0;
             let stashed = 0;
-            console.log('transactions'+transactions);
             for(let i = 0; i < transactions.length; i++) {
                 if(transactions[i].where === 'Disponível' || transactions[i].where === 'disponível') {
                     moneyAvailable += transactions[i].value;
@@ -181,6 +189,15 @@ const Home = ({ navigation }: any) => {
             )
         }
 
+        const teste = () => {
+            dispatch({
+                type: 'CHANGE_NAME',
+                payload: {
+                    name: 'Pedro'
+                }
+            });
+        }
+
     return (
         <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container} showsVerticalScrollIndicator={false}>
             
@@ -192,6 +209,11 @@ const Home = ({ navigation }: any) => {
             
             <View style={styles.main}>
                 
+                <TouchableOpacity onPress={teste}>
+                    <Text>Troca nome</Text>
+                </TouchableOpacity>
+                <Text>Euuuuuu {state.user.name}</Text>
+
                 <TouchableOpacity onPress={handleScrollToTop}>
                     <Text style={styles.newTransaction}>Nova Transação</Text>
                 </TouchableOpacity>

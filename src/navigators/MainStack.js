@@ -20,25 +20,7 @@ import EditProfile from '../screens/EditProfile';
 const MainStack = createNativeStackNavigator();
 
 
-export default () => {
-
-  const [ userLogged, setUserLogged ] = useState(false);
-
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // usuário está logado
-                setUserLogged(true);
-            } else {
-                // usuário não está logado
-                setUserLogged(false);
-            }
-        });
-
-        // quando a tela for desmontada, remove o ouvinte
-        return unsubscribe;
-    });
+export default ({ userLogged }) => {
 
   return(
   
