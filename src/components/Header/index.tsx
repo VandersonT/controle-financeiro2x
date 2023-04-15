@@ -19,11 +19,12 @@ type Props = {
     nav: any,
     showMoney?: boolean,
     totalMoneyAvailable?: number,
-    stash?: number
+    stash?: number,
+    username: string
 }
 
 
-const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: Props) => {
+const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0, username }: Props) => {
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
@@ -69,7 +70,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                             source={require('../../../assets/images/noPhoto.png')}
                             style={{width: 57, height: 55, marginRight: 13, borderColor: '#5144DB', borderWidth: 2, borderRadius: 50}}
                         />
-                        <Text style={styles.userName}>Colocar Depois</Text>
+                        <Text style={styles.userName}>{username}</Text>
                     </View>
                     <TouchableOpacity onPress={() => setMenuOpened(true)}>
                         <Text style={styles.menuButton}>

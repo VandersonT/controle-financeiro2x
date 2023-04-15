@@ -38,8 +38,6 @@ const Home = ({ navigation }: any) => {
     //Getting user's context
     const { state, dispatch } = useContext(Context);
 
-    //console.log(state.user.name)
-
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
@@ -50,6 +48,7 @@ const Home = ({ navigation }: any) => {
         const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
         const [ totalMoneyAvailable, setTotalMoneyAvailable] = useState<number>(0);
         const [ stash, setStash ] = useState<number>(0);
+
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
@@ -189,15 +188,6 @@ const Home = ({ navigation }: any) => {
             )
         }
 
-        const teste = () => {
-            dispatch({
-                type: 'CHANGE_NAME',
-                payload: {
-                    name: 'Pedro'
-                }
-            });
-        }
-
     return (
         <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container} showsVerticalScrollIndicator={false}>
             
@@ -205,20 +195,13 @@ const Home = ({ navigation }: any) => {
                 <NewTransaction successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
             }
             
-            <Header nav={navigation} showMoney={true} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
+            <Header nav={navigation} showMoney={true} username={state.user.name} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
             
             <View style={styles.main}>
-                
-                <TouchableOpacity onPress={teste}>
-                    <Text>Troca nome</Text>
-                </TouchableOpacity>
-                <Text>Euuuuuu {state.user.name}</Text>
 
                 <TouchableOpacity onPress={handleScrollToTop}>
                     <Text style={styles.newTransaction}>Nova Transação</Text>
                 </TouchableOpacity>
-
-                
 
                 <View style={styles.transactionsBox}>
 

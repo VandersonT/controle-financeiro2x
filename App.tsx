@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import MainStack from "./src/navigators/MainStack";
 
-import { ContextProvider } from "./src/context/Context";
+import { Context, ContextProvider } from "./src/context/Context";
 
 //Firebase Importas
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -12,7 +12,6 @@ import db from "./src/config/firebase"; //Even if not using this, do not remove!
 const App = () => {
 
   const [ userLogged, setUserLogged ] = useState(false);
-  const [ userTeste, setUserTeste ] = useState('teste');
 
   useEffect(() => {
       const auth = getAuth();

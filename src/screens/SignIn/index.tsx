@@ -8,8 +8,8 @@ import styles from "./style";
 import { CheckBox } from 'react-native-elements';
 
 //Firebase Imports
-import { browserSessionPersistence, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore"; 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { collection, doc, setDoc, getDoc } from "firebase/firestore"; 
 import db from "../../config/firebase";
 
 //Components:
@@ -20,6 +20,7 @@ import { Theme } from "../../global/theme";
 //Helpers
 import firebaseErrorTranslate from "../../helpers/firebaseErrorTranslate";
 import SuccessFlash from "../../components/SuccessFlash";
+import { Context } from "../../context/Context";
 /*----------------------------------------*/
 
 
@@ -40,12 +41,67 @@ const SignIn = ({ navigation }: any) => {
     const [ confirmPassRegister, setConfirmPassRegister ] = useState<string>('');
     const [checked, setChecked] = useState(false);
     /*-------------------------------------*/
-
+    
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
 
     /*------------Functions----------------*/
     const closeFlash = () => {
         setErrorMsg("");
         setSuccessMsg("");
+    }
+
+    const saveUserDataOnContext = (user: any) => {
+        
+        dispatch({
+            type: 'CHANGE_NAME',
+            payload: {
+                name: user.username
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_ID',
+            payload: {
+                id: user.id
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_EMAIL',
+            payload: {
+                email: user.email
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_AVATAR',
+            payload: {
+                avatar: user.avatar
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_CREATEDAT',
+            payload: {
+                created_at: user.created_at
+            }
+        });
+    }
+
+    const getUserData = async (user_id: string) => {
+        const docRef = doc(db, "user", user_id);
+
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()){
+            // We have the user's data here => docSnap.data()
+            saveUserDataOnContext(docSnap.data()); //save data on the context.
+            return true; 
+        }else{
+            // docSnap.data() will be undefined in this case
+            return false; 
+        }
     }
 
     const loginAction = () => {
@@ -61,12 +117,18 @@ const SignIn = ({ navigation }: any) => {
         /*Check if the user want to stay logged in*/
 
         signInWithEmailAndPassword(auth, email, pass)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             // Signed in 
             const user = userCredential.user;
 
-            //Send user to Home
-            navigation.push('Home');
+            /*Get user data*/
+            let ready = await getUserData(user.uid);
+            
+            if(ready)
+                navigation.push('Home'); //Send user to Home
+            else
+                setErrorMsg("Ocorreu um erro ao tentar logar, tente novamente.");
+            
         })
         .catch((error) => {
             const errorCode = error.code;

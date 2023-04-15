@@ -4,16 +4,16 @@ export type UserType = {
     id: string,
     name: string,
     email: string,
-    photo: string,
-    created_at: Date | null
+    avatar: string,
+    created_at: number
 }
 
 export const userInitialState: UserType = {
-    id: 'ewew',
-    name: 'Vanderson',
-    email: 'vandersontpaulo@gmail.com',
-    photo: 'noPhoto.png',
-    created_at: null
+    id: '',
+    name: '',
+    email: '',
+    avatar: '',
+    created_at: 0
 }
 
 export const userReducer = (state: UserType, action: reducerActionType) => {
@@ -24,6 +24,15 @@ export const userReducer = (state: UserType, action: reducerActionType) => {
             break;
         case 'CHANGE_NAME':
             return {...state, name: action.payload.name};
+            break;
+        case 'CHANGE_EMAIL':
+            return {...state, email: action.payload.email};
+            break;
+        case 'CHANGE_AVATAR':
+            return {...state, avatar: action.payload.avatar};
+            break;
+        case 'CHANGE_CREATEDAT':
+            return {...state, created_at: action.payload.created_at};
             break;
     }
 
