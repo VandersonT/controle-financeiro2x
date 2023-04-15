@@ -5,7 +5,8 @@ export type Transaction = {
     title: string,
     value: Double,
     description: string,
-    date: string, //Facilitar pra não ter que ficar salvando em formato mm/dd/yy e depois trocando.
+    date: string,
     where: string,
-    user_id: string
+    user_id: string,
+    created_at: string
 }

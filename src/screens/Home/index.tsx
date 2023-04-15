@@ -22,6 +22,8 @@ import NewTransaction from "../../components/NewTransaction";
 
 //Context
 import { Context } from "../../context/Context";
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import db from "../../config/firebase";
 
 
 
@@ -29,11 +31,11 @@ import { Context } from "../../context/Context";
 const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
-    let transactionsBancoSimulation:Transaction[] = [
+    /*let transactionsBancoSimulation:Transaction[] = [
         {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', where: 'Disponível', user_id: 'dsdsd'},
         {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', where: 'Emergência', user_id: 'dsdsd'},
         {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', where: 'Viagem', user_id: 'dsdsd'},
-    ];
+    ];*/
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
@@ -45,13 +47,46 @@ const Home = ({ navigation }: any) => {
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(-1);
         const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
         const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
-        const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
+        const [ transactions, setTransactions ] = useState<Transaction[]>([]);
         const [ totalMoneyAvailable, setTotalMoneyAvailable] = useState<number>(0);
         const [ stash, setStash ] = useState<number>(0);
 
     /*----------------------------------------*/
-    /*             FUNCTIONS                  */
+    /*             USE EFFECT                  */
     /*----------------------------------------*/
+
+        
+        useEffect(() => {
+            getTransactions();
+        }, [])
+
+        const getTransactions = async () => {
+            const q = query(collection(db, "transaction"), where("user_id", "==", state.user.id));
+
+            const querySnapshot = await getDocs(q);
+
+            let transactionsAux = transactions;
+
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                
+                transactionsAux.splice(0, 0, {
+                    id: doc.data().id,
+                    title: doc.data().title,
+                    value: doc.data().value,
+                    description: doc.data().description,
+                    date: doc.data().date,
+                    where: doc.data().where,
+                    user_id: doc.data().user_id,
+                    created_at: doc.data().created_at
+                })
+
+                console.log(doc.data().title);
+                console.log("--------------------");
+            });
+            
+            setTransactions([...transactionsAux]);
+        };
 
         useEffect(() => {
 
@@ -68,7 +103,11 @@ const Home = ({ navigation }: any) => {
             setStash(stashed);
             setTotalMoneyAvailable(moneyAvailable);
 
-        }, [transactions]);
+        }, [transactions])
+
+        /*----------------------------------------*/
+        /*             FUNCTIONS                  */
+        /*----------------------------------------*/
 
         const scrollViewRef = useRef<ScrollView>(null);
         const handleScrollToTop = () => {

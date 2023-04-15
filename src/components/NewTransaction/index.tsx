@@ -75,7 +75,8 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
             value: parseInt(inputValue),
             date: inputDate,
             where: selectedOption.value,
-            user_id: userId
+            user_id: userId,
+            created_at: Math.floor(Date.now() / 1000)
         }
 
         await setDoc(doc(transactionRef, randomId), transaction);
