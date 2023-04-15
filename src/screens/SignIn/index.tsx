@@ -6,6 +6,7 @@ import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidin
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./style";
 import { CheckBox } from 'react-native-elements';
+import { v4 as uuidv4 } from 'uuid';
 
 //Firebase Imports
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
@@ -137,7 +138,7 @@ const SignIn = ({ navigation }: any) => {
         });
 
     }
-
+    
     const registerAction = async () => {
         if(!userRegister || !emailRegister || !passRegister || !confirmPassRegister){
             setErrorMsg('Preencha todos os campos.');
@@ -152,19 +153,45 @@ const SignIn = ({ navigation }: any) => {
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, emailRegister, passRegister)
         .then(async (userCredential) => {
-            // Signed in 
+            
+            /*-------------------Signed in-------------------*/
             const user = userCredential.user;
             
             /*Saving necessary user data to Firestore*/
             const userRef = collection(db, "user");
 
-            await setDoc(doc(userRef, user.uid), {
+            let userData = {
+                id: user.uid,
                 username: userRegister,
                 email: emailRegister,
-                avatar: "noPhoto.png"
-            });
-            /******/
+                avatar: "noPhoto.png",
+                createdd_at: Math.floor(Date.now() / 1000)
+            }
+
+            await setDoc(doc(userRef, user.uid), userData);
+
+
+            //Save data on the context
+            saveUserDataOnContext(userData);
+            /*-----------------------------------------------*/
             
+            
+            /*----------Create first user cash box-----------*/
+            
+            /*Creating cashBox to Firestore*/
+            const cashBoxRef = collection(db, "moneyJar");
+
+            let randomId = uuidv4();
+            await setDoc(doc(cashBoxRef, randomId), {
+                id: randomId,
+                user_id: user.uid,
+                title: 'Disponível',
+                money: 0,
+                image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg',
+                created_at: Math.floor(Date.now() / 1000)
+            });
+            /*-----------------------------------------------*/
+
             //Send user to Home
             navigation.push('Home');
         })

@@ -73,7 +73,7 @@ const MoneyJar = ({ navigation }: any) => {
                 <NewBox closeFnc={closeModal} successFnc={boxCreatedSuccessfully} />
             }
 
-            <Header nav={navigation} showMoney={false} />
+            <Header username='coloca aqui tbem' nav={navigation} showMoney={false} />
             
             <View style={styles.topBarHeader}>
                 <TouchableOpacity onPress={() => navigation.push('Home')}>
