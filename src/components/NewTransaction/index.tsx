@@ -6,9 +6,15 @@ import { useState, useRef, useEffect } from 'react';
 import BrazillianDateFormat from '../../helpers/BrazillianDateFormat';
 import uuid from 'react-native-uuid';
 
+//Firebase Imports
+import { collection, doc, setDoc } from 'firebase/firestore';
+import db from '../../config/firebase';
+import { v4 as uuidv4 } from 'uuid';
+
 type Props = {
     closeFnc: () => void,
-    successFnc: any
+    successFnc: any,
+    userId: string
 }
 
 
@@ -20,7 +26,7 @@ const options = [
     { id: '5', label: 'Investimentos', value: 'Investimentos'},
   ];
 
-const NewTransaction = ({ closeFnc, successFnc }: Props) => {
+const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
 
     const [inputDate, setInputDate] = useState('');
     const [inputValue, setInputValue] = useState('');
@@ -52,23 +58,31 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
         setIsOpen(false);
     };
 
-    const createTransaction = () => {
+    const createTransaction = async () => {
         if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
         }
 
-        //Manda para o banco de dados a nova transação
-        
-        let id = uuid.v4();
-        successFnc({
-            id,
+         /*----------Send transaction to the database-----------*/
+        const transactionRef = collection(db, "transaction");
+
+        let randomId = uuidv4();
+        let transaction = {
+            id: randomId,
             title: inputTransactionTitle,
+            description: 'esqueci do input disso affs',
             value: parseInt(inputValue),
-            description: 'esqueci do input disso',
             date: inputDate,
-            where: selectedOption.value
-        });
+            where: selectedOption.value,
+            user_id: userId
+        }
+
+        await setDoc(doc(transactionRef, randomId), transaction);
+        /*-----------------------------------------------*/
+        
+        //return this new function to this function
+        successFnc(transaction);
     }
 
     const renderItem = ({ item }:any) => (

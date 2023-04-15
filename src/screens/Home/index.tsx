@@ -30,9 +30,9 @@ const Home = ({ navigation }: any) => {
 
     /*Dados falsos, até a gente não conectar com  o banco de dados*/
     let transactionsBancoSimulation:Transaction[] = [
-        {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'Disponível'},
-        {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-        {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
+        {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', where: 'Disponível', user_id: 'dsdsd'},
+        {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', where: 'Emergência', user_id: 'dsdsd'},
+        {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', where: 'Viagem', user_id: 'dsdsd'},
     ];
 
     //Getting user's context
@@ -192,7 +192,7 @@ const Home = ({ navigation }: any) => {
         <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container} showsVerticalScrollIndicator={false}>
             
             {newTrasactionStatus &&
-                <NewTransaction successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
+                <NewTransaction userId={state.user.id} successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
             }
             
             <Header nav={navigation} showMoney={true} username={state.user.name} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
