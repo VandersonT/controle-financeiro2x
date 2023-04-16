@@ -132,7 +132,7 @@ const MoneyJar = ({ navigation }: any) => {
     const renderItem = ({item, index}: any) => {
 
         return (
-            <TouchableOpacity onPress={() => openMoneyJar(item.id)} style={styles.moneyJarsSingle}>
+            <TouchableOpacity onPress={() => openMoneyJar(item.title)} style={styles.moneyJarsSingle}>
                 <Image
                     style={{width: 84, height: 84, borderRadius: 4}}
                     source={{uri: item['image']}}

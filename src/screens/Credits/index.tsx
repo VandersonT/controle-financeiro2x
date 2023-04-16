@@ -13,7 +13,7 @@ const Credits = ({ navigation }: any) => {
             <Header2 title="Créditos" fnc={BackToHome} />
 
             <View style={styles.messageBox}>
-                <Text style={styles.message}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum consequat nisi, ut mollis magna porta vel. Integer ornare dolor et blandit venenatis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum consequat nisi, ut mollis magna porta vel. Integer ornare dolor et blandit venenatis.</Text>
+                <Text style={styles.message}>Com o objetivo de facilitar o controle das suas finanças pessoais, este aplicativo oferece uma interface intuitiva e descomplicada. Uma das principais características do aplicativo é a capacidade de separar seu dinheiro em várias categorias, ou "caixinhas", como emergência, aluguel, dentre outras. Isso ajuda a manter um controle mais organizado e detalhado das suas despesas, possibilitando uma identificação mais precisa de onde o dinheiro está sendo gasto e onde é possível economizar.</Text>
             </View>
             <View style={styles.infoBox}>
                 <View style={styles.infoSingle}>

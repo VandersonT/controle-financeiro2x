@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
     },
+    empty:{
+        color: Theme.colors.gray[500],
+        fontSize: Theme.fontSizes.md
+    },
     topBarHeader: {
         flexDirection: "row",
         justifyContent: "space-between",

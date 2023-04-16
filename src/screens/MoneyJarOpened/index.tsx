@@ -4,23 +4,84 @@ import Header from "../../components/Header";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Theme } from "../../global/theme";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Transaction } from "../../Types/Transaction";
 import BrazilianRealFormat from "../../helpers/BrazilianRealFormat";
+import { Context } from "../../context/Context";
+
+//Firebase Imports
+import { collection, getDocs, query, where } from "firebase/firestore";
+import db from "../../config/firebase";
 
 
 /*Dados falsos, até a gente não conectar com  o banco de dados*/
-let transactionsBancoSimulation:Transaction[] = [
-    {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', 'where': 'Disponível'},
-    {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', 'where': 'Emergência'},
-    {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', 'where': 'Viagem'},
-];
+let transactionsBancoSimulation:Transaction[] = [];
 
 const MoneyJarOpened = ({ navigation, route }: any) => {
 
-    //const boxId = route.params.boxId;
-    const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
 
+    /*----------------------------------------*/
+    /*               STATES                   */
+    /*----------------------------------------*/
+    const boxTitle = route.params.boxId;
+    const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
+    const [ totalMoney, setTotalMoney ] = useState<number>(0);
+
+    /*----------------------------------------*/
+    /*               EFFECTS                  */
+    /*----------------------------------------*/
+    useEffect(()=>{
+        getMoneyJarTransactions();
+    }, []);
+
+    const getMoneyJarTransactions = async () => {
+        const q = query(collection(db, "transaction"), where("where", "==", boxTitle), where("user_id", "==", state.user.id));
+
+        const querySnapshot = await getDocs(q);
+
+        let transactionsAux: Transaction[] = [];
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            
+            transactionsAux.splice(0, 0, {
+                id: doc.data().id,
+                title: doc.data().title,
+                value: doc.data().value,
+                description: doc.data().description,
+                date: doc.data().date,
+                where: doc.data().where,
+                user_id: doc.data().user_id,
+                created_at: doc.data().created_at
+            });
+        })
+
+        //Sorting transactions
+        transactionsAux.sort((a, b) => {
+            if (a.created_at < b.created_at) {
+                return 1;
+            } else if (a.created_at > b.created_at) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        //Getting total money
+        let totalMoneyAux = 0;
+        for(let i = 0; i < transactionsAux.length; i++)
+            totalMoneyAux += transactionsAux[i].value;
+
+        setTotalMoney(totalMoneyAux);
+        
+        setTransactions(transactionsAux);
+    }
+
+    /*----------------------------------------*/
+    /*              FUNCTIONS                 */
+    /*----------------------------------------*/
     const returnFnc = () => {
         navigation.push('MoneyJar')
     }
@@ -70,19 +131,19 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Header nav={navigation} showMoney={false} />
+            <Header username={state.user.name} nav={navigation} showMoney={false} />
 
             <View style={styles.topBarHeader}>
                 <TouchableOpacity onPress={() => navigation.push('MoneyJar')}>
                     <MaterialIcons name="arrow-back-ios" size={24} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Emergência</Text>
+                <Text style={styles.title}>{boxTitle}</Text>
                 <Text></Text>
             </View>
 
             <View style={styles.mainInfo}>
                 <View>
-                    <Text style={styles.value}>R$60,00</Text>
+                    <Text style={styles.value}>{BrazilianRealFormat(totalMoney)}</Text>
                     <Text>Saldo Atual</Text>
                 </View>
                 <TouchableOpacity onPress={deleteMoneyJar}>
@@ -94,12 +155,18 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
 
                 <Text style={styles.historicTitle}>Histórico</Text>
 
-                <FlatList
-                    scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
-                    data={transactions}
-                    keyExtractor={item=>item.id}
-                    renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
-                />
+                {transactions.length > 0 &&
+                    <FlatList
+                        scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
+                        data={transactions}
+                        keyExtractor={item=>item.id}
+                        renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
+                    />
+                }
+
+                {transactions.length < 1 && 
+                    <Text style={styles.empty}>Nenhuma transação nesta caixinha.</Text>
+                }
 
             </View>
 
