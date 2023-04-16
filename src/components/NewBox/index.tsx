@@ -5,6 +5,9 @@ import styles from './style';
 import { useState, useRef, useEffect } from 'react';
 import BrazillianDateFormat from '../../helpers/BrazillianDateFormat';
 import uuid from 'react-native-uuid';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import db from '../../config/firebase';
+import { MoneyJarT } from '../../Types/MoneyJarT';
 
 type Props = {
     closeFnc: () => void,
@@ -53,6 +56,12 @@ const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
         setIsOpen(false);
     };
 
+    const saveMoneyJar = async (newMoneyJar: MoneyJarT) => {
+        const moneyJarRef = collection(db, "moneyJar");
+
+        await setDoc(doc(moneyJarRef, newMoneyJar.id), newMoneyJar);
+    }
+    
     const createBox = () => {
         
         if(!boxName || !selectedOption.image){
@@ -61,15 +70,20 @@ const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
         }
 
         let id = uuid.v4();
-        successFnc({
-            id,
-            name: boxName,
-            value: 0,
-            user_id: '123',
-            image: selectedOption.image
-        });
+        let newMoneyJar: MoneyJarT = {
+            id: id.toString(),
+            title: boxName,
+            money: 0,
+            user_id: userId,
+            image: selectedOption.image,
+            created_at:  Math.floor(Date.now() / 1000)
+        }
 
-        //successFnc({id: '346', name: 'novo', value: 3123.00, user_id: '123', image: 'https://www.infomoney.com.br/wp-content/uploads/2019/06/dinheiro-emergencia.jpg?fit=900%2C600&quality=50&strip=all'})
+        /*Send this moneyJar to firebase*/
+        saveMoneyJar(newMoneyJar);
+
+        /*Return data to the main screen*/
+        successFnc(newMoneyJar);
 
     }
 
