@@ -22,7 +22,7 @@ import NewTransaction from "../../components/NewTransaction";
 
 //Context
 import { Context } from "../../context/Context";
-import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import db from "../../config/firebase";
 
 
@@ -82,6 +82,16 @@ const Home = ({ navigation }: any) => {
                 })
             });
             
+            transactionsAux.sort((a, b) => {
+                if (a.created_at < b.created_at) {
+                    return 1;
+                } else if (a.created_at > b.created_at) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+            console.log(transactionsAux)
             setTransactions([...transactionsAux]);
         };
 

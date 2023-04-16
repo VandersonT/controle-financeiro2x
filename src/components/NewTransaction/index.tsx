@@ -31,6 +31,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
 
     const [inputDate, setInputDate] = useState('');
     const [inputValue, setInputValue] = useState('');
+    const [inputDescription, setInputDescription] = useState(''); 
     const [inputTransactionTitle, setInputTransactionTitle] = useState('');
     const buttonRef = useRef<TouchableOpacity>(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -90,7 +91,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
 
     const createTransaction = async () => {
 
-        if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate){
+        if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate || !inputDescription){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
         }
@@ -108,7 +109,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
         let transaction = {
             id: randomId,
             title: inputTransactionTitle,
-            description: 'esqueci do input disso affs',
+            description: inputDescription,
             value: parseInt(inputValue),
             date: inputDate,
             where: selectedOption.title,
@@ -141,6 +142,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
                     <View style={styles.form}>
                         
                         <TextInput style={styles.input} onChangeText={setInputTransactionTitle} value={inputTransactionTitle} placeholder="Titulo da Transação" />
+                        <TextInput style={styles.input} onChangeText={setInputDescription} value={inputDescription} placeholder="Digite uma descrição" />
                         <TextInput style={styles.input} onChangeText={setInputValue} value={inputValue} keyboardType="numeric" placeholder="Digite o Valor" />
                         
                         <View>
