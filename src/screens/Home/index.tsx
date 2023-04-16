@@ -80,9 +80,6 @@ const Home = ({ navigation }: any) => {
                     user_id: doc.data().user_id,
                     created_at: doc.data().created_at
                 })
-
-                console.log(doc.data().title);
-                console.log("--------------------");
             });
             
             setTransactions([...transactionsAux]);

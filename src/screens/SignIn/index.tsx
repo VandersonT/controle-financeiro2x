@@ -187,6 +187,7 @@ const SignIn = ({ navigation }: any) => {
                 user_id: user.uid,
                 title: 'Disponível',
                 money: 0,
+                value: 0,
                 image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg',
                 created_at: Math.floor(Date.now() / 1000)
             });

@@ -7,7 +7,7 @@ import BrazillianDateFormat from '../../helpers/BrazillianDateFormat';
 import uuid from 'react-native-uuid';
 
 //Firebase Imports
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import db from '../../config/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,14 +17,15 @@ type Props = {
     userId: string
 }
 
+const initialOptions = [
+    { id: '1', label: 'none', title: 'Selecione uma caixinha'},
+];
 
-const options = [
-    { id: '1', label: 'Emergência', value: 'Emergência'},
-    { id: '2', label: 'Disponível', value: 'Disponível'},
-    { id: '3', label: 'Viagens', value: 'Viagens'},
-    { id: '4', label: 'Obra', value: 'Obra'},
-    { id: '5', label: 'Investimentos', value: 'Investimentos'},
-  ];
+type optionsType = {
+    id: string,
+    label: string,
+    title: string,
+}
 
 const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
 
@@ -33,7 +34,36 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
     const [inputTransactionTitle, setInputTransactionTitle] = useState('');
     const buttonRef = useRef<TouchableOpacity>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(options[0]);
+    const [ options, setOptions ] = useState<optionsType[]>(initialOptions);
+    const [selectedOption, setSelectedOption] = useState<optionsType>(options[0]);
+
+
+    useEffect(() => {
+        //get all user's moneyJars
+        getMoneyJars();
+    }, []);
+
+    const getMoneyJars = async () => {
+
+        const q = query(collection(db, "moneyJar"), where("user_id", "==", userId));
+
+        const querySnapshot = await getDocs(q);
+
+        let optionsAux: optionsType[] = [];
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            
+            optionsAux.splice(0, 0, {
+                id: doc.data().id,
+                label: doc.data().title,
+                title: doc.data().title
+            });
+        })
+        
+        setOptions(optionsAux);
+    };
+
 
     const handlePress = (event: any) => {
         if (event.target === buttonRef.current) {
@@ -59,10 +89,17 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
     };
 
     const createTransaction = async () => {
+
         if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
         }
+
+        if(selectedOption['label'] == 'none'){
+            Alert.alert('Espere um momento', 'Antes de continuarmos, você deve escolher uma caixinha.');
+            return;
+        }
+        
 
          /*----------Send transaction to the database-----------*/
         const transactionRef = collection(db, "transaction");
@@ -74,7 +111,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
             description: 'esqueci do input disso affs',
             value: parseInt(inputValue),
             date: inputDate,
-            where: selectedOption.value,
+            where: selectedOption.title,
             user_id: userId,
             created_at: Math.floor(Date.now() / 1000)
         }
@@ -88,7 +125,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
 
     const renderItem = ({ item }:any) => (
         <TouchableOpacity style={styles.optionSingle}>
-            <Text>{item.label}</Text>
+            <Text>{item.title}</Text>
         </TouchableOpacity>
     );
 
@@ -108,18 +145,17 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
                         
                         <View>
                             <TouchableOpacity style={styles.input} onPress={() => setIsOpen(!isOpen)}>
-                                <Text style={styles.selectTitle}>{selectedOption.label}</Text>
+                                <Text style={styles.selectTitle}>{selectedOption.title}</Text>
                             </TouchableOpacity>
                             {isOpen && (
                                 <View style={styles.optionsBox}>
-
                                     {options.map((option) => (
                                         <TouchableOpacity
                                             key={option.id}
                                             onPress={() => handleOptionPress(option)}
                                             style={styles.optionSingle}
                                         >
-                                            <Text style={[styles.optionSingle_title, (option.id == '0') ? styles.unSelected : null]}>{option.label}</Text>
+                                            <Text style={[styles.optionSingle_title, (option.id == '0') ? styles.unSelected : null]}>{option.title}</Text>
                                         </TouchableOpacity>
                                     ))}
 
