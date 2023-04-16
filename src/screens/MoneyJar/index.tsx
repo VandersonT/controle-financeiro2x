@@ -17,16 +17,16 @@ import { Transaction } from '../../Types/Transaction';
 
 
 
-let boxsSimulator = [
-    {id: '232', title: 'Disponível', created_at: 0, money: 123.00, user_id: '123', image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg'},
-]
+/*let boxsSimulator = [
+    {id: '0', title: 'none', created_at: 0, money: 0, user_id: '0', image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg'},
+]*/
 
 const MoneyJar = ({ navigation }: any) => {
 
     /*----------------------------------------*/
     /*               STATE                    */
     /*----------------------------------------*/
-    const [ MoneyJars, SetMoneyJars ] = useState<MoneyJarT[]>(boxsSimulator);
+    const [ MoneyJars, SetMoneyJars ] = useState<MoneyJarT[]>([]);
     const [ modalNewBox, setModalNewBox ] = useState(false);
     const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
 
@@ -65,7 +65,6 @@ const MoneyJar = ({ navigation }: any) => {
         
         /*--------------Get MoneyJars values--------------*/
         for(let i = 0; i < moneyJarAux.length; i++){
-            console.log("verificando o "+moneyJarAux.length)
 
             const q = query(collection(db, "transaction"), where("where", "==", moneyJarAux[i].title));
 
@@ -77,8 +76,7 @@ const MoneyJar = ({ navigation }: any) => {
                 // doc.data() is never undefined for query doc snapshots
                 transactionsAux += doc.data().value;
             })
-            //console.log('Valor total: '+transactionsAux);
-            //console.log("coloca em "+moneyJarAux[0].money)
+            
             moneyJarAux[i].money = transactionsAux;
         }
 
@@ -141,7 +139,7 @@ const MoneyJar = ({ navigation }: any) => {
         <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container}>
 
             {modalNewBox &&
-                <NewBox closeFnc={closeModal} successFnc={boxCreatedSuccessfully} />
+                <NewBox userId={state.user.id} closeFnc={closeModal} successFnc={boxCreatedSuccessfully} />
             }
 
             <Header username='coloca aqui tbem' nav={navigation} showMoney={false} />
