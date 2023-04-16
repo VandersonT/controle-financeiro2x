@@ -80,7 +80,18 @@ const MoneyJar = ({ navigation }: any) => {
             moneyJarAux[i].money = transactionsAux;
         }
 
-        //
+        /*Sorting moneyJars*/
+        moneyJarAux.sort((a, b) => {
+            if (a.created_at < b.created_at) {
+                return 1;
+            } else if (a.created_at > b.created_at) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        //Send data to moneyJar state
         SetMoneyJars(moneyJarAux);
     };
 
