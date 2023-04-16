@@ -29,6 +29,9 @@ type optionsType = {
 
 const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
 
+    /*----------------------------------------*/
+    /*               STATE                    */
+    /*----------------------------------------*/
     const [inputDate, setInputDate] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [inputDescription, setInputDescription] = useState(''); 
@@ -39,11 +42,18 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
     const [selectedOption, setSelectedOption] = useState<optionsType>(options[0]);
 
 
+    /*----------------------------------------*/
+    /*              EFFECTS                   */
+    /*----------------------------------------*/
     useEffect(() => {
         //get all user's moneyJars
         getMoneyJars();
     }, []);
 
+
+    /*----------------------------------------*/
+    /*             FUNCTIONS                  */
+    /*----------------------------------------*/
     const getMoneyJars = async () => {
 
         const q = query(collection(db, "moneyJar"), where("user_id", "==", userId));

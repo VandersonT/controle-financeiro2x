@@ -65,7 +65,7 @@ const Home = ({ navigation }: any) => {
 
             const querySnapshot = await getDocs(q);
 
-            let transactionsAux = transactions;
+            let transactionsAux:Transaction[]  = [];
 
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
@@ -82,6 +82,7 @@ const Home = ({ navigation }: any) => {
                 })
             });
             
+            //Sorting transactions
             transactionsAux.sort((a, b) => {
                 if (a.created_at < b.created_at) {
                     return 1;
@@ -91,8 +92,8 @@ const Home = ({ navigation }: any) => {
                     return 0;
                 }
             });
-            console.log(transactionsAux)
-            setTransactions([...transactionsAux]);
+            
+            setTransactions(transactionsAux);
         };
 
         useEffect(() => {

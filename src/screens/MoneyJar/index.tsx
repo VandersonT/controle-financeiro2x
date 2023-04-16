@@ -2,23 +2,94 @@ import { View, Text, TouchableOpacity, Image, FlatList, ScrollView } from 'react
 import Header from '../../components/Header';
 import { MaterialIcons } from '@expo/vector-icons';
 import styles from './style';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { MoneyJarT } from '../../Types/MoneyJarT';
 import { Theme } from '../../global/theme';
 import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 import NewBox from '../../components/NewBox';
 
-let boxsSimulator = [
-    {id: '232', name: 'Disponível', value: 123.00, user_id: '123', image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg'},
-]
+//Firebase Imports
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import db from '../../config/firebase';
+import { Context } from '../../context/Context';
+import { Transaction } from '../../Types/Transaction';
 
+
+
+
+let boxsSimulator = [
+    {id: '232', title: 'Disponível', created_at: 0, money: 123.00, user_id: '123', image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg'},
+]
 
 const MoneyJar = ({ navigation }: any) => {
 
+    /*----------------------------------------*/
+    /*               STATE                    */
+    /*----------------------------------------*/
     const [ MoneyJars, SetMoneyJars ] = useState<MoneyJarT[]>(boxsSimulator);
     const [ modalNewBox, setModalNewBox ] = useState(false);
     const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
 
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
+
+
+    /*----------------------------------------*/
+    /*              EFFECTS                   */
+    /*----------------------------------------*/
+    useEffect(() => {
+        //get all user's moneyJars
+        getMoneyJars();
+    }, []);
+
+    const getMoneyJars = async () => {
+
+        const q = query(collection(db, "moneyJar"), where("user_id", "==", state.user.id));
+
+        const querySnapshot = await getDocs(q);
+
+        let moneyJarAux: MoneyJarT[] = [];
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            
+            moneyJarAux.splice(0, 0, {
+                id: doc.data().id,
+                title: doc.data().title,
+                money: doc.data().money,
+                user_id: doc.data().user_id,
+                image: doc.data().image,
+                created_at: doc.data().created_at
+            });
+        })
+        
+        /*--------------Get MoneyJars values--------------*/
+        for(let i = 0; i < moneyJarAux.length; i++){
+            console.log("verificando o "+moneyJarAux.length)
+
+            const q = query(collection(db, "transaction"), where("where", "==", moneyJarAux[i].title));
+
+            const querySnapshot = await getDocs(q);
+
+            let transactionsAux = 0;
+
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                transactionsAux += doc.data().value;
+            })
+            //console.log('Valor total: '+transactionsAux);
+            //console.log("coloca em "+moneyJarAux[0].money)
+            moneyJarAux[i].money = transactionsAux;
+        }
+
+        //
+        SetMoneyJars(moneyJarAux);
+    };
+
+
+    /*----------------------------------------*/
+    /*             FUNCTIONS                  */
+    /*----------------------------------------*/
     const scrollViewRef = useRef<ScrollView>(null);
     const openCreateNewBoxModal = () => {
         setScrollEnabled(false);
@@ -58,8 +129,8 @@ const MoneyJar = ({ navigation }: any) => {
                     source={{uri: item['image']}}
                 />
                 <View style={styles.infoBox}>
-                    <Text style={styles.infoTitle}>{item['name']}</Text>
-                    <Text  style={styles.infoValue}>{BrazilianRealFormat(item['value'])}</Text>
+                    <Text style={styles.infoTitle}>{item['title']}</Text>
+                    <Text  style={styles.infoValue}>{BrazilianRealFormat(item['money'])}</Text>
                 </View>
                 <MaterialIcons name="arrow-circle-up" size={35} color={Theme.colors.primary[500]} />
             </TouchableOpacity>
