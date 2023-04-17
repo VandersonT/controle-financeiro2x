@@ -90,7 +90,11 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                     <View style={styles.infoBox}>
                         <View style={styles.infoSingle}>
                             <Text style={styles.infoTitle}>Disponivel</Text>
-                            <Text style={styles.money}>{BrazilianRealFormat(totalMoneyAvailable)}</Text>
+                            <Text style={styles.money}>
+                                {(totalMoneyAvailable > 999999) ? 'R$ 999.999+' : null}
+                                {(totalMoneyAvailable < -999999) ? '-R$ 999.999-' : null}
+                                {(totalMoneyAvailable < 999999 && totalMoneyAvailable > -999999) ? BrazilianRealFormat(totalMoneyAvailable) : null}
+                            </Text>
                         </View>
                         <View style={styles.infoSingle}>
                             <TouchableOpacity style={styles.infoTitleBox} onPress={moneyJar}>
@@ -99,7 +103,11 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                                 </Text>
                                 <Text style={styles.infoTitle_alert}>[Clique]</Text>
                             </TouchableOpacity>
-                            <Text style={styles.money}>{BrazilianRealFormat(stash)}</Text>
+                            <Text style={styles.money}>
+                                {(stash > 999999) ? 'R$ 999.999+' : null}
+                                {(stash < -999999) ? '-R$ 999.999-' : null}
+                                {(stash < 999999 && stash > -999999) ? BrazilianRealFormat(stash) : null}
+                            </Text>
                         </View>
                     </View>
                 }

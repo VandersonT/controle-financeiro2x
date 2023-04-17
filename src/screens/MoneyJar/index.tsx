@@ -143,7 +143,11 @@ const MoneyJar = ({ navigation }: any) => {
                 />
                 <View style={styles.infoBox}>
                     <Text style={styles.infoTitle}>{item['title']}</Text>
-                    <Text  style={styles.infoValue}>{BrazilianRealFormat(item['money'])}</Text>
+                    <Text  style={styles.infoValue}>
+                        {(item['money'] > 99999999) ? 'R$ 99.999.999+' : null}
+                        {(item['money'] < -99999999) ? '-R$ 99.999.999-' : null}
+                        {(item['money'] < 99999999 && item['money'] > -99999999) ? BrazilianRealFormat(item['money']) : null}
+                    </Text>
                 </View>
                 <MaterialIcons name="arrow-circle-up" size={35} color={Theme.colors.primary[500]} />
             </TouchableOpacity>
