@@ -98,6 +98,7 @@ const SignIn = ({ navigation }: any) => {
         if (docSnap.exists()){
             // We have the user's data here => docSnap.data()
             saveUserDataOnContext(docSnap.data()); //save data on the context.
+
             return true; 
         }else{
             // docSnap.data() will be undefined in this case
@@ -165,7 +166,7 @@ const SignIn = ({ navigation }: any) => {
                 username: userRegister,
                 email: emailRegister,
                 avatar: "noPhoto.png",
-                createdd_at: Math.floor(Date.now() / 1000)
+                created_at: Math.floor(Date.now() / 1000)
             }
 
             await setDoc(doc(userRef, user.uid), userData);
