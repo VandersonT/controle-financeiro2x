@@ -17,21 +17,40 @@ const avatarsAvailable = [
     {id: '3', name: 'Lobo', image: 'https://t4.ftcdn.net/jpg/05/64/10/99/360_F_564109909_5G38uqAWzT9U3seGi6IKcNjOtTJFfdPG.jpg'},
 ]
 
+const currentUserAvatarName = 'Leão';
+
+
 const EditProfile = ({ navigation }: any) => {
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
 
+    //Getting user avatar to set as a default value in selectedOption state
+    let selectedIndex = avatarsAvailable.findIndex(avatar => avatar.image === state.user.avatar);
+    if(selectedIndex === -1) selectedIndex = 0; //ant-crash
+
+    /*----------------------------------------*/
+    /*               STATES                   */
+    /*----------------------------------------*/
     const [ userName, setUserName ] = useState(state.user.name);
     const [ email, setEmail ] = useState(state.user.email);
-    const [selectedOption, setSelectedOption] = useState(avatarsAvailable[0]);
+    const [selectedOption, setSelectedOption] = useState(avatarsAvailable[selectedIndex]);
     const [isOpen, setIsOpen] = useState(false);
 
+
+    /*----------------------------------------*/
+    /*             FUNCTIONS                  */
+    /*----------------------------------------*/
     const backToProfile = () => {
         navigation.push('Profile');
     }
 
     const saveInfo = async () => {
+        
+        if(email == state.user.email && userName == state.user.name && selectedOption.image == state.user.avatar){
+            Alert.alert("Um momento amigo", "Você não fez nenhuma alteração para que possa salvar.");
+            return;
+        }
         
         if(!email || !userName || !selectedOption.image){
             Alert.alert("Um momento amigo", "Você não pode deixar campos vazios, faz o favor de preencher ai, amigão(ona).");
