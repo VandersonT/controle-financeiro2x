@@ -124,15 +124,14 @@ const MoneyJar = ({ navigation }: any) => {
         closeModal();
     }
 
-    const openMoneyJar = (boxId: string) => {
-
-        navigation.push('MoneyJarOpened', {boxId})
+    const openMoneyJar = (boxTitle: string, boxId: string) => {
+        navigation.push('MoneyJarOpened', {boxTitle, boxId})
     }
 
     const renderItem = ({item, index}: any) => {
 
         return (
-            <TouchableOpacity onPress={() => openMoneyJar(item.title)} style={styles.moneyJarsSingle}>
+            <TouchableOpacity onPress={() => openMoneyJar(item.title, item.id)} style={styles.moneyJarsSingle}>
                 <Image
                     style={{width: 84, height: 84, borderRadius: 4}}
                     source={{uri: item['image']}}

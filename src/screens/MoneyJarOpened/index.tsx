@@ -10,7 +10,7 @@ import BrazilianRealFormat from "../../helpers/BrazilianRealFormat";
 import { Context } from "../../context/Context";
 
 //Firebase Imports
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import db from "../../config/firebase";
 
 
@@ -25,7 +25,8 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
-    const boxTitle = route.params.boxId;
+    const boxTitle = route.params.boxTitle;
+    const boxId = route.params.boxId;
     const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
     const [ totalMoney, setTotalMoney ] = useState<number>(0);
 
@@ -89,16 +90,30 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     const deleteMoneyJar = () => {
         Alert.alert(
             'Confirmação',
-            'Tem certeza que deseja excluir essa caixinha?',
+            'Tem certeza que deseja excluir essa caixinha? Todas as transações feito para ela serão deletadas também.',
             [
                 {
                 text: 'Cancelar',
                 onPress: () => {},
                 style: 'cancel',
                 },
-                { text: 'Excluir', onPress: () => {
+                { text: 'Excluir', onPress: async() => {
                     
+                    //Remove todas as transações que são desta caixinha
+                    const q = query(collection(db, "transaction"), where("where", "==", boxTitle));
+
+                    const querySnapshot = await getDocs(q);
+
+                    querySnapshot.forEach((doc) => {
+                        deleteDoc(doc.ref).then(() => {
+                            console.log("Documento excluído com sucesso!");
+                        }).catch((error) => {
+                            console.error("Erro ao excluir documento: ", error);
+                        });
+                    });                      
+
                     //Código remove esta caixinha do banco de dados
+                    await deleteDoc(doc(db, "moneyJar", boxId));
 
                     /*Return to MoneyJars listing*/
                     navigation.push('MoneyJar');
