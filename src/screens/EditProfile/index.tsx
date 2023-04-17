@@ -3,13 +3,13 @@ import styles from './style';
 import Header2 from '../../components/Header2';
 import Button1 from '../../components/Button1';
 import { useContext, useState } from 'react';
-import { CheckBox } from 'react-native-elements';
 import Footer from '../../components/Footer';
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, sendPasswordResetEmail, updateEmail } from 'firebase/auth';
 import firebaseErrorTranslate from '../../helpers/firebaseErrorTranslate';
-import { Touchable } from 'react-native';
 import CancelButton from '../../components/CancelButton';
 import { Context } from '../../context/Context';
+import db from '../../config/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const EditProfile = ({ navigation }: any) => {
 
@@ -25,9 +25,41 @@ const EditProfile = ({ navigation }: any) => {
         navigation.push('Profile');
     }
 
-    const saveInfo = () => {
+    const saveInfo = async () => {
 
-        //edita no banco de dados
+        if(!email || !userName){
+            Alert.alert("Um momento amigo", "Você não pode deixar campos vazios, faz o favor de preencher ai, amigão(ona).");
+            return;
+        }
+
+        //Edit email auth
+        const auth = getAuth();
+        const currentUser = auth.currentUser ?? undefined;
+
+        if(currentUser)
+            updateEmail(currentUser, email);
+        
+
+        //Edit in the database
+        await updateDoc(doc(db, "user", state.user.id), {
+            username: userName,
+            email: email
+        });
+
+        //Edit on Context
+        dispatch({
+            type: 'CHANGE_NAME',
+            payload: {
+                name: userName
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_EMAIL',
+            payload: {
+                email: email
+            }
+        });
 
         navigation.push('Profile');
     }
