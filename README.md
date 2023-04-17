@@ -7,7 +7,7 @@ ___
 <br/>
 <h2>Devs:</h2>
 
-- Bruno Caldeira | [GitHub](https://github.com/caldeira-bruno)
+- Bruno Caldeira | <a href="https://github.com/caldeira-bruno" target="_blank">GitHub</a>
 
 - Eduardo Oliveira | [GitHub](https://github.com/Duduax)
 
@@ -25,6 +25,11 @@ ___
 <h2>🔨 Prototype</h2>
 
 [https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1](https://www.figma.com/file/i8UBpjffnkgaNHAHn8ya94/Controle-Financeiro?node-id=1%3A2&t=G59ht8n7IDOBxffN-1)
+
+<br/>
+<h2>🔨 DataBase</h2>
+
+[https://imgbox.com/duhMtw46](https://imgbox.com/duhMtw46)
 
 
 <br/><br/>
