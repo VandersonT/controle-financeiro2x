@@ -165,7 +165,7 @@ const SignIn = ({ navigation }: any) => {
                 id: user.uid,
                 username: userRegister,
                 email: emailRegister,
-                avatar: "noPhoto.png",
+                avatar: "https://www.promoview.com.br/uploads/images/unnamed%2819%29.png",
                 created_at: Math.floor(Date.now() / 1000)
             }
 

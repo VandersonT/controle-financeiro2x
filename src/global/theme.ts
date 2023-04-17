@@ -32,7 +32,8 @@ export const Theme = {
             200: '#96be25'
         },
         blue: {
-            300: '#00A3FF'
+            300: '#00A3FF',
+            100: '#4dc3ff'
         },
         white: {
             700: '#FFFFFF',

@@ -105,11 +105,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                     const querySnapshot = await getDocs(q);
 
                     querySnapshot.forEach((doc) => {
-                        deleteDoc(doc.ref).then(() => {
-                            console.log("Documento excluído com sucesso!");
-                        }).catch((error) => {
-                            console.error("Erro ao excluir documento: ", error);
-                        });
+                        deleteDoc(doc.ref);
                     });                      
 
                     //Código remove esta caixinha do banco de dados
