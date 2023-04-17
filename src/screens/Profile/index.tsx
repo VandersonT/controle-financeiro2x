@@ -31,7 +31,7 @@ const Profile = ({ navigation }: any) => {
 
                 <Image
                     style={{width: 100, height: 100, borderRadius: 100}}
-                    source={{uri: 'https://focalizando.com.br/sites/default/files/inline-images/Fotos-para-perfil-do-Whatsapp-masculino-1170x700.webp'}}
+                    source={{uri: state.user.avatar}}
                 />
                 <Text style={styles.userName}>{state.user.name}</Text>
                 

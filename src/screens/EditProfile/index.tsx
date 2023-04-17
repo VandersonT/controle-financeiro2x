@@ -57,15 +57,26 @@ const EditProfile = ({ navigation }: any) => {
             return;
         }
 
-        //Edit email auth
-        const auth = getAuth();
-        const currentUser = auth.currentUser ?? undefined;
+        if(selectedOption.image){
+            dispatch({
+                type: 'CHANGE_AVATAR',
+                payload: {
+                    avatar: selectedOption.image
+                }
+            });
+        }
 
-        if(email != state.user.email && currentUser)
-            updateEmail(currentUser, email);
+        //Edit email auth
+        if(email != state.user.email){
+            const auth = getAuth();
+            const currentUser = auth.currentUser ?? undefined;
+
+            if(currentUser)
+                updateEmail(currentUser, email);
+        }
         
 
-        //Edit in the database
+        //Edit in the firestore
         await updateDoc(doc(db, "user", state.user.id), {
             username: userName,
             email: email,

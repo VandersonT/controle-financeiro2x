@@ -246,7 +246,7 @@ const Home = ({ navigation }: any) => {
                 <NewTransaction userId={state.user.id} successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
             }
             
-            <Header nav={navigation} showMoney={true} username={state.user.name} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
+            <Header nav={navigation} showMoney={true} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
             
             <View style={styles.main}>
 

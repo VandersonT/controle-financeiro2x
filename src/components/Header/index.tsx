@@ -6,13 +6,14 @@ import styles from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../global/theme';
 import { Feather } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 import { AntDesign } from '@expo/vector-icons';
 
 
 //Firebase imports
 import { getAuth, signOut } from "firebase/auth";
+import { Context } from '../../context/Context';
 
 
 type Props = {
@@ -20,15 +21,19 @@ type Props = {
     showMoney?: boolean,
     totalMoneyAvailable?: number,
     stash?: number,
-    username: string
 }
 
 
-const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0, username }: Props) => {
+const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: Props) => {
+
     /*----------------------------------------*/
     /*               STATES                   */
     /*----------------------------------------*/
     const [ menuOpened, setMenuOpened] = useState(false);
+
+
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
 
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
@@ -67,10 +72,10 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0, use
                     <View style={styles.headerInfo}>
                         <Image
                             resizeMode='contain'
-                            source={require('../../../assets/images/noPhoto.png')}
+                            source={{ uri: (state.user.avatar) ? state.user.avatar : '../../../assets/images/noPhoto.png'}}
                             style={{width: 57, height: 55, marginRight: 13, borderColor: '#5144DB', borderWidth: 2, borderRadius: 50}}
                         />
-                        <Text style={styles.userName}>{username}</Text>
+                        <Text style={styles.userName}>{state.user.name}</Text>
                     </View>
                     <TouchableOpacity onPress={() => setMenuOpened(true)}>
                         <Text style={styles.menuButton}>
@@ -113,10 +118,10 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0, use
                                     </TouchableOpacity>
 
                                     <Image 
-                                        source={require('../../../assets/images/noPhoto.png')}
+                                        source={{ uri: (state.user.avatar) ? state.user.avatar : '../../../assets/images/noPhoto.png'}}
                                         style={{width: 100, height: 100, borderRadius: 50}}
                                     />
-                                    <Text style={styles.menuTitle}>{username}</Text>
+                                    <Text style={styles.menuTitle}>{state.user.name}</Text>
                                 </View>
                             </ImageBackground>
 
