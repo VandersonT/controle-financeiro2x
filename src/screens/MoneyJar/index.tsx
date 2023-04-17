@@ -13,6 +13,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import db from '../../config/firebase';
 import { Context } from '../../context/Context';
 import { Transaction } from '../../Types/Transaction';
+import Loading from '../../components/Loading';
 
 
 
@@ -29,6 +30,7 @@ const MoneyJar = ({ navigation }: any) => {
     const [ MoneyJars, SetMoneyJars ] = useState<MoneyJarT[]>([]);
     const [ modalNewBox, setModalNewBox ] = useState(false);
     const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
+    const [ loading, setLoading ] = useState(false);
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
@@ -43,6 +45,8 @@ const MoneyJar = ({ navigation }: any) => {
     }, []);
 
     const getMoneyJars = async () => {
+
+        setLoading(true);
 
         const q = query(collection(db, "moneyJar"), where("user_id", "==", state.user.id));
 
@@ -93,6 +97,7 @@ const MoneyJar = ({ navigation }: any) => {
 
         //Send data to moneyJar state
         SetMoneyJars(moneyJarAux);
+        setLoading(false);
     };
 
 
@@ -167,6 +172,12 @@ const MoneyJar = ({ navigation }: any) => {
                 <TouchableOpacity onPress={openCreateNewBoxModal}>
                     <Text style={styles.link}>Criar caixinha</Text>
                 </TouchableOpacity>
+
+                {loading &&
+                    <View style={{ marginTop: 55 }}>
+                        <Loading />
+                    </View>
+                }
 
                 <View style={styles.moneyJarsBox}>
 

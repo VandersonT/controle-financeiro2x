@@ -19,6 +19,7 @@ import { Transaction } from "../../Types/Transaction";
 import Header from '../../components/Header';
 import Footer from "../../components/Footer";
 import NewTransaction from "../../components/NewTransaction";
+import Loading from "../../components/Loading";
 
 //Context
 import { Context } from "../../context/Context";
@@ -29,13 +30,6 @@ import db from "../../config/firebase";
 
 
 const Home = ({ navigation }: any) => {
-
-    /*Dados falsos, até a gente não conectar com  o banco de dados*/
-    /*let transactionsBancoSimulation:Transaction[] = [
-        {id: '2334efsdfs-sd34r', title: 'Salário Mensal', value: 2450.00, description: 'Ganhei do meu Trabalho.', date: '28/03/2023', where: 'Disponível', user_id: 'dsdsd'},
-        {id: '34esars-fdsfsf3', title: 'Divida de Jogo', value: -200.00, description: 'Pagamento da divida e eu estava sem dinheiro.', date: '27/03/2023', where: 'Emergência', user_id: 'dsdsd'},
-        {id: '3243rew-sfrewrw', title: 'Deposito para viagem', value: 400.00, description: 'Ganhei por ajudar um amigo esse valor.', date: '26/03/2023', where: 'Viagem', user_id: 'dsdsd'},
-    ];*/
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
@@ -50,6 +44,7 @@ const Home = ({ navigation }: any) => {
         const [ transactions, setTransactions ] = useState<Transaction[]>([]);
         const [ totalMoneyAvailable, setTotalMoneyAvailable] = useState<number>(0);
         const [ stash, setStash ] = useState<number>(0);
+        const [ loading, setLoading ] = useState(false);
 
     /*----------------------------------------*/
     /*             USE EFFECT                  */
@@ -61,6 +56,8 @@ const Home = ({ navigation }: any) => {
         }, [])
 
         const getTransactions = async () => {
+            setLoading(true);
+
             const q = query(collection(db, "transaction"), where("user_id", "==", state.user.id));
 
             const querySnapshot = await getDocs(q);
@@ -94,6 +91,7 @@ const Home = ({ navigation }: any) => {
             });
             
             setTransactions(transactionsAux);
+            setLoading(false);
         };
 
         useEffect(() => {
@@ -263,8 +261,14 @@ const Home = ({ navigation }: any) => {
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
 
-                    {transactions.length < 1 &&
+                    {transactions.length < 1 && !loading &&
                         <Text style={styles.empty}>Nenhuma transação até o momento</Text>
+                    }
+
+                    {loading &&
+                        <View style={{ marginTop: 50 }}>
+                            <Loading />
+                        </View>
                     }
 
                 </View>

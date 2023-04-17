@@ -7,6 +7,7 @@ import { Theme } from '../../global/theme';
 const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+    
     container: {
         width: '100%',
         //backgroundColor: Theme.colors.white[700],
