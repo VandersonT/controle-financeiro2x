@@ -3,12 +3,13 @@ import styles from './style';
 
 type Props = {
     title: String,
-    fnc: () => void
+    fnc: () => void,
+    color?: string
 }
 
-const Button1 = ({ title, fnc }: Props) => {
+const Button1 = ({ title, fnc, color }: Props) => {
     return (
-        <TouchableOpacity style={styles.button} onPress={() => fnc()}>
+        <TouchableOpacity style={[styles.button, color ? { backgroundColor: color } : null]} onPress={() => fnc()}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );

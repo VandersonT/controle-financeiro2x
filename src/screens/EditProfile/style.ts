@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         marginTop: 80,
-        marginBottom: 90
+        marginBottom: 90,
+        minHeight: screenHeight-396
     },
     inputSingle: {
         width: '70%',
@@ -25,6 +26,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 25,
         textAlign: 'center'
+    },
+    buttonGroup: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 30
     },
     note: {
         width: '70%',

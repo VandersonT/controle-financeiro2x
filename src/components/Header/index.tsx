@@ -116,7 +116,7 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0, use
                                         source={require('../../../assets/images/noPhoto.png')}
                                         style={{width: 100, height: 100, borderRadius: 50}}
                                     />
-                                    <Text style={styles.menuTitle}>Matheus Silva</Text>
+                                    <Text style={styles.menuTitle}>{username}</Text>
                                 </View>
                             </ImageBackground>
 
