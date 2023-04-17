@@ -2,18 +2,24 @@ import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity } from 'reac
 import styles from './style';
 import Header2 from '../../components/Header2';
 import Button1 from '../../components/Button1';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { CheckBox } from 'react-native-elements';
 import Footer from '../../components/Footer';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import firebaseErrorTranslate from '../../helpers/firebaseErrorTranslate';
 import { Touchable } from 'react-native';
 import CancelButton from '../../components/CancelButton';
+import { Context } from '../../context/Context';
 
 const EditProfile = ({ navigation }: any) => {
 
-    const [ userName, setUserName ] = useState('Matheus Silva');
-    const [ email, setEmail ] = useState('matheusilva12@gmail.com');
+
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
+
+    const [ userName, setUserName ] = useState(state.user.name);
+    const [ email, setEmail ] = useState(state.user.email);
+
 
     const backToProfile = () => {
         navigation.push('Profile');
@@ -28,17 +34,31 @@ const EditProfile = ({ navigation }: any) => {
 
     const resetPassword = async () => {
         
-        try {
-            const auth = getAuth();
-            // Enviar um e-mail de redefinição de senha para o endereço de e-mail fornecido
-            await sendPasswordResetEmail(auth, email);
-        
-            // Exibir uma mensagem de sucesso ao usuário
-            Alert.alert("Email de redefinição enviado.");
-        } catch (error: any) {
-            // Exibir uma mensagem de erro ao usuário
-            Alert.alert("Email de redefinição enviado.");(firebaseErrorTranslate(error.code));
-        }
+        Alert.alert(
+            'Confirmação',
+            `Enviaremos um email para "${email}"" com as informações de redefinição. Deseja prosseguir?`,
+            [
+              {
+                text: 'Cancelar',
+                onPress: () => {},
+                style: 'cancel',
+              },
+              { text: 'Continuar', onPress: async () => {
+                try {
+                    const auth = getAuth();
+                    // Enviar um e-mail de redefinição de senha para o endereço de e-mail fornecido
+                    await sendPasswordResetEmail(auth, email);
+                
+                    // Exibir uma mensagem de sucesso ao usuário
+                    Alert.alert("Corre para trocar", "Acabamos de enviar um email de redefinição para o email informado.");
+                } catch (error: any) {
+                    // Exibir uma mensagem de erro ao usuário
+                    Alert.alert("Oops! Ocorreu um erro", firebaseErrorTranslate(error.code));;
+                }
+              }},
+            ],
+            { cancelable: false }
+          );
 
     }
 
@@ -54,7 +74,6 @@ const EditProfile = ({ navigation }: any) => {
                 <Text style={styles.note}>Nota: Se clicar para resetar senha o email será enviado para o email que está acima.</Text>
                 <View style={styles.buttonGroup}>
                     <CancelButton title="Resetar Senha" fnc={resetPassword} />
-
                     <Button1 title="Salvar" fnc={saveInfo} />
                 </View>
             </View>
