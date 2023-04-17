@@ -70,7 +70,7 @@ const MoneyJar = ({ navigation }: any) => {
         /*--------------Get MoneyJars values--------------*/
         for(let i = 0; i < moneyJarAux.length; i++){
 
-            const q = query(collection(db, "transaction"), where("where", "==", moneyJarAux[i].title));
+            const q = query(collection(db, "transaction"), where("where", "==", moneyJarAux[i].title), where("user_id", "==", state.user.id));
 
             const querySnapshot = await getDocs(q);
 

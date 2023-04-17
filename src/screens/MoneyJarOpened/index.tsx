@@ -88,6 +88,12 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     }
 
     const deleteMoneyJar = () => {
+
+        if(boxTitle === "Disponível"){
+            Alert.alert("Um momento amigo", "Você não pode apagar essa caixinha, pois ela é padrão.");
+            return;
+        }
+
         Alert.alert(
             'Confirmação',
             'Tem certeza que deseja excluir essa caixinha? Todas as transações feito para ela serão deletadas também.',
@@ -142,7 +148,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Header username={state.user.name} nav={navigation} showMoney={false} />
+            <Header nav={navigation} showMoney={false} />
 
             <View style={styles.topBarHeader}>
                 <TouchableOpacity onPress={() => navigation.push('MoneyJar')}>
