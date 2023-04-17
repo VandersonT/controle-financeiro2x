@@ -22,7 +22,7 @@ import NewTransaction from "../../components/NewTransaction";
 
 //Context
 import { Context } from "../../context/Context";
-import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import db from "../../config/firebase";
 
 
@@ -172,15 +172,19 @@ const Home = ({ navigation }: any) => {
                     onPress: () => {},
                     style: 'cancel',
                   },
-                  { text: 'Excluir', onPress: () => {
+                  { text: 'Excluir', onPress: async () => {
                     let aux = transactions;
+                    //Remove deleted transaction from array
                     aux.splice(index, 1);
                     setTransactions([...aux]);
 
-                    /*Close all transactions*/
+                    //Close all transactions
                     setTransactionOpened(-1);
-
                     setSeeMore([false]);
+
+                    //Remove transaction from database
+                    await deleteDoc(doc(db, "transaction", transactionId));
+
                   }},
                 ],
                 { cancelable: false }
