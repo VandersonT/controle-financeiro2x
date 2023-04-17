@@ -15,6 +15,11 @@ const avatarsAvailable = [
     {id: '1', name: 'Hacker', image: 'https://pbs.twimg.com/media/FK_euX0WYAQW5fv.jpg'},
     {id: '2', name: 'Leão', image: 'https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80'},
     {id: '3', name: 'Lobo', image: 'https://t4.ftcdn.net/jpg/05/64/10/99/360_F_564109909_5G38uqAWzT9U3seGi6IKcNjOtTJFfdPG.jpg'},
+    {id: '4', name: 'Troll', image: 'https://i0.wp.com/omeudiadia.com.br/wp-content/uploads/2022/04/gato-feio.webp?h=500&ssl=1'},
+    {id: '5', name: 'Holy Spirit', image: 'https://www.perpetuosocorro.org.br/restrito/uploads/2020/05/formacao_oracao-universal-do-espirito-santo-1600x1200-1024x768-1.jpg'},
+    {id: '6', name: 'Dinheiro', image: 'https://f.i.uol.com.br/fotografia/2018/01/29/15172395505a6f3cfeadf76_1517239550_1x1_md.jpg'},
+    {id: '7', name: 'Hacker', image: 'https://grandemente.net/wp-content/uploads/Fotos-para-Perfil-10.jpg'},
+    {id: '8', name: 'Hacker', image: 'https://i.pinimg.com/originals/6f/1e/fb/6f1efb3e2f7ddb6f6b9a3dbefabe0c67.jpg'},
 ]
 
 const currentUserAvatarName = 'Leão';
