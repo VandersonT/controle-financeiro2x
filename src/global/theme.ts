@@ -37,7 +37,8 @@ export const Theme = {
         },
         white: {
             700: '#FFFFFF',
-            500: '#D8D8D8'
+            600: '#F5F5F5',
+            500: '#D8D8D8',
         },
         black: {
             700: '#000000',

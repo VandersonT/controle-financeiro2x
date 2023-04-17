@@ -6,7 +6,7 @@ const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Theme.colors.white[700],
+        backgroundColor: Theme.colors.white[600],
         minHeight: screenHeight,
     },
     content: {
@@ -51,7 +51,16 @@ const styles = StyleSheet.create({
         borderColor: "#ddd",
         padding: 10,
         marginBottom: 15,
-        borderRadius: 5
+        borderRadius: 5,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
     },
     infoBox: {
         width: 170,

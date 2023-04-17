@@ -1,7 +1,7 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import { View, Text, StatusBar, Image, ImageBackground, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StatusBar, Image, ImageBackground, TouchableOpacity, Modal, Alert } from 'react-native';
 import styles from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../global/theme';
@@ -41,14 +41,31 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
     
     const logOut = () => {
 
-        const auth = getAuth();
-        signOut(auth).then(() => {
-            //Logged out successfully
-            nav.push('SignIn');
-        }).catch((error) => {
-            //Could not log out
-            //console.log("Error: ", error);
-        });
+        Alert.alert(
+            'Confirmação',
+            'Tem certeza que deseja sair do aplicativo?',
+            [
+              {
+                text: 'Cancelar',
+                onPress: () => {},
+                style: 'cancel',
+              },
+              { text: 'Sair', onPress: async () => {
+                
+                /*Try logout*/
+                const auth = getAuth();
+                signOut(auth).then(() => {
+                    //Logged out successfully
+                    nav.push('SignIn');
+                }).catch((error) => {
+                    //Could not log out
+                    //console.log("Error: ", error);
+                });
+
+              }},
+            ],
+            { cancelable: false }
+        );
 
     }
 

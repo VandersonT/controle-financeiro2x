@@ -24,7 +24,7 @@ const Profile = ({ navigation }: any) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style={styles.container}>
             <Header2 title='Perfil' fnc={backToHome} />
 
             <View style={styles.info1Box}>

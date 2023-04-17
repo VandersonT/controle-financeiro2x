@@ -4,7 +4,7 @@ import { Theme } from "../../global/theme";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: 'white'
     },
     empty:{
         color: Theme.colors.gray[500],
@@ -18,12 +18,15 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: "#ddd",
-        backgroundColor: "#fff",
+        backgroundColor: Theme.colors.white[600],
     },
     title: {
         fontSize: Theme.fontSizes.xl,
         fontWeight: "700",
         color: Theme.colors.secondary[200]
+    },
+    text: {
+        color: Theme.colors.black[200]
     },
     mainInfo: {
         display: 'flex',
@@ -33,8 +36,9 @@ const styles = StyleSheet.create({
         height: 132,
         borderBottomWidth: 1,
         borderBottomColor: "#ddd",
-        backgroundColor: "#fff",
-        padding: 20
+        padding: 20,
+
+        
     },
     value: {
         fontSize: Theme.fontSizes.xl,

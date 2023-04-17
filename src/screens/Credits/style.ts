@@ -6,7 +6,8 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Theme.colors.white[700],
-        height: screenHeight
+        height: screenHeight,
+        paddingBottom: 30
     },
     messageBox: {
         marginTop: 30,
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
         fontSize: Theme.fontSizes.md,
     },
     infoBox: {
-        padding: 20
+        padding: 20,
     },
     infoSingle: {
         width: '100%',

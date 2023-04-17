@@ -4,6 +4,9 @@ import { Theme } from "../../global/theme";
 const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: Theme.colors.white[700]
+    },
     info1Box: {
         display: 'flex',
         alignItems: 'center',

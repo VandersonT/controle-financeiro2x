@@ -186,7 +186,7 @@ const Home = ({ navigation }: any) => {
                   }},
                 ],
                 { cancelable: false }
-              );
+            );
         }
 
         const renderItem = ({item, index}: any) => {

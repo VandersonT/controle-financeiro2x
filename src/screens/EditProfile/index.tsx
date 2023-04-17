@@ -171,7 +171,7 @@ const EditProfile = ({ navigation }: any) => {
                                     style={styles.avatarSingle}
                                 >
                                     <Image
-                                        style={{width: 100, height: 100, borderRadius: 3}}
+                                        style={{width: 90, height: 100, borderRadius: 3}}
                                         source={{uri: option['image']}}
                                     />
                                     <Text style={[styles.imageName, option.id == selectedOption.id ? styles.avatarSelected : null]}>{option.name}</Text>

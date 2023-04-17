@@ -15,8 +15,10 @@ const styles = StyleSheet.create({
         color: Theme.colors.gray[500],
     },
     selectAvatarBox: {
+        width: '100%',
         marginBottom: 30,
-        marginTop: 20
+        marginTop: 20,
+        paddingHorizontal: 10
     },
     imageName: {
         textAlign: 'center',
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         marginTop: 2,
         borderColor: Theme.colors.gray[400],
-        width: 100,
+        width: 90,
         backgroundColor: Theme.colors.gray[200],
         color: Theme.colors.black[300]
         
@@ -43,9 +45,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 6,
         display: 'flex',
+        justifyContent: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        width: '100%'
+        width: '100%',
+        backgroundColor: Theme.colors.white[700],
     },
     form: {
         display: 'flex',
@@ -66,7 +70,8 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         borderRadius: 5,
         marginTop: 25,
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: Theme.colors.white[700],
     },
     buttonGroup: {
         display: 'flex',

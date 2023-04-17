@@ -161,7 +161,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
             <View style={styles.mainInfo}>
                 <View>
                     <Text style={styles.value}>{BrazilianRealFormat(totalMoney)}</Text>
-                    <Text>Saldo Atual</Text>
+                    <Text style={styles.text}>Saldo Atual</Text>
                 </View>
                 <TouchableOpacity onPress={deleteMoneyJar}>
                     <Text style={styles.delete}>Excluir</Text>

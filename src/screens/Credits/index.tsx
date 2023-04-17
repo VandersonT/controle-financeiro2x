@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import Header2 from "../../components/Header2";
 import styles from './style';
 
@@ -9,7 +9,7 @@ const Credits = ({ navigation }: any) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Header2 title="Créditos" fnc={BackToHome} />
 
             <View style={styles.messageBox}>
@@ -25,7 +25,7 @@ const Credits = ({ navigation }: any) => {
                     <Text style={styles.infoContent}>17/02/2023</Text>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
