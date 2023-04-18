@@ -23,7 +23,7 @@ import Loading from "../../components/Loading";
 
 //Context
 import { Context } from "../../context/Context";
-import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from "firebase/firestore";
 import db from "../../config/firebase";
 
 
@@ -46,6 +46,9 @@ const Home = ({ navigation }: any) => {
         const [ stash, setStash ] = useState<number>(0);
         const [ loading, setLoading ] = useState(false);
 
+        const [transaction, setTransaction] = useState<any>([]);
+        const [lastVisible, setLastVisible] = useState<any>(null);
+
     /*----------------------------------------*/
     /*             USE EFFECT                  */
     /*----------------------------------------*/
@@ -58,41 +61,41 @@ const Home = ({ navigation }: any) => {
         const getTransactions = async () => {
             setLoading(true);
 
-            const q = query(collection(db, "transaction"), where("user_id", "==", state.user.id));
-
-            const querySnapshot = await getDocs(q);
-
-            let transactionsAux:Transaction[]  = [];
-
-            querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                
-                transactionsAux.splice(0, 0, {
-                    id: doc.data().id,
-                    title: doc.data().title,
-                    value: doc.data().value,
-                    description: doc.data().description,
-                    date: doc.data().date,
-                    where: doc.data().where,
-                    user_id: doc.data().user_id,
-                    created_at: doc.data().created_at
-                })
-            });
+             // Query the first page of docs
+            const first = query(collection(db, "transaction"), where("user_id", "==", state.user.id), orderBy("created_at"), limit(1));
             
-            //Sorting transactions
-            transactionsAux.sort((a, b) => {
-                if (a.created_at < b.created_at) {
-                    return 1;
-                } else if (a.created_at > b.created_at) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+            getDocs(first).then((querySnapshot) => {
+                const citiesData:any = [];
+                querySnapshot.forEach((doc) => {
+                    citiesData.push(doc.data());
+                });
+                setTransaction(citiesData);
+                setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
             });
-            
-            setTransactions(transactionsAux);
+
             setLoading(false);
         };
+
+        const loadMore = async () => {
+            const next = query(collection(db, "transaction"),
+              orderBy("created_at"),
+              startAfter(lastVisible),
+              limit(1)
+            );
+            const querySnapshot = await getDocs(next);
+            const citiesData: any = [];
+            querySnapshot.forEach((doc) => {
+              citiesData.push(doc.data());
+            });
+            setTransaction([...transaction, ...citiesData]);
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+        };
+
+        const teste = () => {
+            loadMore();
+            console.log(transaction);
+            console.log('---------------------------------------');
+        }
 
         useEffect(() => {
 
@@ -252,11 +255,15 @@ const Home = ({ navigation }: any) => {
                     <Text style={styles.newTransaction}>Nova Transação</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity onPress={teste}>
+                    <Text style={styles.newTransaction}>teste</Text>
+                </TouchableOpacity>
+
                 <View style={styles.transactionsBox}>
 
                     <FlatList
                         scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
-                        data={transactions}
+                        data={transaction}
                         keyExtractor={item=>item.id}
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
