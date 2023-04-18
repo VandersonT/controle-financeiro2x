@@ -118,7 +118,13 @@ const styles = StyleSheet.create({
     description: {
         marginTop: 3,
         color: Theme.colors.black[300],
-    }
+    },
+    loadMore: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: Theme.colors.blue[300],
+        fontSize: Theme.fontSizes.md
+    },
 });
 
 

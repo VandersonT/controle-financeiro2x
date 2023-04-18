@@ -41,12 +41,13 @@ const Home = ({ navigation }: any) => {
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(-1);
         const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
         const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
-        const [ transactions, setTransactions ] = useState<Transaction[]>([]);
+        //const [ transactions, setTransactions ] = useState<Transaction[]>([]);
         const [ totalMoneyAvailable, setTotalMoneyAvailable] = useState<number>(0);
         const [ stash, setStash ] = useState<number>(0);
         const [ loading, setLoading ] = useState(false);
 
-        const [transaction, setTransaction] = useState<any>([]);
+        const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
+        const [transactions, setTransactions] = useState<any>([]);
         const [lastVisible, setLastVisible] = useState<any>(null);
 
     /*----------------------------------------*/
@@ -62,14 +63,18 @@ const Home = ({ navigation }: any) => {
             setLoading(true);
 
              // Query the first page of docs
-            const first = query(collection(db, "transaction"), where("user_id", "==", state.user.id), orderBy("created_at"), limit(1));
+            const first = query(collection(db, "transaction"),
+                where("user_id", "==", state.user.id),
+                orderBy("created_at"),
+                limit(15)
+            );
             
             getDocs(first).then((querySnapshot) => {
                 const citiesData:any = [];
                 querySnapshot.forEach((doc) => {
                     citiesData.push(doc.data());
                 });
-                setTransaction(citiesData);
+                setTransactions(citiesData);
                 setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
             });
 
@@ -78,24 +83,26 @@ const Home = ({ navigation }: any) => {
 
         const loadMore = async () => {
             const next = query(collection(db, "transaction"),
-              orderBy("created_at"),
-              startAfter(lastVisible),
-              limit(1)
+                where("user_id", "==", state.user.id),
+                orderBy("created_at"),
+                startAfter(lastVisible),
+                limit(15)
             );
             const querySnapshot = await getDocs(next);
-            const citiesData: any = [];
+            const transactionsData: any = [];
             querySnapshot.forEach((doc) => {
-              citiesData.push(doc.data());
+                transactionsData.push(doc.data());
             });
-            setTransaction([...transaction, ...citiesData]);
-            setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
-        };
 
-        const teste = () => {
-            loadMore();
-            console.log(transaction);
-            console.log('---------------------------------------');
-        }
+            if(transactionsData.length != 0){
+                setTransactions([...transactions, ...transactionsData]);
+                setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+            }else{
+                Alert.alert("Isso é tudo", "Essas são todas as transações que você já realizou nesta conta.");
+                setMoreTransactionsAvailable(false);
+            }
+            
+        };
 
         useEffect(() => {
 
@@ -255,18 +262,20 @@ const Home = ({ navigation }: any) => {
                     <Text style={styles.newTransaction}>Nova Transação</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={teste}>
-                    <Text style={styles.newTransaction}>teste</Text>
-                </TouchableOpacity>
-
                 <View style={styles.transactionsBox}>
 
                     <FlatList
                         scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
-                        data={transaction}
+                        data={transactions}
                         keyExtractor={item=>item.id}
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
+
+                    {transactions.length > 0 && moreTransactionsAvailable &&
+                        <TouchableOpacity onPress={loadMore}>
+                            <Text style={styles.loadMore}>Carregar mais</Text>
+                        </TouchableOpacity>
+                    }
 
                     {transactions.length < 1 && !loading &&
                         <Text style={styles.empty}>Nenhuma transação até o momento</Text>
