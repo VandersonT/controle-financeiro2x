@@ -49,12 +49,12 @@ const Home = ({ navigation }: any) => {
         const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
         const [transactions, setTransactions] = useState<any>([]);
         const [lastVisible, setLastVisible] = useState<any>(null);
+        const [ transactionsPerPage, setTransactionsPerPage ] = useState(15);
 
     /*----------------------------------------*/
     /*             USE EFFECT                  */
     /*----------------------------------------*/
 
-        
         useEffect(() => {
             getTransactions();
         }, [])
@@ -66,7 +66,7 @@ const Home = ({ navigation }: any) => {
             const first = query(collection(db, "transaction"),
                 where("user_id", "==", state.user.id),
                 orderBy("created_at"),
-                limit(15)
+                limit(transactionsPerPage)
             );
             
             getDocs(first).then((querySnapshot) => {
@@ -86,7 +86,7 @@ const Home = ({ navigation }: any) => {
                 where("user_id", "==", state.user.id),
                 orderBy("created_at"),
                 startAfter(lastVisible),
-                limit(15)
+                limit(transactionsPerPage)
             );
             const querySnapshot = await getDocs(next);
             const transactionsData: any = [];
@@ -121,6 +121,8 @@ const Home = ({ navigation }: any) => {
 
         }, [transactions])
 
+
+        
         /*----------------------------------------*/
         /*             FUNCTIONS                  */
         /*----------------------------------------*/
@@ -271,7 +273,7 @@ const Home = ({ navigation }: any) => {
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
 
-                    {transactions.length > 0 && moreTransactionsAvailable &&
+                    {transactions.length >= transactionsPerPage && moreTransactionsAvailable &&
                         <TouchableOpacity onPress={loadMore}>
                             <Text style={styles.loadMore}>Carregar mais</Text>
                         </TouchableOpacity>
