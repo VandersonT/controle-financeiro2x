@@ -25,6 +25,7 @@ import Loading from "../../components/Loading";
 import { Context } from "../../context/Context";
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from "firebase/firestore";
 import db from "../../config/firebase";
+import MoneyJar from "../MoneyJar";
 
 
 
@@ -65,7 +66,7 @@ const Home = ({ navigation }: any) => {
              // Query the first page of docs
             const first = query(collection(db, "transaction"),
                 where("user_id", "==", state.user.id),
-                orderBy("created_at"),
+                orderBy("created_at", "desc"),
                 limit(transactionsPerPage)
             );
             

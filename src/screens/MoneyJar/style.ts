@@ -36,9 +36,8 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     moneyJarsBox: {
-        minHeight: screenHeight-440,
         marginTop: 15,
-        marginBottom: 100
+        marginBottom: 100,
     },
     moneyJarsSingle: {
         height: 106,
@@ -76,7 +75,13 @@ const styles = StyleSheet.create({
     infoValue: {
         fontSize: Theme.fontSizes.lg,
         color: Theme.colors.secondary[200]
-    }
+    },
+    loadMore: {
+        textAlign: 'center',
+        color: Theme.colors.blue[300],
+        fontSize: Theme.fontSizes.md,
+        marginTop: 20
+    },
 });
 
 export default styles;

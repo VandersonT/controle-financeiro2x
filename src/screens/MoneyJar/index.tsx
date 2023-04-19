@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, FlatList, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, ScrollView, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { MaterialIcons } from '@expo/vector-icons';
 import styles from './style';
@@ -9,10 +9,9 @@ import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 import NewBox from '../../components/NewBox';
 
 //Firebase Imports
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
 import db from '../../config/firebase';
 import { Context } from '../../context/Context';
-import { Transaction } from '../../Types/Transaction';
 import Loading from '../../components/Loading';
 
 
@@ -27,10 +26,13 @@ const MoneyJar = ({ navigation }: any) => {
     /*----------------------------------------*/
     /*               STATE                    */
     /*----------------------------------------*/
-    const [ MoneyJars, SetMoneyJars ] = useState<MoneyJarT[]>([]);
+    const [ moneyJars, setMoneyJars ] = useState<any>([]);
+    const [lastVisible, setLastVisible] = useState<any>(null);
     const [ modalNewBox, setModalNewBox ] = useState(false);
     const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
     const [ loading, setLoading ] = useState(false);
+    const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
+    const [ moneyJarsPerPage, setMoneyJarssPerPage ] = useState(2);
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
@@ -48,29 +50,27 @@ const MoneyJar = ({ navigation }: any) => {
 
         setLoading(true);
 
-        const q = query(collection(db, "moneyJar"), where("user_id", "==", state.user.id));
-
-        const querySnapshot = await getDocs(q);
-
-        let moneyJarAux: MoneyJarT[] = [];
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            
-            moneyJarAux.splice(0, 0, {
-                id: doc.data().id,
-                title: doc.data().title,
-                money: doc.data().money,
-                user_id: doc.data().user_id,
-                image: doc.data().image,
-                created_at: doc.data().created_at
-            });
-        })
+         // Query the first page of docs
+         const first = query(collection(db, "moneyJar"),
+            where("user_id", "==", state.user.id),
+            orderBy("created_at", "desc"),
+            limit(moneyJarsPerPage)
+        );
         
-        /*--------------Get MoneyJars values--------------*/
-        for(let i = 0; i < moneyJarAux.length; i++){
+        const moneyJarsData:any = [];
+        await getDocs(first).then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                moneyJarsData.push(doc.data());
+            });
+            setMoneyJars(moneyJarsData);
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+        });
 
-            const q = query(collection(db, "transaction"), where("where", "==", moneyJarAux[i].title), where("user_id", "==", state.user.id));
+
+        /*--------------Get MoneyJars values--------------*/
+        for(let i = 0; i < moneyJarsData.length; i++){
+
+            const q = query(collection(db, "transaction"), where("where", "==", moneyJarsData[i].title), where("user_id", "==", state.user.id));
 
             const querySnapshot = await getDocs(q);
 
@@ -81,23 +81,56 @@ const MoneyJar = ({ navigation }: any) => {
                 transactionsAux += doc.data().value;
             })
             
-            moneyJarAux[i].money = transactionsAux;
+            moneyJarsData[i].money = transactionsAux;
         }
 
-        /*Sorting moneyJars*/
-        moneyJarAux.sort((a, b) => {
-            if (a.created_at < b.created_at) {
-                return 1;
-            } else if (a.created_at > b.created_at) {
-                return -1;
-            } else {
-                return 0;
-            }
+        setLoading(false);
+    };
+
+    const loadMore = async () => {
+        const next = query(collection(db, "moneyJar"),
+            where("user_id", "==", state.user.id),
+            orderBy("created_at", "desc"),
+            startAfter(lastVisible),
+            limit(1)
+        );
+        const querySnapshot = await getDocs(next);
+        const moneyJarsData: any = [];
+        await querySnapshot.forEach((doc) => {
+            moneyJarsData.push(doc.data());
         });
 
-        //Send data to moneyJar state
-        SetMoneyJars(moneyJarAux);
-        setLoading(false);
+        if(moneyJarsData.length != 0){
+            //setMoneyJars(moneyJarsData);
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+        }else{
+            Alert.alert("Isso é tudo", "Essas são todas as transações que você já realizou nesta conta.");
+            setMoreTransactionsAvailable(false);
+        }
+
+        
+        /*--------------Get MoneyJars values--------------*/
+        for(let i = 0; i < moneyJarsData.length; i++){
+
+            const q = query(collection(db, "transaction"), where("where", "==", moneyJarsData[i].title), where("user_id", "==", state.user.id));
+
+            const querySnapshot = await getDocs(q);
+
+            let transactionsAux = 0;
+
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                transactionsAux += doc.data().value;
+            })
+            
+            moneyJarsData[i].money = transactionsAux;
+        }
+        /*------------------------------------------------*/
+
+
+        /*Update moneyJars state*/
+        setMoneyJars([...moneyJars, ...moneyJarsData]);
+        
     };
 
 
@@ -118,12 +151,12 @@ const MoneyJar = ({ navigation }: any) => {
 
     const boxCreatedSuccessfully = (newMoneyJar: any) => {
 
-        let aux = MoneyJars;
+        let aux = moneyJars;
 
         //aux.push(newMoneyJar);
         aux.splice(0, 0,newMoneyJar);
 
-        SetMoneyJars([...aux]);
+        setMoneyJars([...aux]);
 
         /*Close transaction creation modal*/
         closeModal();
@@ -167,7 +200,7 @@ const MoneyJar = ({ navigation }: any) => {
                 <TouchableOpacity onPress={() => navigation.push('Home')}>
                     <MaterialIcons name="arrow-back-ios" size={24} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Caixinhas ({MoneyJars.length})</Text>
+                <Text style={styles.title}>Caixinhas ({moneyJars.length})</Text>
                 <Text></Text>
             </View>
 
@@ -177,7 +210,7 @@ const MoneyJar = ({ navigation }: any) => {
                     <Text style={styles.link}>Criar caixinha</Text>
                 </TouchableOpacity>
 
-                {loading &&
+                {loading && moneyJars.length < 1 &&
                     <View style={{ marginTop: 55 }}>
                         <Loading />
                     </View>
@@ -187,10 +220,16 @@ const MoneyJar = ({ navigation }: any) => {
 
                     <FlatList
                         scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
-                        data={MoneyJars}
+                        data={moneyJars}
                         keyExtractor={item=>item.id}
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
+
+                    {moneyJars.length >= moneyJarsPerPage && moreTransactionsAvailable &&
+                        <TouchableOpacity onPress={loadMore}>
+                            <Text style={styles.loadMore}>Carregar mais</Text>
+                        </TouchableOpacity>
+                    }
 
                 </View>
 
