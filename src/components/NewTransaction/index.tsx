@@ -2,19 +2,19 @@ import { ScrollView, Text, TextInput, TouchableOpacity, View, Platform, Keyboard
 import Button1 from '../Button1';
 import CancelButton from '../CancelButton';
 import styles from './style';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import BrazillianDateFormat from '../../helpers/BrazillianDateFormat';
 import uuid from 'react-native-uuid';
 
 //Firebase Imports
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import db from '../../config/firebase';
 import { v4 as uuidv4 } from 'uuid';
+import { Context } from '../../context/Context';
 
 type Props = {
     closeFnc: () => void,
-    successFnc: any,
-    userId: string
+    successFnc: any
 }
 
 const initialOptions = [
@@ -27,7 +27,11 @@ type optionsType = {
     title: string,
 }
 
-const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
+const NewTransaction = ({ closeFnc, successFnc }: Props) => {
+
+
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
 
     /*----------------------------------------*/
     /*               STATE                    */
@@ -56,7 +60,7 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
     /*----------------------------------------*/
     const getMoneyJars = async () => {
 
-        const q = query(collection(db, "moneyJar"), where("user_id", "==", userId));
+        const q = query(collection(db, "moneyJar"), where("user_id", "==", state.user.id));
 
         const querySnapshot = await getDocs(q);
 
@@ -113,7 +117,6 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
         
 
          /*----------Send transaction to the database-----------*/
-        const transactionRef = collection(db, "transaction");
 
         let randomId = uuidv4();
         let transaction = {
@@ -123,11 +126,10 @@ const NewTransaction = ({ closeFnc, successFnc, userId }: Props) => {
             value: parseInt(inputValue),
             date: inputDate,
             where: selectedOption.title,
-            user_id: userId,
+            user_id: state.user.id,
             created_at: Math.floor(Date.now() / 1000)
         }
 
-        await setDoc(doc(transactionRef, randomId), transaction);
         /*-----------------------------------------------*/
         
         //return this new function to this function

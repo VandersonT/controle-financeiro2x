@@ -23,9 +23,8 @@ import Loading from "../../components/Loading";
 
 //Context
 import { Context } from "../../context/Context";
-import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
 import db from "../../config/firebase";
-import MoneyJar from "../MoneyJar";
 
 
 
@@ -43,8 +42,6 @@ const Home = ({ navigation }: any) => {
         const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
         const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
         //const [ transactions, setTransactions ] = useState<Transaction[]>([]);
-        const [ totalMoneyAvailable, setTotalMoneyAvailable] = useState<number>(0);
-        const [ stash, setStash ] = useState<number>(0);
         const [ loading, setLoading ] = useState(false);
 
         const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
@@ -85,7 +82,7 @@ const Home = ({ navigation }: any) => {
         const loadMore = async () => {
             const next = query(collection(db, "transaction"),
                 where("user_id", "==", state.user.id),
-                orderBy("created_at"),
+                orderBy("created_at", "desc"),
                 startAfter(lastVisible),
                 limit(transactionsPerPage)
             );
@@ -105,23 +102,6 @@ const Home = ({ navigation }: any) => {
             
         };
 
-        useEffect(() => {
-
-            let moneyAvailable = 0;
-            let stashed = 0;
-            for(let i = 0; i < transactions.length; i++) {
-                if(transactions[i].where === 'Disponível' || transactions[i].where === 'disponível') {
-                    moneyAvailable += transactions[i].value;
-                }else{
-                    stashed += transactions[i].value;
-                }
-            }
-
-            setStash(stashed);
-            setTotalMoneyAvailable(moneyAvailable);
-
-        }, [transactions])
-
 
         
         /*----------------------------------------*/
@@ -140,8 +120,39 @@ const Home = ({ navigation }: any) => {
             setNewTransactionStatus(false);
         }
 
-        const transactionSuccess = (transaction: any) => {
+        const transactionSuccess = async(transaction: any) => {
 
+
+            const transactionRef = collection(db, "transaction");
+
+            await setDoc(doc(transactionRef, transaction.id), transaction);
+
+            if(transaction.where == "Disponível"){//Edit in the firestore
+                await updateDoc(doc(db, "user", state.user.id), {
+                    available_balance: state.user.available_balance + transaction.value
+                });
+                dispatch({
+                    type: 'CHANGE_AVAILABLEBALANCE',
+                    payload: {
+                        available_balance: state.user.available_balance + transaction.value
+                    }
+                });
+                
+            }else{
+                await updateDoc(doc(db, "user", state.user.id), {
+                    moneyJar_balance: state.user.moneyJar_balance + transaction.value
+                });
+
+                dispatch({
+                    type: 'CHANGE_MONEYJARBALANCE',
+                    payload: {
+                        moneyJar_balance: state.user.moneyJar_balance + transaction.value
+                    }
+                });
+            }
+
+
+            /****/
             let aux = transactions;
 
             //aux.push(transaction);
@@ -254,10 +265,10 @@ const Home = ({ navigation }: any) => {
         <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container} showsVerticalScrollIndicator={false}>
             
             {newTrasactionStatus &&
-                <NewTransaction userId={state.user.id} successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
+                <NewTransaction successFnc={transactionSuccess} closeFnc={closeNewTransaction} />
             }
             
-            <Header nav={navigation} showMoney={true} totalMoneyAvailable={totalMoneyAvailable} stash={stash}/>
+            <Header nav={navigation} showMoney={true} />
             
             <View style={styles.main}>
 

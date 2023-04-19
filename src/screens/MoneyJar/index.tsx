@@ -9,7 +9,7 @@ import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 import NewBox from '../../components/NewBox';
 
 //Firebase Imports
-import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { collection, doc, getDocs, limit, orderBy, query, startAfter, updateDoc, where } from 'firebase/firestore';
 import db from '../../config/firebase';
 import { Context } from '../../context/Context';
 import Loading from '../../components/Loading';
@@ -32,7 +32,7 @@ const MoneyJar = ({ navigation }: any) => {
     const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
     const [ loading, setLoading ] = useState(false);
     const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
-    const [ moneyJarsPerPage, setMoneyJarssPerPage ] = useState(2);
+    const [ moneyJarsPerPage, setMoneyJarssPerPage ] = useState(10);
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
@@ -92,7 +92,7 @@ const MoneyJar = ({ navigation }: any) => {
             where("user_id", "==", state.user.id),
             orderBy("created_at", "desc"),
             startAfter(lastVisible),
-            limit(1)
+            limit(moneyJarsPerPage)
         );
         const querySnapshot = await getDocs(next);
         const moneyJarsData: any = [];
@@ -149,8 +149,19 @@ const MoneyJar = ({ navigation }: any) => {
         setModalNewBox(false);
     }
 
-    const boxCreatedSuccessfully = (newMoneyJar: any) => {
+    const boxCreatedSuccessfully = async (newMoneyJar: any) => {
 
+        await updateDoc(doc(db, "user", state.user.id), {
+            totalMoneyJars: state.user.totalMoneyJars + 1
+        });
+        dispatch({
+            type: 'CHANGE_TOTALMONEYJARS',
+            payload: {
+                totalMoneyJars: state.user.totalMoneyJars + 1
+            }
+        });
+
+        /****/
         let aux = moneyJars;
 
         //aux.push(newMoneyJar);
@@ -200,7 +211,7 @@ const MoneyJar = ({ navigation }: any) => {
                 <TouchableOpacity onPress={() => navigation.push('Home')}>
                     <MaterialIcons name="arrow-back-ios" size={24} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Caixinhas ({moneyJars.length})</Text>
+                <Text style={styles.title}>Caixinhas ({state.user.totalMoneyJars})</Text>
                 <Text></Text>
             </View>
 

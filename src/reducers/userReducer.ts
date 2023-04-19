@@ -5,7 +5,10 @@ export type UserType = {
     name: string,
     email: string,
     avatar: string,
-    created_at: number
+    created_at: number,
+    available_balance: number,
+    moneyJar_balance: number,
+    totalMoneyJars: number
 }
 
 export const userInitialState: UserType = {
@@ -13,7 +16,10 @@ export const userInitialState: UserType = {
     name: '',
     email: '',
     avatar: '',
-    created_at: 0
+    created_at: 0,
+    available_balance: 0,
+    moneyJar_balance: 0,
+    totalMoneyJars: 0
 }
 
 export const userReducer = (state: UserType, action: reducerActionType) => {
@@ -33,6 +39,15 @@ export const userReducer = (state: UserType, action: reducerActionType) => {
             break;
         case 'CHANGE_CREATEDAT':
             return {...state, created_at: action.payload.created_at};
+            break;
+        case 'CHANGE_AVAILABLEBALANCE':
+            return {...state, available_balance: action.payload.available_balance};
+            break;
+        case 'CHANGE_MONEYJARBALANCE':
+            return {...state, moneyJar_balance: action.payload.moneyJar_balance};
+            break;
+        case 'CHANGE_TOTALMONEYJARS':
+            return {...state, totalMoneyJars: action.payload.totalMoneyJars};
             break;
     }
 

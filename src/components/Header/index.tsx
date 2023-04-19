@@ -19,12 +19,10 @@ import { Context } from '../../context/Context';
 type Props = {
     nav: any,
     showMoney?: boolean,
-    totalMoneyAvailable?: number,
-    stash?: number,
 }
 
 
-const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: Props) => {
+const Header = ({ nav, showMoney = true }: Props) => {
 
     /*----------------------------------------*/
     /*               STATES                   */
@@ -108,9 +106,9 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                         <View style={styles.infoSingle}>
                             <Text style={styles.infoTitle}>Disponivel</Text>
                             <Text style={styles.money}>
-                                {(totalMoneyAvailable > 999999) ? 'R$ 999.999+' : null}
-                                {(totalMoneyAvailable < -999999) ? '-R$ 999.999-' : null}
-                                {(totalMoneyAvailable < 999999 && totalMoneyAvailable > -999999) ? BrazilianRealFormat(totalMoneyAvailable) : null}
+                                {(state.user.available_balance > 999999) ? 'R$ 999.999+' : null}
+                                {(state.user.available_balance < -999999) ? '-R$ 999.999-' : null}
+                                {(state.user.available_balance < 999999 && state.user.available_balance > -999999) ? BrazilianRealFormat(state.user.available_balance) : null}
                             </Text>
                         </View>
                         <View style={styles.infoSingle}>
@@ -121,9 +119,9 @@ const Header = ({ nav, showMoney = true, totalMoneyAvailable = 0, stash = 0 }: P
                                 <Text style={styles.infoTitle_alert}>[Clique]</Text>
                             </TouchableOpacity>
                             <Text style={styles.money}>
-                                {(stash > 999999) ? 'R$ 999.999+' : null}
-                                {(stash < -999999) ? '-R$ 999.999-' : null}
-                                {(stash < 999999 && stash > -999999) ? BrazilianRealFormat(stash) : null}
+                                {(state.user.moneyJar_balance > 999999) ? 'R$ 999.999+' : null}
+                                {(state.user.moneyJar_balance < -999999) ? '-R$ 999.999-' : null}
+                                {(state.user.moneyJar_balance < 999999 && state.user.moneyJar_balance > -999999) ? BrazilianRealFormat(state.user.moneyJar_balance) : null}
                             </Text>
                         </View>
                     </View>

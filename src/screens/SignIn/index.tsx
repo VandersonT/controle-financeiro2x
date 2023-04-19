@@ -53,7 +53,7 @@ const SignIn = ({ navigation }: any) => {
     }
 
     const saveUserDataOnContext = (user: any) => {
-        
+
         dispatch({
             type: 'CHANGE_NAME',
             payload: {
@@ -86,6 +86,27 @@ const SignIn = ({ navigation }: any) => {
             type: 'CHANGE_CREATEDAT',
             payload: {
                 created_at: user.created_at
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_AVAILABLEBALANCE',
+            payload: {
+                available_balance: user.available_balance
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_MONEYJARBALANCE',
+            payload: {
+                moneyJar_balance: user.moneyJar_balance
+            }
+        });
+
+        dispatch({
+            type: 'CHANGE_TOTALMONEYJARS',
+            payload: {
+                totalMoneyJars: user.totalMoneyJars
             }
         });
     }
@@ -166,7 +187,9 @@ const SignIn = ({ navigation }: any) => {
                 username: userRegister,
                 email: emailRegister,
                 avatar: "https://www.promoview.com.br/uploads/images/unnamed%2819%29.png",
-                created_at: Math.floor(Date.now() / 1000)
+                created_at: Math.floor(Date.now() / 1000),
+                available_balance: 0,
+                moneyJar_balance: 0
             }
 
             await setDoc(doc(userRef, user.uid), userData);
