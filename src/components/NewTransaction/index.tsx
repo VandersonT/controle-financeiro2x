@@ -96,7 +96,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
     };
 
     const createTransaction = async () => {
-
+        
         if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDescription){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
@@ -107,6 +107,13 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
             return;
         }
         
+        
+        let value = parseFloat(inputValue.replace(',', '.')); //Convert string value to float value
+        
+        if(value == 0){
+            Alert.alert('Espere um momento', 'Para que você fará uma transação em que não perdeu nem ganhou nada?');
+            return;
+        }
 
          /*----------Send transaction to the database-----------*/
 
@@ -115,7 +122,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
             id: randomId,
             title: inputTransactionTitle,
             description: inputDescription,
-            value: parseInt(inputValue),
+            value: value,
             where: selectedOption.title,
             user_id: state.user.id,
             created_at: Math.floor(Date.now() / 1000)
