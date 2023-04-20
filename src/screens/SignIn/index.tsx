@@ -198,7 +198,8 @@ const SignIn = ({ navigation }: any) => {
                 avatar: "https://www.promoview.com.br/uploads/images/unnamed%2819%29.png",
                 created_at: Math.floor(Date.now() / 1000),
                 available_balance: 0,
-                moneyJar_balance: 0
+                moneyJar_balance: 0,
+                totalMoneyJars: 0
             }
 
             await setDoc(doc(userRef, user.uid), userData);
