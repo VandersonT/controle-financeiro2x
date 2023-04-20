@@ -14,6 +14,7 @@ import MoneyJarOpened from '../screens/MoneyJarOpened';
 import Credits from '../screens/Credits';
 import Profile from '../screens/Profile';
 import EditProfile from '../screens/EditProfile';
+import Splash from '../screens/Splash';
 /****/
 
 
@@ -37,7 +38,10 @@ export default ({ userLogged }) => {
           <MainStack.Screen name="MoneyJar" component={MoneyJar} options={{ headerShown: false }}/>
         </>
       :
-        <MainStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
+        <>
+          <MainStack.Screen name="Splash" component={Splash} options={{gestureEnabled: false, headerShown: false }}/>
+          <MainStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
+        </>
       }
   
     </MainStack.Navigator>

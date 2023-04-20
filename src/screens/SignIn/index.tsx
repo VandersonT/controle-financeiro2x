@@ -1,8 +1,8 @@
 /*----------------------------------------*/
 /*              IMPORTS                   */
 /*----------------------------------------*/
-import React, { useContext, useState } from "react";
-import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert, BackHandler } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./style";
 import { CheckBox } from 'react-native-elements';
@@ -45,6 +45,15 @@ const SignIn = ({ navigation }: any) => {
     
     //Getting user's context
     const { state, dispatch } = useContext(Context);
+
+    
+    /*------------UseEffects----------------*/
+    useEffect(() => {
+        //Preventing the user from returning to the splash screen
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            return true;
+        });
+    }, []);
 
     /*------------Functions----------------*/
     const closeFlash = () => {
