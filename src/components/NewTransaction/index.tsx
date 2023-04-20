@@ -43,6 +43,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [ options, setOptions ] = useState<optionsType[]>(initialOptions);
     const [selectedOption, setSelectedOption] = useState<optionsType>(options[0]);
+    const [ transactionLoad, setTransactionLoad ] = useState(false);
 
 
     /*----------------------------------------*/
@@ -51,6 +52,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
     useEffect(() => {
         //get all user's moneyJars
         getMoneyJars();
+        setTransactionLoad(false);
     }, []);
 
 
@@ -115,8 +117,9 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
             return;
         }
 
-         /*----------Send transaction to the database-----------*/
+        setTransactionLoad(true);
 
+        /*------------Create transaction array-----------*/
         let randomId = uuidv4();
         let transaction = {
             id: randomId,
@@ -127,7 +130,6 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
             user_id: state.user.id,
             created_at: Math.floor(Date.now() / 1000)
         }
-
         /*-----------------------------------------------*/
         
         //return this new function to this function
@@ -179,7 +181,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
 
                     <View style={styles.buttonBox}>
                         <CancelButton title="Cancelar" fnc={closeFnc} />
-                        <Button1 title="Continuar" fnc={createTransaction} />
+                        <Button1 title={(transactionLoad) ? 'Criando...' : 'Continuar'} fnc={createTransaction} />
                     </View>
                     </ScrollView>
                 </TouchableOpacity>

@@ -199,7 +199,7 @@ const SignIn = ({ navigation }: any) => {
                 created_at: Math.floor(Date.now() / 1000),
                 available_balance: 0,
                 moneyJar_balance: 0,
-                totalMoneyJars: 0
+                totalMoneyJars: 1
             }
 
             await setDoc(doc(userRef, user.uid), userData);
@@ -291,7 +291,7 @@ const SignIn = ({ navigation }: any) => {
                                     </View>
 
                                     <TextInput value={email} onChangeText={setEmail} style={styles.input} placeholder="Digite seu email" />
-                                    <TextInput value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 20}]} placeholder="Digite sua senha" />
+                                    <TextInput secureTextEntry value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 20}]} placeholder="Digite sua senha" />
 
                                     {/*<CheckBox
                                         title='Lembre de mim'

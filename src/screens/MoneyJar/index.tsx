@@ -199,54 +199,55 @@ const MoneyJar = ({ navigation }: any) => {
     }
 
     return (
-        <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container}>
-
+        <>
             {modalNewBox &&
                 <NewBox userId={state.user.id} closeFnc={closeModal} successFnc={boxCreatedSuccessfully} />
             }
+            <ScrollView ref={scrollViewRef} scrollEnabled={scrollEnabled} style={styles.container}>
 
-            <Header nav={navigation} showMoney={false} />
-            
-            <View style={styles.topBarHeader}>
-                <TouchableOpacity onPress={() => navigation.push('Home')}>
-                    <MaterialIcons name="arrow-back-ios" size={24} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.title}>Caixinhas ({state.user.totalMoneyJars})</Text>
-                <Text></Text>
-            </View>
-
-            <View style={styles.content}>
+                <Header nav={navigation} showMoney={false} />
                 
-                <TouchableOpacity onPress={openCreateNewBoxModal}>
-                    <Text style={styles.link}>Criar caixinha</Text>
-                </TouchableOpacity>
+                <View style={styles.topBarHeader}>
+                    <TouchableOpacity onPress={() => navigation.push('Home')}>
+                        <MaterialIcons name="arrow-back-ios" size={24} color="black" />
+                    </TouchableOpacity>
+                    <Text style={styles.title}>Caixinhas ({state.user.totalMoneyJars})</Text>
+                    <Text></Text>
+                </View>
 
-                {loading && moneyJars.length < 1 &&
-                    <View style={{ marginTop: 55 }}>
-                        <Loading />
-                    </View>
-                }
+                <View style={styles.content}>
+                    
+                    <TouchableOpacity onPress={openCreateNewBoxModal}>
+                        <Text style={styles.link}>Criar caixinha</Text>
+                    </TouchableOpacity>
 
-                <View style={styles.moneyJarsBox}>
-
-                    <FlatList
-                        scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
-                        data={moneyJars}
-                        keyExtractor={item=>item.id}
-                        renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
-                    />
-
-                    {moneyJars.length >= moneyJarsPerPage && moreTransactionsAvailable &&
-                        <TouchableOpacity onPress={loadMore}>
-                            <Text style={styles.loadMore}>Carregar mais</Text>
-                        </TouchableOpacity>
+                    {loading && moneyJars.length < 1 &&
+                        <View style={{ marginTop: 55 }}>
+                            <Loading />
+                        </View>
                     }
+
+                    <View style={styles.moneyJarsBox}>
+
+                        <FlatList
+                            scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
+                            data={moneyJars}
+                            keyExtractor={item=>item.id}
+                            renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
+                        />
+
+                        {moneyJars.length >= moneyJarsPerPage && moreTransactionsAvailable &&
+                            <TouchableOpacity onPress={loadMore}>
+                                <Text style={styles.loadMore}>Carregar mais</Text>
+                            </TouchableOpacity>
+                        }
+
+                    </View>
 
                 </View>
 
-            </View>
-
-        </ScrollView>
+            </ScrollView>
+        </>
     );
 }
 

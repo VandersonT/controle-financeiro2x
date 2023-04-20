@@ -20,9 +20,8 @@ const avatarsAvailable = [
     {id: '6', name: 'Dinheiro', image: 'https://f.i.uol.com.br/fotografia/2018/01/29/15172395505a6f3cfeadf76_1517239550_1x1_md.jpg'},
     {id: '7', name: 'Hacker', image: 'https://grandemente.net/wp-content/uploads/Fotos-para-Perfil-10.jpg'},
     {id: '8', name: 'Hacker', image: 'https://i.pinimg.com/originals/6f/1e/fb/6f1efb3e2f7ddb6f6b9a3dbefabe0c67.jpg'},
+    {id: '9', name: 'noPhoto', image: 'https://www.promoview.com.br/uploads/images/unnamed%2819%29.png'}
 ]
-
-const currentUserAvatarName = 'Leão';
 
 
 const EditProfile = ({ navigation }: any) => {
@@ -41,6 +40,7 @@ const EditProfile = ({ navigation }: any) => {
     const [ email, setEmail ] = useState(state.user.email);
     const [selectedOption, setSelectedOption] = useState(avatarsAvailable[selectedIndex]);
     const [isOpen, setIsOpen] = useState(false);
+    const [ saving, setSaving ] = useState(false);
 
 
     /*----------------------------------------*/
@@ -51,14 +51,17 @@ const EditProfile = ({ navigation }: any) => {
     }
 
     const saveInfo = async () => {
-        
+        setSaving(true);
+
         if(email == state.user.email && userName == state.user.name && selectedOption.image == state.user.avatar){
             Alert.alert("Um momento amigo", "Você não fez nenhuma alteração para que possa salvar.");
+            setSaving(false);
             return;
         }
         
         if(!email || !userName || !selectedOption.image){
             Alert.alert("Um momento amigo", "Você não pode deixar campos vazios, faz o favor de preencher ai, amigão(ona).");
+            setSaving(false);
             return;
         }
 
@@ -103,6 +106,7 @@ const EditProfile = ({ navigation }: any) => {
             }
         });
 
+        setSaving(false);
         navigation.push('Profile');
     }
 
@@ -190,7 +194,7 @@ const EditProfile = ({ navigation }: any) => {
                 <Text style={styles.note}>Nota: Se clicar para resetar senha o email será enviado para o email que está acima.</Text>
                 <View style={styles.buttonGroup}>
                     <CancelButton title="Resetar Senha" fnc={resetPassword} />
-                    <Button1 title="Salvar" fnc={saveInfo} />
+                    <Button1 title={(saving) ? 'Salvando...' : 'Salvar'} fnc={saveInfo} />
                 </View>
             </View>
 

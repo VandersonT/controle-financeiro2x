@@ -7,6 +7,7 @@ const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     bgDark: {
+        flex: 1,
         width: '100%',
         height: screenHeight,
         position: 'absolute',
@@ -19,10 +20,10 @@ const styles = StyleSheet.create({
     },
     container: {
         width: '100%',
-        height: '100%',
+        height: screenHeight,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     newTransactionBox: {
         width: '90%',

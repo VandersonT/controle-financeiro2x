@@ -29,6 +29,9 @@ const options = [
     { id: '10', label: 'Imagem-10', value: 'Aposentadoria', image: 'https://bramanteprevidencia.adv.br/wp-content/uploads/2019/07/como-saber-qual-regra-de-transicao-da-aposentadoria-e-melhor-para-voce.jpg'},
     { id: '11', label: 'Imagem-11', value: 'Aposentadoria2', image: 'https://www.feebpr.org.br/images/media/7103082226218b69c1e691.jpg'},
     { id: '12', label: 'Imagem-12', value: 'Investimento', image: 'https://files.sunoresearch.com.br/p/uploads/2018/08/empresas-de-investimento-800x450.jpg'},
+    { id: '13', label: 'Imagem-13', value: 'Ecercício', image: 'https://blogeducacaofisica.com.br/wp-content/uploads/2018/10/capa-6.png'},
+    { id: '14', label: 'Imagem-14', value: 'Ecercício2', image: 'https://p2.trrsf.com/image/fget/cf/940/0/images.terra.com/2022/11/20/292998551-exercicio-fisico-1.jpg'},
+    { id: '15', label: 'Imagem-15', value: 'Oração', image: 'https://www.cartacapital.com.br/wp-content/uploads/2021/09/iStock-1181376545-1.jpg' },
 ];
 
 const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
@@ -38,7 +41,11 @@ const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
     const buttonRef = useRef<TouchableOpacity>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(options[0]);
+    const [ creatingLoad, setCreatingLoad ] = useState(false);
 
+    useEffect(() => {
+        setCreatingLoad(false);
+    }, []);
 
     const handlePress = (event: any) => {
         if (event.target === buttonRef.current) {
@@ -62,12 +69,14 @@ const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
         await setDoc(doc(moneyJarRef, newMoneyJar.id), newMoneyJar);
     }
     
-    const createBox = () => {
+    const createBox = async () => {
         
         if(!boxName || !selectedOption.image){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
         }
+
+        setCreatingLoad(true);
 
         let id = uuid.v4();
         let newMoneyJar: MoneyJarT = {
@@ -80,7 +89,7 @@ const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
         }
 
         /*Send this moneyJar to firebase*/
-        saveMoneyJar(newMoneyJar);
+        await saveMoneyJar(newMoneyJar);
 
         /*Return data to the main screen*/
         successFnc(newMoneyJar);
@@ -100,47 +109,47 @@ const NewBox = ({ closeFnc, successFnc, userId }: Props) => {
                 <TouchableOpacity activeOpacity={1} style={styles.newTransactionBox}>
 
                     <ScrollView showsVerticalScrollIndicator={false}>
-                    <Text style={styles.title}>Criar Caixinha</Text>
+                        <Text style={styles.title}>Criar Caixinha</Text>
 
-                    <View style={styles.form}>
-                        
-                        <TextInput style={styles.input} onChangeText={setBoxName} value={boxName} placeholder="Digite o nome da caixinha" />
-                        
-                        <View>
-                            <TouchableOpacity style={styles.inputImage} onPress={() => setIsOpen(!isOpen)}>
-                                <Image
-                                    style={{width: 60, height: 60, borderRadius: 3}}
-                                    source={{uri: selectedOption['image']}}
-                                />
-                                <Text style={styles.selectTitle}>{selectedOption.label}</Text>
-                            </TouchableOpacity>
-                            {isOpen && (
-                                <View style={styles.optionsBox}>
+                        <View style={styles.form}>
+                            
+                            <TextInput style={styles.input} onChangeText={setBoxName} value={boxName} placeholder="Digite o nome da caixinha" />
+                            
+                            <View>
+                                <TouchableOpacity style={styles.inputImage} onPress={() => setIsOpen(!isOpen)}>
+                                    <Image
+                                        style={{width: 60, height: 60, borderRadius: 3}}
+                                        source={{uri: selectedOption['image']}}
+                                    />
+                                    <Text style={styles.selectTitle}>{selectedOption.label}</Text>
+                                </TouchableOpacity>
+                                {isOpen && (
+                                    <View style={styles.optionsBox}>
 
-                                    {options.map((option) => (
-                                        <TouchableOpacity
-                                            key={option.id}
-                                            onPress={() => handleOptionPress(option)}
-                                            style={styles.optionSingle}
-                                        >
-                                            <Image
-                                                style={{width: 50, height: 50, borderRadius: 3}}
-                                                source={{uri: option['image']}}
-                                            />
-                                            <Text style={[styles.optionSingle_title, (option.id == '0') ? styles.unSelected : null]}>{option.label}</Text>
-                                        </TouchableOpacity>
-                                    ))}
+                                        {options.map((option) => (
+                                            <TouchableOpacity
+                                                key={option.id}
+                                                onPress={() => handleOptionPress(option)}
+                                                style={styles.optionSingle}
+                                            >
+                                                <Image
+                                                    style={{width: 50, height: 50, borderRadius: 3}}
+                                                    source={{uri: option['image']}}
+                                                />
+                                                <Text style={[styles.optionSingle_title, (option.id == '0') ? styles.unSelected : null]}>{option.label}</Text>
+                                            </TouchableOpacity>
+                                        ))}
 
-                                </View>
-                            )}
+                                    </View>
+                                )}
+                            </View>
+
                         </View>
 
-                    </View>
-
-                    <View style={styles.buttonBox}>
-                        <CancelButton title="Cancelar" fnc={closeFnc} />
-                        <Button1 title="Continuar" fnc={createBox} />
-                    </View>
+                        <View style={styles.buttonBox}>
+                            <CancelButton title="Cancelar" fnc={closeFnc} />
+                            <Button1 title={(creatingLoad) ? 'Criando...' : 'Continuar'} fnc={createBox} />
+                        </View>
                     </ScrollView>
                 </TouchableOpacity>
 

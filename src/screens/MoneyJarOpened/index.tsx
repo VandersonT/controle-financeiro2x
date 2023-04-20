@@ -49,6 +49,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
 
         // Query the first page of docs
         const first = query(collection(db, "transaction"),
+            where("where", "==", boxTitle),
             where("user_id", "==", state.user.id),
             orderBy("created_at", "desc"),
             limit(transactionsPerPage)

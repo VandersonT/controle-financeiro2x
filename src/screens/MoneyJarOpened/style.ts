@@ -8,7 +8,9 @@ const styles = StyleSheet.create({
     },
     empty:{
         color: Theme.colors.gray[500],
-        fontSize: Theme.fontSizes.md
+        fontSize: Theme.fontSizes.md,
+        marginTop: 30,
+        textAlign: 'center'
     },
     topBarHeader: {
         flexDirection: "row",

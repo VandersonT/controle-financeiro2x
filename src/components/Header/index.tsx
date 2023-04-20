@@ -104,7 +104,7 @@ const Header = ({ nav, showMoney = true }: Props) => {
                 {showMoney &&
                     <View style={styles.infoBox}>
                         <View style={styles.infoSingle}>
-                            <Text style={styles.infoTitle}>Disponivel</Text>
+                            <Text style={styles.infoTitle}>Disponível</Text>
                             <Text style={styles.money}>
                                 {(state.user.available_balance > 999999) ? 'R$ 999.999+' : null}
                                 {(state.user.available_balance < -999999) ? '-R$ 999.999-' : null}

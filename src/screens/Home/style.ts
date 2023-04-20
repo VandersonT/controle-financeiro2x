@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     empty: {
         color: Theme.colors.gray[400],
         textAlign: 'center',
-        fontSize: Theme.fontSizes.lg,
+        fontSize: Theme.fontSizes.md,
         marginTop: 50
     },
     transactionSingle: {
