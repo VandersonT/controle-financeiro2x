@@ -41,7 +41,6 @@ const Home = ({ navigation }: any) => {
         const [ transactionOpened, setTransactionOpened ] = useState<Number>(-1);
         const [ scrollEnabled, setScrollEnabled ] = useState<boolean>(true);
         const [ newTrasactionStatus, setNewTransactionStatus ] = useState<Boolean>(false);
-        //const [ transactions, setTransactions ] = useState<Transaction[]>([]);
         const [ loading, setLoading ] = useState(false);
 
         const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);

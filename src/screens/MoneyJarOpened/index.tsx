@@ -12,6 +12,7 @@ import { Context } from "../../context/Context";
 //Firebase Imports
 import { collection, deleteDoc, doc, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import db from "../../config/firebase";
+import Loading from "../../components/Loading";
 
 
 
@@ -31,6 +32,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     const [ transactionsPerPage, setTransactionsPerPage ] = useState(10);
     const [lastVisible, setLastVisible] = useState<any>(null);
     const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
+    const [ loading, setLoading ] = useState(false);
 
 
     /*----------------------------------------*/
@@ -41,6 +43,8 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     }, []);
 
     const getMoneyJarTransactions = async () => {
+
+        setLoading(true);
 
         // Query the first page of docs
         const first = query(collection(db, "transaction"),
@@ -58,9 +62,13 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
             setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
         });
 
+        setLoading(false);
     }
 
     const loadMore = async () => {
+
+        setLoading(true);
+
         const next = query(collection(db, "transaction"),
             where("where", "==", boxTitle),
             where("user_id", "==", state.user.id),
@@ -82,7 +90,8 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
             Alert.alert("Isso é tudo", "Essas são todas as transações que você já realizou nesta conta.");
             setMoreTransactionsAvailable(false);
         }
-        
+
+        setLoading(false);
     };
 
     /*----------------------------------------*/
@@ -185,6 +194,12 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                             keyExtractor={item=>item.id}
                             renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                         />
+
+                        {loading &&
+                            <View style={{ marginTop: 50 }}>
+                                <Loading />
+                            </View>
+                        }
 
                         {transactions.length >= transactionsPerPage && moreTransactionsAvailable &&
                             <TouchableOpacity onPress={loadMore}>
