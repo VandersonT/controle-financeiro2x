@@ -94,7 +94,13 @@ const styles = StyleSheet.create({
         fontSize: Theme.fontSizes.md,
         fontWeight: "600",
         color: Theme.colors.secondary[200]
-    }
+    },
+    loadMore: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: Theme.colors.blue[300],
+        fontSize: Theme.fontSizes.md
+    },
 });
 
 export default styles;

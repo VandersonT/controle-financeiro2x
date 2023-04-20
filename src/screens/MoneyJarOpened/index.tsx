@@ -10,12 +10,10 @@ import BrazilianRealFormat from "../../helpers/BrazilianRealFormat";
 import { Context } from "../../context/Context";
 
 //Firebase Imports
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import db from "../../config/firebase";
 
 
-/*Dados falsos, até a gente não conectar com  o banco de dados*/
-let transactionsBancoSimulation:Transaction[] = [];
 
 const MoneyJarOpened = ({ navigation, route }: any) => {
 
@@ -27,8 +25,13 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     /*----------------------------------------*/
     const boxTitle = route.params.boxTitle;
     const boxId = route.params.boxId;
-    const [ transactions, setTransactions ] = useState<Transaction[]>(transactionsBancoSimulation);
-    const [ totalMoney, setTotalMoney ] = useState<number>(0);
+    const totalMoney = route.params.totalMoney;
+
+    const [ transactions, setTransactions ] = useState<Transaction[]>([]);
+    const [ transactionsPerPage, setTransactionsPerPage ] = useState(10);
+    const [lastVisible, setLastVisible] = useState<any>(null);
+    const [ moreTransactionsAvailable, setMoreTransactionsAvailable] = useState(true);
+
 
     /*----------------------------------------*/
     /*               EFFECTS                  */
@@ -38,47 +41,49 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     }, []);
 
     const getMoneyJarTransactions = async () => {
-        const q = query(collection(db, "transaction"), where("where", "==", boxTitle), where("user_id", "==", state.user.id));
 
-        const querySnapshot = await getDocs(q);
-
-        let transactionsAux: Transaction[] = [];
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            
-            transactionsAux.splice(0, 0, {
-                id: doc.data().id,
-                title: doc.data().title,
-                value: doc.data().value,
-                description: doc.data().description,
-                date: doc.data().date,
-                where: doc.data().where,
-                user_id: doc.data().user_id,
-                created_at: doc.data().created_at
+        // Query the first page of docs
+        const first = query(collection(db, "transaction"),
+            where("user_id", "==", state.user.id),
+            orderBy("created_at", "desc"),
+            limit(transactionsPerPage)
+        );
+        
+        getDocs(first).then((querySnapshot) => {
+            const citiesData:any = [];
+            querySnapshot.forEach((doc) => {
+                citiesData.push(doc.data());
             });
-        })
-
-        //Sorting transactions
-        transactionsAux.sort((a, b) => {
-            if (a.created_at < b.created_at) {
-                return 1;
-            } else if (a.created_at > b.created_at) {
-                return -1;
-            } else {
-                return 0;
-            }
+            setTransactions(citiesData);
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
         });
 
-        //Getting total money
-        let totalMoneyAux = 0;
-        for(let i = 0; i < transactionsAux.length; i++)
-            totalMoneyAux += transactionsAux[i].value;
-
-        setTotalMoney(totalMoneyAux);
-        
-        setTransactions(transactionsAux);
     }
+
+    const loadMore = async () => {
+        const next = query(collection(db, "transaction"),
+            where("where", "==", boxTitle),
+            where("user_id", "==", state.user.id),
+            orderBy("created_at", "desc"),
+            startAfter(lastVisible),
+            limit(transactionsPerPage)
+        );
+        const querySnapshot = await getDocs(next);
+        const transactionsData: any = [];
+
+        querySnapshot.forEach((doc) => {
+            transactionsData.push(doc.data());
+        });
+
+        if(transactionsData.length != 0){
+            setTransactions([...transactions, ...transactionsData]);
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+        }else{
+            Alert.alert("Isso é tudo", "Essas são todas as transações que você já realizou nesta conta.");
+            setMoreTransactionsAvailable(false);
+        }
+        
+    };
 
     /*----------------------------------------*/
     /*              FUNCTIONS                 */
@@ -173,12 +178,20 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                 <Text style={styles.historicTitle}>Histórico</Text>
 
                 {transactions.length > 0 &&
-                    <FlatList
-                        scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
-                        data={transactions}
-                        keyExtractor={item=>item.id}
-                        renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
-                    />
+                    <>
+                        <FlatList
+                            scrollEnabled={false}/*Desabilita o scroll do flatlist deixando apenas o scrollview*/
+                            data={transactions}
+                            keyExtractor={item=>item.id}
+                            renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
+                        />
+
+                        {transactions.length >= transactionsPerPage && moreTransactionsAvailable &&
+                            <TouchableOpacity onPress={loadMore}>
+                                <Text style={styles.loadMore}>Carregar mais</Text>
+                            </TouchableOpacity>
+                        }
+                    </>
                 }
 
                 {transactions.length < 1 && 
