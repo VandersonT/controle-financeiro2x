@@ -25,6 +25,7 @@ import Loading from "../../components/Loading";
 import { Context } from "../../context/Context";
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
 import db from "../../config/firebase";
+import dateFormat from "../../helpers/dateFormat";
 
 
 
@@ -73,9 +74,8 @@ const Home = ({ navigation }: any) => {
                 });
                 setTransactions(citiesData);
                 setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+                setLoading(false);
             });
-
-            setLoading(false);
         };
 
         const loadMore = async () => {
@@ -238,7 +238,7 @@ const Home = ({ navigation }: any) => {
 
                             <View style={styles.fieldSingle}>
                                 <Text style={styles.fieldTitle}>Data:</Text>
-                                <Text style={styles.description}>{item['date']}</Text>
+                                <Text style={styles.description}>{dateFormat(item['created_at'])}</Text>
                             </View>
 
                             <View style={styles.fieldSingle}>
@@ -290,14 +290,14 @@ const Home = ({ navigation }: any) => {
                         </TouchableOpacity>
                     }
 
-                    {transactions.length < 1 && !loading &&
-                        <Text style={styles.empty}>Nenhuma transação até o momento</Text>
-                    }
-
                     {loading &&
                         <View style={{ marginTop: 50 }}>
                             <Loading />
                         </View>
+                    }
+
+                    {transactions.length < 1 && !loading &&
+                        <Text style={styles.empty}>Nenhuma transação até o momento</Text>
                     }
 
                 </View>

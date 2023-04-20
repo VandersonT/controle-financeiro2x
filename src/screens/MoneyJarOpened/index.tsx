@@ -13,6 +13,7 @@ import { Context } from "../../context/Context";
 import { collection, deleteDoc, doc, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import db from "../../config/firebase";
 import Loading from "../../components/Loading";
+import dateFormat from "../../helpers/dateFormat";
 
 
 
@@ -60,9 +61,9 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
             });
             setTransactions(citiesData);
             setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+            setLoading(false);
         });
 
-        setLoading(false);
     }
 
     const loadMore = async () => {
@@ -86,12 +87,11 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
         if(transactionsData.length != 0){
             setTransactions([...transactions, ...transactionsData]);
             setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+            setLoading(false);
         }else{
             Alert.alert("Isso é tudo", "Essas são todas as transações que você já realizou nesta conta.");
             setMoreTransactionsAvailable(false);
         }
-
-        setLoading(false);
     };
 
     /*----------------------------------------*/
@@ -144,7 +144,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
         return (
             <View style={styles.transactionSingle}>
                 <View>
-                    <Text style={styles.transactionDate}>{item.date}</Text>
+                    <Text style={styles.transactionDate}>{dateFormat(item.created_at)}</Text>
                     <View style={styles.info1}>
                         <Ionicons name={(item.value < 0) ? 'trending-down-outline' : 'trending-up-outline'} size={27} color={Theme.colors.primary[300]} />
                         <View style={styles.note}>
@@ -195,12 +195,6 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                             renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                         />
 
-                        {loading &&
-                            <View style={{ marginTop: 50 }}>
-                                <Loading />
-                            </View>
-                        }
-
                         {transactions.length >= transactionsPerPage && moreTransactionsAvailable &&
                             <TouchableOpacity onPress={loadMore}>
                                 <Text style={styles.loadMore}>Carregar mais</Text>
@@ -209,7 +203,13 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                     </>
                 }
 
-                {transactions.length < 1 && 
+                {loading &&
+                    <View style={{ marginTop: 50 }}>
+                        <Loading />
+                    </View>
+                }
+
+                {transactions.length < 1 && !loading && 
                     <Text style={styles.empty}>Nenhuma transação nesta caixinha.</Text>
                 }
 

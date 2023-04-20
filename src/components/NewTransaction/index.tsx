@@ -36,7 +36,6 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
     /*----------------------------------------*/
     /*               STATE                    */
     /*----------------------------------------*/
-    const [inputDate, setInputDate] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [inputDescription, setInputDescription] = useState(''); 
     const [inputTransactionTitle, setInputTransactionTitle] = useState('');
@@ -87,13 +86,6 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
         }
     };
 
-    const handleInputDate = (date: string) => {
-        
-        let formattedDate = BrazillianDateFormat(date);
-
-        setInputDate(formattedDate);
-    };
-
     const handleOptionPress = (option:any) => {
 
         if(option.id == '0')
@@ -105,7 +97,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
 
     const createTransaction = async () => {
 
-        if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDate || !inputDescription){
+        if(!inputTransactionTitle || !inputValue || !selectedOption.id || !inputDescription){
             Alert.alert('Ocorreu um erro', 'Preencha todos os campos antes de continuar.');
             return;
         }
@@ -124,7 +116,6 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
             title: inputTransactionTitle,
             description: inputDescription,
             value: parseInt(inputValue),
-            date: inputDate,
             where: selectedOption.title,
             user_id: state.user.id,
             created_at: Math.floor(Date.now() / 1000)
@@ -176,8 +167,6 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
                                 </View>
                             )}
                         </View>
-
-                        <TextInput value={inputDate} onChangeText={handleInputDate} style={styles.input} placeholder="dd/mm/yyyy" />
 
                     </View>
 

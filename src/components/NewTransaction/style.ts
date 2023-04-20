@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     },
     newTransactionBox: {
         width: '90%',
-        height: '61%',
+        height: 430,
         backgroundColor: Theme.colors.white[700],
         padding: 20,
         borderRadius: 5
