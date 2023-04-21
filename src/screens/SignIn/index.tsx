@@ -24,6 +24,7 @@ import SuccessFlash from "../../components/SuccessFlash";
 import { Context } from "../../context/Context";
 import authentication from "../../querys/user/authentication";
 import getUserData from "../../querys/user/getUserData";
+import registerNewUser from "../../querys/user/registerNewUser";
 /*--------------------------------------------------------------------------*/
 
 
@@ -188,62 +189,18 @@ const SignIn = ({ navigation }: any) => {
             setErrorMsg('As senhas não coincidem.');
             return;
         }
+
+        //Try to create a new user
+        let res = await registerNewUser(emailRegister, passRegister, userRegister);
+
         
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, emailRegister, passRegister)
-        .then(async (userCredential) => {
-            
-            /*-------------------Signed in-------------------*/
-            const user = userCredential.user;
-            
-            /*Saving necessary user data to Firestore*/
-            const userRef = collection(db, "user");
-
-            let userData = {
-                id: user.uid,
-                username: userRegister,
-                email: emailRegister,
-                avatar: "https://www.promoview.com.br/uploads/images/unnamed%2819%29.png",
-                created_at: Math.floor(Date.now() / 1000),
-                available_balance: 0,
-                moneyJar_balance: 0,
-                totalMoneyJars: 1
-            }
-
-            await setDoc(doc(userRef, user.uid), userData);
-
-
-            //Save data on the context
-            //saveUserDataOnContext(userData);
-            /*-----------------------------------------------*/
-            
-            
-            /*----------Create first user cash box-----------*/
-            
-            /*Creating cashBox to Firestore*/
-            const cashBoxRef = collection(db, "moneyJar");
-
-            let randomId = uuidv4();
-            await setDoc(doc(cashBoxRef, randomId), {
-                id: randomId,
-                user_id: user.uid,
-                title: 'Disponível',
-                money: 0,
-                value: 0,
-                image: 'https://contextoatual.com.br/wp-content/uploads/2020/10/Foto-Mulher-com-leque-de-dinheiro-e-celular-nas-m%C3%A3os.jpg',
-                created_at: Math.floor(Date.now() / 1000)
-            });
-            /*-----------------------------------------------*/
-
-            //Send user to Home
-            navigation.push('Home');
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            setErrorMsg(firebaseErrorTranslate(errorCode) as string);
-        });
-       
+        //If the user was registered successfully, save the data in the context;
+        //otherwise, return an error message.
+        if(res.loggedUser)
+            saveUserDataOnContext(res.loggedUser);
+        else if(res.errorMsg)
+            setErrorMsg(res.errorMsg);
+        
     }
 
 
