@@ -7,6 +7,8 @@ import { Context, ContextProvider } from "./src/context/Context";
 //Firebase Importas
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import db from "./src/config/firebase"; //Even if not using this, do not remove! Removing this will cause an options error.
+import getUserData from "./src/querys/user/getUserData";
+import saveUserDataOnContext from "./src/querys/user/saveUserDataOnContext";
 
 
 const App = () => {
@@ -16,17 +18,16 @@ const App = () => {
   useEffect(() => {
       const auth = getAuth();
       const unsubscribe = onAuthStateChanged(auth, (user) => {
-          if (user) {
-              // user is logged
-              setUserLogged(true);
-          } else {
-              // user isn't logged
-              setUserLogged(false);
+          if(user){
+              
+            setUserLogged(true); //Defining the user as logged
+
+          }else{
+              setUserLogged(false); //Sets user as logged out.
           }
       });
 
-      // quando a tela for desmontada, remove o ouvinte
-      return unsubscribe;
+      return unsubscribe; //When the screen is unmounted, remove the listener.
   });
 
   return (

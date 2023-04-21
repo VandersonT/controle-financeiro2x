@@ -1,6 +1,6 @@
-/*----------------------------------------*/
-/*              IMPORTS                   */
-/*----------------------------------------*/
+/*--------------------------------------------------------------------------*/
+/*                                IMPORTS                                   */
+/*--------------------------------------------------------------------------*/
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Button, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert, BackHandler } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,14 +22,23 @@ import { Theme } from "../../global/theme";
 import firebaseErrorTranslate from "../../helpers/firebaseErrorTranslate";
 import SuccessFlash from "../../components/SuccessFlash";
 import { Context } from "../../context/Context";
-/*----------------------------------------*/
+import authentication from "../../querys/user/authentication";
+import getUserData from "../../querys/user/getUserData";
+/*--------------------------------------------------------------------------*/
 
 
 
 
 const SignIn = ({ navigation }: any) => {
 
-    /*-------------States------------------*/
+
+    //Getting user's context
+    const { state, dispatch } = useContext(Context);
+
+
+    /*----------------------------------------*/
+    /*               STATES                   */
+    /*----------------------------------------*/
     const [ errorMsg, setErrorMsg ] = useState<string>("");
     const [ successMsg, setSuccessMsg ] = useState<string>("");
     const [ currentScreen, setCurrentScreen ] = useState<number>(1);/*1: Login | 2: Register | 3: Reset Password*/
@@ -41,25 +50,31 @@ const SignIn = ({ navigation }: any) => {
     const [ passRegister, setPassRegister ] = useState<string>('');
     const [ confirmPassRegister, setConfirmPassRegister ] = useState<string>('');
     const [checked, setChecked] = useState(false);
-    /*-------------------------------------*/
+    /*----------------------------------------*/
     
-    //Getting user's context
-    const { state, dispatch } = useContext(Context);
 
     
-    /*------------UseEffects----------------*/
+    /*----------------------------------------*/
+    /*            USER-EFFECTS                */
+    /*----------------------------------------*/
     useEffect(() => {
         //Preventing the user from returning to the splash screen
         BackHandler.addEventListener('hardwareBackPress', () => {
             return true;
         });
     }, []);
+    /*----------------------------------------*/
 
-    /*------------Functions----------------*/
+
+
+    /*----------------------------------------*/
+    /*             FUNCTIONS                  */
+    /*----------------------------------------*/
     const closeFlash = () => {
         setErrorMsg("");
         setSuccessMsg("");
     }
+
 
     const saveUserDataOnContext = (user: any) => {
 
@@ -120,67 +135,60 @@ const SignIn = ({ navigation }: any) => {
         });
     }
 
-    const getUserData = async (user_id: string) => {
-        const docRef = doc(db, "user", user_id);
 
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()){
-            // We have the user's data here => docSnap.data()
-            saveUserDataOnContext(docSnap.data()); //save data on the context.
-
-            return true; 
-        }else{
-            // docSnap.data() will be undefined in this case
-            return false; 
-        }
-    }
-
-    const loginAction = () => {
-
+    const loginAction = async () => {
+        
+        //Check empty fields
         if(!email || !pass){
             setErrorMsg('Preencha todos os campos.')
             return;
         }
 
-        const auth = getAuth();
+        //Log in user
+        let res = await authentication(email, pass);
 
-
-        /*Check if the user want to stay logged in*/
-
-        signInWithEmailAndPassword(auth, email, pass)
-        .then(async (userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-
-            /*Get user data*/
-            let ready = await getUserData(user.uid);
+        
+        //Authenticated user, now let's try their data in context.
+        if(res.loggedUserId){
             
-            if(ready)
-                navigation.push('Home'); //Send user to Home
-            else
+            let loggedUser = await getUserData(res.loggedUserId); /*Get logged user data*/
+            
+            if(loggedUser){
+                
+                saveUserDataOnContext(loggedUser); //Save user data on Context
+
+            }else{
+                /*Se entrou aqui, a autenticação foi bem sucedida, o problema aqui é que este usuário
+                apesar de ter uma conta no firebase authenticate, não possui seus dados no firebase
+                firestore. É praticamente raro isso acontecer, pois, ao registrar o usuário o código
+                já cria automaticamente uma conta no firestore. Mas caso entre aqui, você saberá o porque. ;)*/
                 setErrorMsg("Ocorreu um erro ao tentar logar, tente novamente.");
-            
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            setErrorMsg(firebaseErrorTranslate(errorCode) as string);
-        });
+                console.log("Erro! Leia o comentario do arquivo SignIn > index.js linha 143.");
+            }
 
+            return;
+
+        }else if(res.errorMsg){
+            setErrorMsg(res.errorMsg);
+        }
+        
     }
+
     
     const registerAction = async () => {
+
+        //Check empty Fields
         if(!userRegister || !emailRegister || !passRegister || !confirmPassRegister){
             setErrorMsg('Preencha todos os campos.');
             return;
         }
 
+        //Check if the passwords match.
         if(passRegister != confirmPassRegister){
             setErrorMsg('As senhas não coincidem.');
             return;
         }
-
+        
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, emailRegister, passRegister)
         .then(async (userCredential) => {
@@ -206,7 +214,7 @@ const SignIn = ({ navigation }: any) => {
 
 
             //Save data on the context
-            saveUserDataOnContext(userData);
+            //saveUserDataOnContext(userData);
             /*-----------------------------------------------*/
             
             
@@ -237,9 +245,12 @@ const SignIn = ({ navigation }: any) => {
         });
        
     }
+
+
     const handleCheck = () => {
         setChecked(!checked);
     };
+
 
     const resetPassword = async () => {
         
@@ -256,7 +267,7 @@ const SignIn = ({ navigation }: any) => {
         }
 
     }
-    /*-------------------------------------*/
+    /*----------------------------------------*/
     
 
     return (
