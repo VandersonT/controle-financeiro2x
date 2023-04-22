@@ -23,6 +23,8 @@ import firebaseErrorTranslate from "../../helpers/firebaseErrorTranslate";
 import SuccessFlash from "../../components/SuccessFlash";
 import { Context } from "../../context/Context";
 import authentication from "../../querys/user/authentication";
+
+//Querys
 import getUserData from "../../querys/user/getUserData";
 import registerNewUser from "../../querys/user/registerNewUser";
 /*--------------------------------------------------------------------------*/
@@ -204,23 +206,23 @@ const SignIn = ({ navigation }: any) => {
     }
 
 
-    const handleCheck = () => {
-        setChecked(!checked);
-    };
-
-
     const resetPassword = async () => {
         
-        try {
+        try{
+
             const auth = getAuth();
-            // Enviar um e-mail de redefinição de senha para o endereço de e-mail fornecido
+
+            //Send a password reset email to the provided email address.
             await sendPasswordResetEmail(auth, emailReset);
         
-            // Exibir uma mensagem de sucesso ao usuário
+            //Display a success message to the user.
             setSuccessMsg("Email de redefinição enviado.");
-        } catch (error: any) {
-            // Exibir uma mensagem de erro ao usuário
+
+        }catch(error: any){
+
+            //Display an error message to the user.
             setErrorMsg(firebaseErrorTranslate(error.code));
+            
         }
 
     }
@@ -261,14 +263,6 @@ const SignIn = ({ navigation }: any) => {
                                     <TextInput value={email} onChangeText={setEmail} style={styles.input} placeholder="Digite seu email" />
                                     <TextInput secureTextEntry value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 20}]} placeholder="Digite sua senha" />
 
-                                    {/*<CheckBox
-                                        title='Lembre de mim'
-                                        checked={checked}
-                                        onPress={handleCheck}
-                                        containerStyle={styles.checkboxContainer}
-                                        textStyle={styles.checkboxText}
-                                        checkedColor="#000"
-                                    />*/}
 
                                     <Button1 title="Entrar" fnc={loginAction} />
                                     
@@ -310,7 +304,7 @@ const SignIn = ({ navigation }: any) => {
                                     <CheckBox
                                         title='Exibir senhas'
                                         checked={checked}
-                                        onPress={handleCheck}
+                                        onPress={() => setChecked(!checked)}
                                         containerStyle={styles.checkboxContainer}
                                         textStyle={styles.checkboxText}
                                         checkedColor="#000"
@@ -364,5 +358,7 @@ const SignIn = ({ navigation }: any) => {
         </KeyboardAvoidingView>
     );
 }
+
+
 
 export default SignIn;

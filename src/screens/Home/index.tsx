@@ -1,8 +1,8 @@
-/*----------------------------------------*/
-/*              IMPORTS                   */
-/*----------------------------------------*/
+/*--------------------------------------------------------------------------*/
+/*                                IMPORTS                                   */
+/*--------------------------------------------------------------------------*/
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { View, Text, Button, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 //Functions Helpers
@@ -13,7 +13,6 @@ import { Theme } from "../../global/theme";
 import styles from "./style";
 
 //Types
-import { Transaction } from "../../Types/Transaction";
 
 //Components
 import Header from '../../components/Header';
@@ -23,10 +22,11 @@ import Loading from "../../components/Loading";
 
 //Context
 import { Context } from "../../context/Context";
-import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, limit, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
 import db from "../../config/firebase";
 import dateFormat from "../../helpers/dateFormat";
-
+import getTransaction from "../../querys/transaction/getTransaction";
+/*--------------------------------------------------------------------------*/
 
 
 
@@ -49,10 +49,11 @@ const Home = ({ navigation }: any) => {
         const [lastVisible, setLastVisible] = useState<any>(null);
         const [ transactionsPerPage, setTransactionsPerPage ] = useState(15);
 
+
+
     /*----------------------------------------*/
     /*             USE EFFECT                  */
     /*----------------------------------------*/
-
         useEffect(() => {
             getTransactions();
         }, [state.user])
@@ -60,54 +61,57 @@ const Home = ({ navigation }: any) => {
         const getTransactions = async () => {
             setLoading(true);
 
-             // Query the first page of docs
-            const first = query(collection(db, "transaction"),
-                where("user_id", "==", state.user.id),
-                orderBy("created_at", "desc"),
-                limit(transactionsPerPage)
-            );
-            
-            getDocs(first).then((querySnapshot) => {
-                const citiesData:any = [];
-                querySnapshot.forEach((doc) => {
-                    citiesData.push(doc.data());
-                });
-                setTransactions(citiesData);
-                setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
-                setLoading(false);
-            });
+            try{
+                let res = await getTransaction(transactionsPerPage, state.user.id, lastVisible);
+                
+                setTransactions(res.transactions);
+                setLastVisible(res.currentLastVisible);
+
+            }catch(error){
+                console.log('Error', error);
+            }
+
+            setLoading(false);
         };
 
         const loadMore = async () => {
-            const next = query(collection(db, "transaction"),
-                where("user_id", "==", state.user.id),
-                orderBy("created_at", "desc"),
-                startAfter(lastVisible),
-                limit(transactionsPerPage)
-            );
-            const querySnapshot = await getDocs(next);
-            const transactionsData: any = [];
-            querySnapshot.forEach((doc) => {
-                transactionsData.push(doc.data());
-            });
 
-            if(transactionsData.length != 0){
-                setTransactions([...transactions, ...transactionsData]);
-                setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
-            }else{
-                Alert.alert("Isso é tudo", "Essas são todas as transações que você já realizou nesta conta.");
-                setMoreTransactionsAvailable(false);
+            //prevents from loading more transactions while fetching new ones. And set "loading"
+            setLoading(true);
+            setMoreTransactionsAvailable(false);
+
+            try{
+
+                //Try to get more transactions
+                let res = await getTransaction(transactionsPerPage, state.user.id, lastVisible);
+                
+                setTransactions([...transactions, ...res.transactions]);
+                setLastVisible(res.currentLastVisible);
+
+                if(res.transactions.length < 1){
+                    //All transactions have been loaded. Stop loading and hide the button to load more.
+                    setMoreTransactionsAvailable(false);
+                    setLoading(false);
+                    return;
+                }
+
+            }catch(error){
+                console.log('Error: ', error);
             }
+
+            //To stop loading and allow for new ones to be loaded
+            setLoading(false);
+            setMoreTransactionsAvailable(true);
             
         };
 
 
         
-        /*----------------------------------------*/
-        /*             FUNCTIONS                  */
-        /*----------------------------------------*/
-
+    /*----------------------------------------*/
+    /*             FUNCTIONS                  */
+    /*----------------------------------------*/
         const scrollViewRef = useRef<ScrollView>(null);
+
         const handleScrollToTop = () => {
             setScrollEnabled(false);
             setNewTransactionStatus(true);
@@ -120,7 +124,6 @@ const Home = ({ navigation }: any) => {
         }
 
         const transactionSuccess = async(transaction: any) => {
-
 
             const transactionRef = collection(db, "transaction");
 
@@ -284,16 +287,16 @@ const Home = ({ navigation }: any) => {
                         renderItem={renderItem}/*A lista está sendo renderizada na função renderItem*/
                     />
 
-                    {transactions.length >= transactionsPerPage && moreTransactionsAvailable &&
-                        <TouchableOpacity onPress={loadMore}>
-                            <Text style={styles.loadMore}>Carregar mais</Text>
-                        </TouchableOpacity>
-                    }
-
                     {loading &&
                         <View style={{ marginTop: 50 }}>
                             <Loading />
                         </View>
+                    }
+
+                    {transactions.length >= transactionsPerPage && moreTransactionsAvailable &&
+                        <TouchableOpacity onPress={loadMore}>
+                            <Text style={styles.loadMore}>Carregar mais</Text>
+                        </TouchableOpacity>
                     }
 
                     {transactions.length < 1 && !loading &&
