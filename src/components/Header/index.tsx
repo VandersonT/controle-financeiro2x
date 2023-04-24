@@ -6,7 +6,7 @@ import styles from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../global/theme';
 import { Feather } from '@expo/vector-icons';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import BrazilianRealFormat from '../../helpers/BrazilianRealFormat';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -32,6 +32,10 @@ const Header = ({ nav, showMoney = true }: Props) => {
 
     //Getting user's context
     const { state, dispatch } = useContext(Context);
+
+    useEffect(() => {
+        setMenuOpened(false)
+    }, [])
 
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
@@ -149,7 +153,10 @@ const Header = ({ nav, showMoney = true }: Props) => {
                             </ImageBackground>
 
                             <View>
-                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Profile')}>
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => {
+                                    nav.push('Profile')
+                                    setMenuOpened(false);
+                                }}>
                                     <Text style={styles.optionTitle}>Perfil</Text>
                                 </TouchableOpacity>
 

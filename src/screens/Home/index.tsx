@@ -56,7 +56,7 @@ const Home = ({ navigation }: any) => {
     /*----------------------------------------*/
         useEffect(() => {
             getTransactions();
-        }, [state.user])
+        }, [state.user.created_at])
 
         const getTransactions = async () => {
             setLoading(true);

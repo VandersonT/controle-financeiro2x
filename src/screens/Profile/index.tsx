@@ -16,7 +16,7 @@ const Profile = ({ navigation }: any) => {
     const { state, dispatch } = useContext(Context);
 
     const backToHome = () => {
-        navigation.push('Home');
+        navigation.goBack();
     }
 
     const editProfile = () => {

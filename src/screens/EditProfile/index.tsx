@@ -47,7 +47,7 @@ const EditProfile = ({ navigation }: any) => {
     /*             FUNCTIONS                  */
     /*----------------------------------------*/
     const backToProfile = () => {
-        navigation.push('Profile');
+        navigation.goBack();
     }
 
     const saveInfo = async () => {

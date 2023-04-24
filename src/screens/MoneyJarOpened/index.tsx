@@ -98,9 +98,6 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
     /*----------------------------------------*/
     /*              FUNCTIONS                 */
     /*----------------------------------------*/
-    const returnFnc = () => {
-        navigation.push('MoneyJar')
-    }
 
     const deleteMoneyJar = () => {
 
@@ -133,7 +130,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                     await deleteDoc(doc(db, "moneyJar", boxId));
 
                     /*Return to MoneyJars listing*/
-                    navigation.push('MoneyJar');
+                    navigation.goBack();
                 }},
             ],
             { cancelable: false }
@@ -166,7 +163,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
             <Header nav={navigation} showMoney={false} />
 
             <View style={styles.topBarHeader}>
-                <TouchableOpacity onPress={() => navigation.push('MoneyJar')}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back-ios" size={24} color="black" />
                 </TouchableOpacity>
                 <Text style={styles.title}>{boxTitle}</Text>
