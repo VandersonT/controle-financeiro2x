@@ -185,7 +185,7 @@ const Home = ({ navigation }: any) => {
             setSeeMore(aux);
         }
 
-        const deleteTransaction = (transactionId: string, index: number) => {
+        const deleteTransaction = (transactionToDelete: any, index: number) => {
             
             Alert.alert(
                 'Confirmação',
@@ -207,7 +207,40 @@ const Home = ({ navigation }: any) => {
                     setSeeMore([false]);
 
                     //Remove transaction from database
-                    await deleteDoc(doc(db, "transaction", transactionId));
+                    await deleteDoc(doc(db, "transaction", transactionToDelete['id']));
+
+                    if(transactionToDelete['where'] == "Disponível"){
+                        //Reduces available money
+
+                        //On dataBase
+                        await updateDoc(doc(db, "user", state.user.id), {
+                            available_balance: state.user.available_balance - transactionToDelete.value
+                        });
+
+                        //On Context
+                        dispatch({
+                            type: 'CHANGE_AVAILABLEBALANCE',
+                            payload: {
+                                available_balance: state.user.available_balance - transactionToDelete.value
+                            }
+                        });
+                    }else{
+                        //Reduces moneyJars value
+
+                        //On dataBase
+                        await updateDoc(doc(db, "user", state.user.id), {
+                            moneyJar_balance: state.user.moneyJar_balance - transactionToDelete.value
+                        });
+
+                        //On Content
+                        dispatch({
+                            type: 'CHANGE_MONEYJARBALANCE',
+                            payload: {
+                                moneyJar_balance: state.user.moneyJar_balance - transactionToDelete.value
+                            }
+                        });
+                    }
+
 
                   }},
                 ],
@@ -254,7 +287,7 @@ const Home = ({ navigation }: any) => {
                                 <Text style={[styles.description, (item['value'] >= 0) ? styles.positiveTransaction : styles.negativeTransaction]}>{BrazilianRealFormat(item['value'])}</Text>
                             </View>
                             
-                            <TouchableOpacity onPress={() => deleteTransaction(item['id'], index)} style={styles.deleteTransactionBox}>
+                            <TouchableOpacity onPress={() => deleteTransaction(item, index)} style={styles.deleteTransactionBox}>
                                 <Text style={styles.deleteTransaction}>Excluir</Text>
                             </TouchableOpacity>
                         </View>
