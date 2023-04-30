@@ -1,7 +1,6 @@
 import { View, Text, ScrollView } from 'react-native';
-import { VictoryPie, VictoryChart, VictoryTheme, VictoryBar } from "victory-native";
+import { VictoryPie, VictoryChart, VictoryTheme, VictoryBar, VictoryLegend } from "victory-native";
 import styles from './style';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../context/Context';
@@ -49,56 +48,62 @@ const Charts = ({ navigation }: any) => {
     const getTransactions = async () => {
         
         /*Get all user transactions*/
-        let transactions: any = [];
-        
-        let first = await query(collection(db, "transaction"),
-            where("user_id", "==", state.user.id)
-        );
-
-        await getDocs(first).then((querySnapshot) => {
-            const transactionsData:any = [];
-            querySnapshot.forEach((doc) => {
-                transactionsData.push(doc.data());
-            });
+            let transactions: any = [];
             
-            transactions = transactionsData;
-        });
+            let first = await query(collection(db, "transaction"),
+                where("user_id", "==", state.user.id)
+            );
+
+            await getDocs(first).then((querySnapshot) => {
+                const transactionsData:any = [];
+                querySnapshot.forEach((doc) => {
+                    transactionsData.push(doc.data());
+                });
+                
+                transactions = transactionsData;
+            });
         /*****/
 
 
         /*Get the number of positive and negative transactions*/
-        let positiveMoneyJarsAux = 0;
-        let negativeMoneyJarsAux = 0;
-        for(let i = 0; i < transactions.length; i++){
-            if(transactions[i].value >= 0){
-                positiveMoneyJarsAux += transactions[i].value;
-            }else{
-                negativeMoneyJarsAux += Math.abs(transactions[i].value);
+            let positiveMoneyJarsAux = 0;
+            let negativeMoneyJarsAux = 0;
+            for(let i = 0; i < transactions.length; i++){
+                if(transactions[i].value >= 0){
+                    positiveMoneyJarsAux += transactions[i].value;
+                }else{
+                    negativeMoneyJarsAux += Math.abs(transactions[i].value);
+                }
             }
-        }
-        setPositivesMoneyJar(positiveMoneyJarsAux);
-        setnegativesMoneyJar(negativeMoneyJarsAux);
+            setPositivesMoneyJar(positiveMoneyJarsAux);
+            setnegativesMoneyJar(negativeMoneyJarsAux);
         /*****/
 
         /*Group MoneyJars*/
-        let moneyJarsFound = [];
-        for(let i = 0; i < transactions.length; i++){
-            moneyJarsFound.push(transactions[i].where);
-        }
-        
-        let moneyJarsGrouped = await group(moneyJarsFound);
+            let moneyJarsFound = [];
+            for(let i = 0; i < transactions.length; i++){
+                moneyJarsFound.push(transactions[i].where);
+            }
+            
+            let moneyJarsGrouped = await group(moneyJarsFound);
 
-        setMovementsInMoneyJars(moneyJarsGrouped);
+            setMovementsInMoneyJars(moneyJarsGrouped);
         /*****/
 
 
         /*Put moneyJars values into the chart data*/
-        let aux = [];
-        for(let i = 0; i < moneyJarsGrouped.length; i++){
-            aux.push({ x: i+1, y: 0, y0: moneyJarsGrouped[i].amount });
-        }
+            let aux = [];
+            for(let i = 0; i < moneyJarsGrouped.length; i++){
+                aux.push({ x: i+1, y: 0, y0: moneyJarsGrouped[i].amount });
+            }
 
-        setMovementsMOneyJarChart(aux);
+            /*When there is only 1 item, the chart becomes buggy, this 'if' ensures that
+            if there is only 1 item, a 2nd phantom item is created that will not appear.*/
+            if(aux.length < 2)
+                aux.push({x: 2, y: 0, y0: 0});
+            
+
+            setMovementsMOneyJarChart(aux);
         /*****/
     }
 
@@ -115,17 +120,33 @@ const Charts = ({ navigation }: any) => {
 
                     <View style={styles.chartSingle}>
                         <Text style={styles.chartTitle}>Valor Reservado X Valor Disponível</Text>
+                        
+                        <View style={styles.legendContainer}>
+                            <View style={styles.legendSingle}>
+                                <View style={[styles.legendBox, { backgroundColor: '#FF5722' }]} />
+                                <Text style={styles.legendLabel}>Disponível</Text>
+                            </View>
+
+                            <View style={styles.legendSingle}>
+                                <View style={[styles.legendBox, { backgroundColor: '#3C2CE2' }]} />
+                                <Text style={styles.legendLabel}>Reservado</Text>
+                            </View>
+                        </View>
+
                         <VictoryPie
                             data={[
                                 { x: "Disponível", y: state.user.available_balance },
                                 { x: "Reservado", y: state.user.moneyJar_balance },
                             ]}
                             colorScale={["#FF5722", "#3C2CE2"]}
-                            height={250}
+                            
                         />
                         <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Confira a relação entre o seu dinheiro disponível e o valor reservado para fins específicos.</Text>
                     </View>
                     
+
+
+
                     <View style={styles.chartSingle}>
                         <Text style={styles.chartTitle}>Movimentação das Caixinhas</Text>
 
@@ -137,21 +158,35 @@ const Charts = ({ navigation }: any) => {
                             </View>
                         }
 
-                        <VictoryChart
-                            theme={VictoryTheme.material}
-                            domainPadding={{ x: 15 }}
-                        >
+                        <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }} >
                             <VictoryBar
                                 style={{ data: { fill: "#3C2CE2" }, labels: { fill: "white" } }}
                                 data={movementsMOneyJarChart}
                                 labels={({ datum }) => datum.x}
                                 animate
+                                width={60}
                             />
                         </VictoryChart>
                         <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Acompanhe como anda as movimentações em cada uma das suas caixinhas.</Text>
                     </View>
 
+
+
+
                     <Text style={styles.chartTitle}>Entrada e Saida</Text>
+
+                    <View style={styles.legendContainer}>
+                        <View style={styles.legendSingle}>
+                            <View style={[styles.legendBox, { backgroundColor: '#00C853' }]} />
+                            <Text style={styles.legendLabel}>Entrada</Text>
+                        </View>
+
+                        <View style={styles.legendSingle}>
+                            <View style={[styles.legendBox, { backgroundColor: '#D50000' }]} />
+                            <Text style={styles.legendLabel}>Saida</Text>
+                        </View>
+                    </View>
+
                     <VictoryPie
                         data={[
                             { x: "Saida", y: negativeMoneyJars },

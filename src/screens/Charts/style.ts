@@ -40,7 +40,28 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: 'bold',
         color: Theme.colors.gray[600],
-    }
+    },
+    legendContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+      },
+      legendSingle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 20
+      },
+      legendBox: {
+        width: 15,
+        height: 15,
+        marginRight: 5,
+      },
+      legendLabel: {
+        fontSize: 16,
+      },
 });
 
 export default styles;
