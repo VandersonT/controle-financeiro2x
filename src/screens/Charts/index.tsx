@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../context/Context';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import db from '../../config/firebase';
+import Header2 from '../../components/Header2';
 
 const Charts = ({ navigation }: any) => {
 
@@ -99,13 +100,16 @@ const Charts = ({ navigation }: any) => {
 
         setMovementsMOneyJarChart(aux);
         /*****/
+    }
 
+    const goBack = () => {
+        navigation.goBack();
     }
 
     return (
         <ScrollView style={{ backgroundColor: 'white'}}>
 
-            <Header nav={navigation} showMoney={false} />
+            <Header2 title="Gráficos" fnc={goBack} />
 
             <View style={styles.chartsBox}>
 

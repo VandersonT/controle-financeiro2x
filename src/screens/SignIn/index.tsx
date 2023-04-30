@@ -15,8 +15,7 @@ import db from "../../config/firebase";
 
 //Components:
 import ErrorFlash from "../../components/ErrorFlash";
-import Button1 from "../../components/Button1";
-import { Theme } from "../../global/theme";
+import Button2 from "../../components/Button2";
 
 //Helpers
 import firebaseErrorTranslate from "../../helpers/firebaseErrorTranslate";
@@ -264,7 +263,7 @@ const SignIn = ({ navigation }: any) => {
                                     <TextInput secureTextEntry value={pass} onChangeText={setPass} style={[styles.input, {marginBottom: 20}]} placeholder="Digite sua senha" />
 
 
-                                    <Button1 title="Entrar" fnc={loginAction} />
+                                    <Button2 title="Entrar" fnc={loginAction} />
                                     
                                     <TouchableOpacity onPress={() => setCurrentScreen(3)}>
                                         <Text style={[styles.link, {marginTop: 20}]}>Esqueci minha senha</Text>
@@ -310,7 +309,7 @@ const SignIn = ({ navigation }: any) => {
                                         checkedColor="#000"
                                     />
 
-                                    <Button1 title="Cadastrar" fnc={registerAction} />
+                                    <Button2 title="Cadastrar" fnc={registerAction} />
                                     <TouchableOpacity onPress={() => setCurrentScreen(1)}>
                                         <Text style={[styles.link, {marginTop: 20}]}>Já possuo uma conta</Text>
                                     </TouchableOpacity>
@@ -340,7 +339,7 @@ const SignIn = ({ navigation }: any) => {
                                     <TextInput value={emailReset} onChangeText={setEmailReset} style={styles.input} placeholder="Digite o email da conta" />
 
 
-                                    <Button1 title="Recuperar" fnc={resetPassword} />
+                                    <Button2 title="Recuperar" fnc={resetPassword} />
                                     
                                     <TouchableOpacity onPress={() => setCurrentScreen(1)}>
                                         <Text style={[styles.link, {marginTop: 20}]}>Lembro a senha</Text>

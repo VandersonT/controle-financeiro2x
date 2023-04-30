@@ -161,7 +161,10 @@ const Header = ({ nav, showMoney = true }: Props) => {
                                     <Text style={styles.optionTitle}>Perfil</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Charts')}>
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => {
+                                    nav.push('Charts')
+                                    setMenuOpened(false);
+                                }}>
                                     <Text style={styles.optionTitle}>Gráficos</Text>
                                 </TouchableOpacity>
 
