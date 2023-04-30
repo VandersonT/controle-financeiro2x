@@ -11,6 +11,7 @@ import Home from '../screens/Home';
 import SignIn from '../screens/SignIn';
 import MoneyJar from '../screens/MoneyJar';
 import MoneyJarOpened from '../screens/MoneyJarOpened';
+import Charts from '../screens/Charts';
 import Credits from '../screens/Credits';
 import Profile from '../screens/Profile';
 import EditProfile from '../screens/EditProfile';
@@ -32,6 +33,7 @@ export default ({ userLogged }) => {
         <>
           <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <MainStack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }}/>
+          <MainStack.Screen name="Charts" component={Charts} options={{ headerShown: false }}/>
           <MainStack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
           <MainStack.Screen name="Credits" component={Credits} options={{ headerShown: false }}/>
           <MainStack.Screen name="MoneyJarOpened" component={MoneyJarOpened} options={{ headerShown: false }}/>

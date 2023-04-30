@@ -153,11 +153,16 @@ const Header = ({ nav, showMoney = true }: Props) => {
                             </ImageBackground>
 
                             <View>
+
                                 <TouchableOpacity style={styles.optionSingle} onPress={() => {
                                     nav.push('Profile')
                                     setMenuOpened(false);
                                 }}>
                                     <Text style={styles.optionTitle}>Perfil</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Charts')}>
+                                    <Text style={styles.optionTitle}>Gráficos</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Credits')}>
