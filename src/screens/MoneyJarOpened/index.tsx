@@ -130,7 +130,7 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                     await deleteDoc(doc(db, "moneyJar", boxId));
 
                     /*Return to MoneyJars listing*/
-                    navigation.goBack();
+                    navigation.push('MoneyJar');
                 }},
             ],
             { cancelable: false }
