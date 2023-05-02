@@ -50,7 +50,6 @@ const Home = ({ navigation }: any) => {
         const [ transactionsPerPage, setTransactionsPerPage ] = useState(15);
 
 
-
     /*----------------------------------------*/
     /*             USE EFFECT                  */
     /*----------------------------------------*/

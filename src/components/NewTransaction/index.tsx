@@ -11,6 +11,7 @@ import { collection, doc, getDocs, query, setDoc, updateDoc, where } from 'fireb
 import db from '../../config/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { Context } from '../../context/Context';
+import { CheckBox } from 'react-native-elements';
 
 type Props = {
     closeFnc: () => void,
@@ -44,7 +45,7 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
     const [ options, setOptions ] = useState<optionsType[]>(initialOptions);
     const [selectedOption, setSelectedOption] = useState<optionsType>(options[0]);
     const [ transactionLoad, setTransactionLoad ] = useState(false);
-
+    const [ positiveTransaction, setPositiveTransaction ] = useState(true);
 
     /*----------------------------------------*/
     /*              EFFECTS                   */
@@ -110,8 +111,15 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
         }
         
         
-        let value = parseFloat(inputValue.replace(',', '.')); //Convert string value to float value
-        
+        //Check transaction type and format value
+        let formatedValue = inputValue.replace('-', '');
+
+        if(!positiveTransaction)
+            formatedValue = '-'+formatedValue;
+
+        let value = parseFloat(formatedValue.replace(',', '.')); //Convert string value to float value
+        /****/
+
         if(value == 0){
             Alert.alert('Espere um momento', 'Para que você fará uma transação em que não perdeu nem ganhou nada?');
             return;
@@ -152,8 +160,32 @@ const NewTransaction = ({ closeFnc, successFnc }: Props) => {
                     <Text style={styles.title}>Nova Transação</Text>
 
                     <View style={styles.form}>
+
+                        <View style={styles.optionsTransactionBox}>
+                            <CheckBox
+                                title='Entrada'
+                                checked={positiveTransaction}
+                                onPress={() => {
+                                    setPositiveTransaction(!positiveTransaction)
+                                }}
+                                containerStyle={styles.checkboxContainer}
+                                textStyle={styles.checkboxText}
+                                checkedColor="#000"
+                            />
+
+                            <CheckBox
+                                title='Saida'
+                                checked={!positiveTransaction}
+                                onPress={() => {
+                                    setPositiveTransaction(!positiveTransaction)
+                                }}
+                                containerStyle={styles.checkboxContainer}
+                                textStyle={styles.checkboxText}
+                                checkedColor="#000"
+                            />
+                        </View>
                         
-                        <TextInput style={styles.input} onChangeText={setInputTransactionTitle} value={inputTransactionTitle} placeholder="Titulo da Transação" />
+                        <TextInput style={[styles.input, {marginTop: 0}]} onChangeText={setInputTransactionTitle} value={inputTransactionTitle} placeholder="Titulo da Transação" />
                         <TextInput style={styles.input} onChangeText={setInputDescription} value={inputDescription} placeholder="Digite uma descrição" />
                         <TextInput style={styles.input} onChangeText={setInputValue} value={inputValue} keyboardType="numeric" placeholder="Digite o Valor" />
                         

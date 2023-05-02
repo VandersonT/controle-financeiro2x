@@ -26,10 +26,24 @@ const styles = StyleSheet.create({
     },
     newTransactionBox: {
         width: '90%',
-        height: 430,
+        height: 460,
         backgroundColor: Theme.colors.white[700],
         padding: 20,
         borderRadius: 5
+    },
+    checkboxContainer: {
+        backgroundColor: '#fff',
+        borderWidth: 0,
+        marginBottom: 20
+    },
+    checkboxText: {
+      fontWeight: 'normal',
+      color: Theme.colors.blue[300]
+    },
+    optionsTransactionBox:{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     unSelected: {
         color: Theme.colors.gray[400],
@@ -40,7 +54,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         borderBottomWidth: 1,
         borderColor: Theme.colors.gray[300],
-        paddingBottom: 10,
     },
     form: {
         marginVertical: 20,
