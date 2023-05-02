@@ -62,6 +62,13 @@ const styles = StyleSheet.create({
       legendLabel: {
         fontSize: 16,
       },
+      unavailable: {
+        width: '80%',
+        fontSize: Theme.fontSizes.md,
+        marginVertical: 40,
+        textAlign: 'center',
+        color: Theme.colors.gray[500]
+      }
 });
 
 export default styles;

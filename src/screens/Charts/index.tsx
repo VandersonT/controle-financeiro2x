@@ -7,6 +7,8 @@ import { Context } from '../../context/Context';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import db from '../../config/firebase';
 import Header2 from '../../components/Header2';
+import { Entypo } from '@expo/vector-icons';
+import { Theme } from '../../global/theme';
 
 const Charts = ({ navigation }: any) => {
 
@@ -133,15 +135,27 @@ const Charts = ({ navigation }: any) => {
                             </View>
                         </View>
 
-                        <VictoryPie
-                            data={[
-                                { x: "Disponível", y: state.user.available_balance },
-                                { x: "Reservado", y: state.user.moneyJar_balance },
-                            ]}
-                            colorScale={["#FF5722", "#3C2CE2"]}
-                            
-                        />
-                        <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Confira a relação entre o seu dinheiro disponível e o valor reservado para fins específicos.</Text>
+                        {(state.user.available_balance != 0 || state.user.moneyJar_balance != 0) &&
+                            <>
+                                <VictoryPie
+                                    data={[
+                                        { x: " ", y: state.user.available_balance },
+                                        { x: " ", y: state.user.moneyJar_balance },
+                                    ]}
+                                    colorScale={["#FF5722", "#3C2CE2"]}
+                                    width={350}
+                                />
+                                <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Confira a relação entre o seu dinheiro disponível e o valor reservado para fins específicos.</Text>
+                            </>
+                        }
+
+                        {(state.user.available_balance == 0 && state.user.moneyJar_balance == 0) &&
+                            <Text style={styles.unavailable}>
+                                Gráfico indisponível! Você precisa de pelo menos uma transação.
+                                <Entypo name="emoji-sad" size={20} color={Theme.colors.gray[500]} />    
+                            </Text>
+                        }
+                    
                     </View>
                     
 
@@ -157,17 +171,29 @@ const Charts = ({ navigation }: any) => {
                                 ))}
                             </View>
                         }
+                        
+                        {movementsMOneyJarChart.length > 1 &&
+                            <>
+                                <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }} >
+                                    <VictoryBar
+                                        style={{ data: { fill: "#3C2CE2" }, labels: { fill: "white" } }}
+                                        data={movementsMOneyJarChart}
+                                        labels={({ datum }) => datum.x}
+                                        animate
+                                        width={60}
+                                    />
+                                </VictoryChart>
+                                <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Acompanhe como anda as movimentações em cada uma das suas caixinhas.</Text>
+                            </>
+                        }
 
-                        <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }} >
-                            <VictoryBar
-                                style={{ data: { fill: "#3C2CE2" }, labels: { fill: "white" } }}
-                                data={movementsMOneyJarChart}
-                                labels={({ datum }) => datum.x}
-                                animate
-                                width={60}
-                            />
-                        </VictoryChart>
-                        <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Acompanhe como anda as movimentações em cada uma das suas caixinhas.</Text>
+                        {movementsMOneyJarChart.length < 2 &&
+                            <Text style={styles.unavailable}>
+                                Gráfico indisponível! Você precisa fazer pelo menos uma movimentação.
+                                <Entypo name="emoji-sad" size={20} color={Theme.colors.gray[500]} />
+                            </Text>
+                        }
+                    
                     </View>
 
 
@@ -187,15 +213,26 @@ const Charts = ({ navigation }: any) => {
                         </View>
                     </View>
 
-                    <VictoryPie
-                        data={[
-                            { x: "Saida", y: negativeMoneyJars },
-                            { x: "Entrada", y: positiveMoneyJars },
-                        ]}
-                        colorScale={["#D50000", "#00C853"]}
-                        height={300}
-                    />
-                    <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Confira como estão as relações entre as suas transações de entrada e saída.</Text>
+                    {(positiveMoneyJars != 0 || negativeMoneyJars != 0) &&
+                        <>
+                            <VictoryPie
+                                data={[
+                                    { x: "Saida", y: negativeMoneyJars },
+                                    { x: "Entrada", y: positiveMoneyJars },
+                                ]}
+                                colorScale={["#D50000", "#00C853"]}
+                                height={300}
+                            />
+                            <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Confira como estão as relações entre as suas transações de entrada e saída.</Text>
+                        </>
+                    }
+
+                    {positiveMoneyJars == 0 && negativeMoneyJars == 0 &&
+                        <Text style={styles.unavailable}>
+                            Gráfico indisponível! Você precisa de pelo menos uma transação.
+                            <Entypo name="emoji-sad" size={20} color={Theme.colors.gray[500]} />
+                        </Text>
+                    }
             </View>
 
             <Footer/>
