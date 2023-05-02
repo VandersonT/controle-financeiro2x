@@ -117,6 +117,28 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                 },
                 { text: 'Excluir', onPress: async() => {
                     
+                    //Verifica quanto essa caixinha tinha para subtrair do valor reservado
+                    const res = query(collection(db, "transaction"), where("where", "==", boxTitle), where("user_id", "==", state.user.id));
+                    const resquerySnapshot = await getDocs(res);
+                    let totalValue = 0;
+                    resquerySnapshot.forEach((doc) => {
+                        totalValue += doc.data().value;
+                    })
+                    console.log('Essa caixinha tinha: '+totalValue);
+
+                    //Subtrai do valor reservado no banco de dados
+                    await updateDoc(doc(db, "user", state.user.id), {
+                        moneyJar_balance: state.user.moneyJar_balance - totalValue
+                    });
+
+                    //Subtrai do valor reservado no contexto
+                    dispatch({
+                        type: 'CHANGE_MONEYJARBALANCE',
+                        payload: {
+                            moneyJar_balance: state.user.moneyJar_balance - totalValue
+                        }
+                    });
+
                     //Remove todas as transações que são desta caixinha
                     const q = query(collection(db, "transaction"), where("where", "==", boxTitle));
 
