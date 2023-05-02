@@ -2,7 +2,8 @@
 
 <p id="description">This app is an efficient and practical solution to help people manage their finances without involving real money. With it, you can simulate your financial transactions and have a complete view of your money movements in real time. Additionally, the app allows you to create virtual money boxes for specific purposes such as a trip, emergency funds, or buying a new car. With this functionality, you can plan and achieve your financial goals in an organized and planned way.</p>
 
-<p>Project developed for the Mobile Devices Topics' subject taught by Professor <a href="https://github.com/edutrindade">Eduardo Trindade</a></p>
+<p>Project developed for the Mobile Devices Topics' subject taught by Professor <a href="https://github.com/edutrindade">Eduardo Trindade.</a></p>
+
 ___
 
 <br/>
@@ -19,7 +20,7 @@ ___
 <br/><br/>
 <h2>🚀 Demo</h2>
 
-[Indisponivel\_no\_momento](Indisponivel_no_momento)
+Indisponível no momento
 
 
 <br/>
@@ -81,7 +82,7 @@ Technologies used in the project:
 
 *   React Native
 *   TypeScript
-*   Firebase
+*   Firebase (Firestore | Authentication)
 
 <br/><br/>
 <h2>💖Like my work?</h2>
