@@ -110,7 +110,7 @@ const Charts = ({ navigation }: any) => {
     }
 
     const goBack = () => {
-        navigation.goBack();
+        navigation.push("Home");
     }
 
     return (

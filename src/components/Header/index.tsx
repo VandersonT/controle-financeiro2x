@@ -33,9 +33,6 @@ const Header = ({ nav, showMoney = true }: Props) => {
     //Getting user's context
     const { state, dispatch } = useContext(Context);
 
-    useEffect(() => {
-        setMenuOpened(false)
-    }, [])
 
     /*----------------------------------------*/
     /*             FUNCTIONS                  */
@@ -154,17 +151,11 @@ const Header = ({ nav, showMoney = true }: Props) => {
 
                             <View>
 
-                                <TouchableOpacity style={styles.optionSingle} onPress={() => {
-                                    nav.push('Profile')
-                                    setMenuOpened(false);
-                                }}>
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Profile')}>
                                     <Text style={styles.optionTitle}>Perfil</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.optionSingle} onPress={() => {
-                                    nav.push('Charts')
-                                    setMenuOpened(false);
-                                }}>
+                                <TouchableOpacity style={styles.optionSingle} onPress={() => nav.push('Charts')}>
                                     <Text style={styles.optionTitle}>Gráficos</Text>
                                 </TouchableOpacity>
 
