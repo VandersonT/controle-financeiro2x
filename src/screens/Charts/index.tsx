@@ -135,7 +135,7 @@ const Charts = ({ navigation }: any) => {
                             </View>
                         </View>
 
-                        {(state.user.available_balance != 0 || state.user.moneyJar_balance != 0) &&
+                        {(state.user.available_balance != 0 || state.user.moneyJar_balance != 0) && (state.user.available_balance > 0 || state.user.moneyJar_balance > 0) &&
                             <>
                                 <VictoryPie
                                     data={[
@@ -146,6 +146,15 @@ const Charts = ({ navigation }: any) => {
                                     width={350}
                                 />
                                 <Text style={styles.chartNote}><Text style={styles.bold}>Nota:</Text> Confira a relação entre o seu dinheiro disponível e o valor reservado para fins específicos.</Text>
+                            </>
+                        }
+
+                        {(state.user.available_balance != 0 || state.user.moneyJar_balance != 0) && (state.user.available_balance < 1 && state.user.moneyJar_balance < 1) &&
+                            <>
+                                <Text style={styles.unavailable}>
+                                    Sua transações estão negativadas! É impossivel gerarmos um gráfico.
+                                    <Entypo name="emoji-sad" size={20} color={Theme.colors.gray[500]} />    
+                                </Text>
                             </>
                         }
 
