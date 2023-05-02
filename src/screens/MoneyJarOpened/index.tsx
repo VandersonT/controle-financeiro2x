@@ -10,7 +10,7 @@ import BrazilianRealFormat from "../../helpers/BrazilianRealFormat";
 import { Context } from "../../context/Context";
 
 //Firebase Imports
-import { collection, deleteDoc, doc, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, limit, orderBy, query, startAfter, updateDoc, where } from "firebase/firestore";
 import db from "../../config/firebase";
 import Loading from "../../components/Loading";
 import dateFormat from "../../helpers/dateFormat";
@@ -129,8 +129,21 @@ const MoneyJarOpened = ({ navigation, route }: any) => {
                     //Código remove esta caixinha do banco de dados
                     await deleteDoc(doc(db, "moneyJar", boxId));
 
+                    //Altera a quantidade de caixinhas que o usuário possui no banco de dados
+                    await updateDoc(doc(db, "user", state.user.id), {
+                        totalMoneyJars: state.user.totalMoneyJars - 1
+                    });
+
+                    //Altera a quantidade de caixinha que o usuário possui no contexto
+                    dispatch({
+                        type: 'CHANGE_TOTALMONEYJARS',
+                        payload: {
+                            totalMoneyJars: state.user.totalMoneyJars - 1
+                        }
+                    });
+
                     /*Return to MoneyJars listing*/
-                    navigation.push('MoneyJar');
+                    navigation.push("MoneyJar");
                 }},
             ],
             { cancelable: false }

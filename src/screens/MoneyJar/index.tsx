@@ -208,7 +208,7 @@ const MoneyJar = ({ navigation }: any) => {
                 <Header nav={navigation} showMoney={false} />
                 
                 <View style={styles.topBarHeader}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity onPress={() => navigation.push("Home")}>
                         <MaterialIcons name="arrow-back-ios" size={24} color="black" />
                     </TouchableOpacity>
                     <Text style={styles.title}>Caixinhas ({state.user.totalMoneyJars})</Text>
